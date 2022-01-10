@@ -1,0 +1,32 @@
+    <%- include('./partials/navbar') %>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <hr>
+                <h2>Perguntas</h2>
+                <a href="/perguntar" class="btn btn-primary">
+                    Perguntar
+                </a>
+                <hr>
+            </div>
+
+            <% questions.forEach(question => { %> 
+                <div class="col-12 mb-2">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><%= question.titulo %></h3>
+                        </div>
+                        <div class="card-body">
+                            <h6> <%= question.descricao %> </h6>
+                            <a href="#" class="btn btn-primary">Responder</a>
+                        </div>
+                    </div>
+                </div>
+            <% });  %> 
+
+            
+        </div>
+    </div>
+</body>
+</html>

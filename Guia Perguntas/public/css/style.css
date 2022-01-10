@@ -1,0 +1,39 @@
+* {
+  margin: 0;
+  padding: 0;
+  border: none;
+  list-style: none;
+  outline: none !important;
+  text-decoration: none !important;
+  transition: all 0.2s;
+  -webkit-transition: all 0.2s;
+  -moz-transition: all 0.2s;
+  -o-transition: all 0.2s;
+}
+
+/* ---------- Variables ---------- */
+/* ---------- End Variables ---------- */
+body {
+  background-color: #e9e8e6;
+}
+
+nav {
+  background-color: #007BFF;
+  padding: 1rem 0.7rem;
+}
+nav a {
+  color: white;
+  font-size: 2rem;
+}
+nav a h2 {
+  display: inline;
+}
+nav a i {
+  margin-left: 0.5rem;
+}
+nav a:hover {
+  color: white;
+}
+nav a:hover h2 {
+  padding-left: 0.5rem;
+}/*# sourceMappingURL=style.css.map */

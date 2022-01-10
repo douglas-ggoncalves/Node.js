@@ -1,0 +1,46 @@
+*{
+    margin: 0;
+    padding: 0;
+    border: none;
+    list-style: none;
+    outline: none !important;
+    text-decoration: none !important;
+    transition: all 0.2s;
+    -webkit-transition: all 0.2s;
+    -moz-transition: all 0.2s;
+    -o-transition: all 0.2s;
+}
+
+/* ---------- Variables ---------- */
+$blue: #007BFF;
+$white: rgb(255, 255, 255);
+/* ---------- End Variables ---------- */
+
+body{
+    background-color: rgb(233, 232, 230);
+}
+
+nav{
+    background-color: $blue;
+    padding: 1.0rem .7rem;
+
+    a{
+        color: white;
+        font-size: 2.0rem;
+
+        h2 {
+            display: inline;
+        }
+    
+        i{
+            margin-left: .5rem;
+        }
+
+        &:hover{
+            h2{
+                padding-left: .5rem;
+            }
+            color: white;
+        }
+    }
+}
