@@ -1,5 +1,4 @@
-    <%- include('./partials/navbar') %>
-
+<%- include('./partials/navbar') %>
     <div class="container">
         <div class="row">
             <div class="col-12">
@@ -17,13 +16,14 @@
                         <div class="card-header">
                             <h3><%= question.titulo %></h3>
                         </div>
+                        
                         <div class="card-body">
                             <h6> <%= question.descricao %> </h6>
-                            <a href="#" class="btn btn-primary">Responder</a>
+                            <a href="questao/<%= question.id %>" class="btn btn-primary">Responder</a>
                         </div>
                     </div>
                 </div>
-            <% });  %> 
+            <% }); %> 
 
             
         </div>

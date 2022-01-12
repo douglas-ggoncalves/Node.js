@@ -9,14 +9,13 @@ const Question = connection.define("pergunta", {
     descricao: {
         type: Sequelize.TEXT,
         allowNull: false
-    }, slug : {
-        type: Sequelize.STRING,
-        allowNull: false
     }
 })
 
+/*
 Question.sync({ force: false }).then(() => {
     console.log("Tabela criada")
 });
+*/
 
 module.exports = Question;

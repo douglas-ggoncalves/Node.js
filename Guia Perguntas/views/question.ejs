@@ -1,0 +1,76 @@
+<%- include('./partials/navbar') %>
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h2><%= question.titulo %></h2>
+                </div>
+
+                <div class="card-body">
+                    <input type="hidden" value="<%= question.id %>">
+                    <h5><%= question.descricao %></h5>
+                    
+                    <button type="button" class="btn btn-primary" onclick="toRespond()">
+                        Responder
+                    </button>
+                    <hr>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" id="divRespond" style="display: none;">
+        <div class="col-12 mt-4 text-center">
+            <form method="POST" action="/resposta/<%= question.id %>" onsubmit="checkForm(event, this)">
+                <h2>Minha Resposta</h2>
+                <hr>
+                <textarea class="form-control mb-2" cols="30" rows="2" name="desc" id="desc" placeholder="Digite sua resposta aqui"></textarea>
+                <button type="submit" class="btn btn-primary">
+                    Enviar Resposta
+                </button>
+            </form>
+        </div>     
+    </div>
+
+    <div class="row" id="divAllResponds">
+        <div class="col-12 mt-4 text-center">
+            <h2>Respostas</h2>
+            <hr>
+        </div>
+        
+        <% question.resposta.forEach(answer => { %>
+            <div class="col-12">
+                <div class="card bg-light mt-3">
+                    <div class="card-body">
+                        <span><%= answer.descricao %></span>
+                    </div>
+                </div>
+            </div>
+        <% }) %>
+    </div>
+</div>
+</body>
+    <script>
+        function checkForm(event, form){
+            event.preventDefault();
+            if(document.getElementById("desc").value.trim() != ''){
+                form.submit();
+            } else{
+                alert('Resposta não enviada, o campo se encontra vazio')
+                document.getElementById("desc").value = "";
+            }
+        }
+
+        function toRespond(){
+            
+            if(document.getElementById("divRespond").style.display == 'block'){
+                document.getElementById("divRespond").style.display = 'none'
+                document.getElementById("divAllResponds").style.display = 'block'
+            } else{
+                document.getElementById("divRespond").style.display = 'block'
+                document.getElementById("divAllResponds").style.display = 'none'
+            }
+        }
+    </script>
+</html>
