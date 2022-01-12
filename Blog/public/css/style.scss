@@ -1,0 +1,19 @@
+*{
+    text-decoration: none !important;
+}
+
+#containerNavbar{
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+    background-color: #007bff;
+
+    a{
+        color: aliceblue;
+        font-size: 1.5rem;
+        font-weight: 500;
+
+        &:hover{
+            color: #007bff;
+        }
+    }
+}

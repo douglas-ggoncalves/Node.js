@@ -1,0 +1,17 @@
+* {
+  text-decoration: none !important;
+}
+
+#containerNavbar {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  background-color: #007bff;
+}
+#containerNavbar a {
+  color: aliceblue;
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+#containerNavbar a:hover {
+  color: #007bff;
+}/*# sourceMappingURL=style.css.map */
