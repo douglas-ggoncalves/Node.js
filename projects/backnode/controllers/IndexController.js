@@ -24,19 +24,21 @@ class IndexController{
     }
 
     async searchComands(req, res) {
-        try{
-            var array = await req.body.array
-            var result = await database.raw(`
-	        select * FROM OPENROWSET('SQLNCLI','${array.IP_LOJA},${array.PORTA_LOJA}';'${array.LOGIN_LOJA}';'${array.SENHA_LOJA}',
-                'select idloja as ''IDLojaDestino'', count(*) as ''QuantidadesDeComandos'' from historico..comandoreplicacao group by idloja order by idloja'
-            );
-            `);
+        var array;
 
-            console.log('result ' +JSON.stringify(result))
+        try{
+            array = await req.body.array
+                var result = await database.raw(`
+                select * FROM OPENROWSET('SQLNCLI','${array.IP_LOJA},${array.PORTA_LOJA}';'${array.LOGIN_LOJA}';'${array.SENHA_LOJA}',
+                    'select idloja as ''IDLojaDestino'', count(*) as ''QuantidadesDeComandos'' from historico..comandoreplicacao group by idloja order by idloja'
+                );
+            `).timeout(10000); // tempo limite de 10 segundos para a consulta ser realizada
+
             array["result"] = result;
             res.send({success: "Requisição feita com sucesso", newArray: array})
         } catch(error) {
             res.status(406);
+            array["err"] = "Ocorreu um erro de conexão";
             res.send({err: "Ocorreu um erro de conexão", newArray: array});
             return;
         }

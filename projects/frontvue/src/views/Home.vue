@@ -24,11 +24,7 @@ import Vue from 'vue'
 
 export default {
   created(){
-    //setInterval(this.myFunction, 1000)
-    //setTimeout(this.myFunction, 1000)
     this.myFunction();
-   //this.initVerify();
-
   },
   data() {
     return {
@@ -63,31 +59,17 @@ export default {
       })
     }, 
     async initVerify(){
-      try{
-        for(var y=0; y < 3 /*this.data.length*/; y++){
-          await axios.post("http://localhost:4000/replic", 
-            {
-              array: this.data[y]
-            }).then(res => {
-              
-              //this.data[y]["comandos"]  =  res.data.newArray
+        for(var y=0; y < this.data.length; y++) {
+          try {
+            await axios.post("http://localhost:4000/replic", {array: this.data[y]})
+            .then(res => {
               Vue.set(this.data, y, res.data.newArray)
-              
-              //console.log(this.arrays.data[y].IP_LOJA)
-              console.log(this.data[y].IP_LOJA + ' ' + this.data[y].comandos)
             });
+          } catch(err) {
+            Vue.set(this.data, y, err.response.data)
+          }
         }
-      } catch(err) {
-        Vue.set(this.data, y, err.response.data.err)
-        console.log(err.response.data.err)
-      }
     }
   }
 }
 </script>
-
-<!-- 
-
-https://br.vuejs.org/v2/guide/reactivity.html
-
--->
