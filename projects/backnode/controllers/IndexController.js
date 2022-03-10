@@ -24,10 +24,23 @@ class IndexController{
     }
 
     async searchComands(req, res) {
-        var array = await req.body.array
-        console.log("Array que chegou " + JSON.stringify(array))
-        console.log("Fim da req")
-        res.send({success: "Olá", newArray: 'aaaa '})
+        try{
+            var array = await req.body.array
+            var result = await database.raw(`
+	        select * FROM OPENROWSET('SQLNCLI','${array.IP_LOJA},${array.PORTA_LOJA}';'${array.LOGIN_LOJA}';'${array.SENHA_LOJA}',
+                'select idloja as ''IDLojaDestino'', count(*) as ''QuantidadesDeComandos'' from historico..comandoreplicacao group by idloja order by idloja'
+            );
+            `);
+
+            console.log('result ' +JSON.stringify(result))
+            array["result"] = result;
+            res.send({success: "Requisição feita com sucesso", newArray: array})
+        } catch(error) {
+            res.status(406);
+            res.send({err: "Ocorreu um erro de conexão", newArray: array});
+            return;
+        }
+        
     }
 }
 

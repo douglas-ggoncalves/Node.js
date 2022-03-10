@@ -10,17 +10,17 @@
         Iniciar verificação
       </button>
 
-      <h5>AAA {{ MYvARIAVEL }}</h5>
-
       <div v-for="(poke, index) in data" :key="index">
         <h5>{{data[index]}}</h5>
       </div>
+
     </div>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
+import Vue from 'vue'
 
 export default {
   created(){
@@ -32,10 +32,8 @@ export default {
   },
   data() {
     return {
-      MYvARIAVEL: 'AAA',
       err: undefined,
-          data: []
-,
+      data: [],
       arrays: 
         {
           idsNetworks: [],
@@ -66,24 +64,22 @@ export default {
     }, 
     async initVerify(){
       try{
-        for(var y=0; y < 3/*this.arrays.data.length*/; y++){
+        for(var y=0; y < 3 /*this.data.length*/; y++){
           await axios.post("http://localhost:4000/replic", 
             {
               array: this.data[y]
             }).then(res => {
-              console.log("chegou resposta")
-              this.MYvARIAVEL = 'BMSBMBAD'
-              this.data[y]["comandos"]  =  res.data.newArray
+              
+              //this.data[y]["comandos"]  =  res.data.newArray
+              Vue.set(this.data, y, res.data.newArray)
+              
               //console.log(this.arrays.data[y].IP_LOJA)
               console.log(this.data[y].IP_LOJA + ' ' + this.data[y].comandos)
-              console.log("Fim da resposta")
             });
-
-            
         }
       } catch(err) {
-        console.log("Ocorreu um erro " +err.response.data.err)
-        this.err = err.response.data.err
+        Vue.set(this.data, y, err.response.data.err)
+        console.log(err.response.data.err)
       }
     }
   }
