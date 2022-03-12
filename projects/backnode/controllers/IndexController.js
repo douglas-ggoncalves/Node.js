@@ -2,6 +2,9 @@ var database = require("../database/database");
 
 class IndexController{
 
+    async home(req, res) {
+    }
+
     async index(req, res) {
         try{
             var idsNetworks = await database.raw(`
