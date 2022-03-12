@@ -1,6 +1,13 @@
 var database = require("../database/database");
 
 class IndexController{
+    
+    async login(req, res) {
+        var login = req.body.login;
+    var password = req.body.password;
+    
+    console.log(login + ' ' +password)
+    }
 
     async home(req, res) {
     }

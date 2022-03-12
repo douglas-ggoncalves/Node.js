@@ -60,6 +60,8 @@
 
 <script>
 export default {};
+import axios from 'axios';
+
 </script>
 
 <style scoped>
