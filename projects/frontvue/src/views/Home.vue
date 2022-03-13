@@ -6,35 +6,22 @@
           <div class="m-auto pb-3">
             <img class="img-fluid" src="../assets/img/logo-white.png" />
           </div>
-          <div class="col-12 col-lg-9 mx-auto">
-            <form method="POST" action="/">
-              <div class="input-group mt-4">
-                
 
-                <input
-                  type="text"
-                  class="form-control"
-                  placeholder="Digite seu usuário"
-                  name="login"
-                  id="login"
-                  onkeydown="user()"
-                />
-                <div class="invalid-feedback" style="font-size: 1.07em">
+          <div class="col-12 col-lg-9 mx-auto">
+            <form>
+              <div class="input-group mt-4">
+                <input type="text" class="form-control" placeholder="Digite seu usuário" v-model="login"/>
+                <div class="form-control invalid-feedback" style="font-size: 1.07em; color: white" v-if="err">
                   Usuário e/ou senha incorretos
                 </div>
               </div>
 
               <div class="input-group" style="margin-top: 20px">
-                <input
-                  type="password"
-                  class="form-control"
-                  placeholder="Digite sua senha"
-                  name="password"
-                />
+                <input type="password" class="form-control" placeholder="Digite sua senha" v-model="password"/>
               </div>
 
               <div class="row d-flex justify-content-center mt-3">
-                <button type="submit" class="btn btn-outline-light">
+                <button type="button" class="btn btn-outline-light" @click="log()">
                   Entrar
                 </button>
               </div>
@@ -59,8 +46,37 @@
 </template>
 
 <script>
-export default {};
 import axios from 'axios';
+
+export default {
+   data(){
+    return {
+      login: '',
+      password: '',
+      err: true
+    }
+  }, methods: {
+
+    log(){
+      if(this.login.trim() == '' || this.password.trim() == ''){
+        alert("Usuário ou senha inválidos")
+      } else {
+        axios.post("http://localhost:4000/", {
+          login: this.login,
+          password: this.password
+        })
+        .then(res => {
+          localStorage.setItem("login", res.data.token);
+          alert("Logamos")
+          console.log(res)
+          console.log('Login é esse ' +this.login)
+        }).catch(err => {
+          console.log(err)
+        })
+      }
+    }
+  }
+};
 
 </script>
 

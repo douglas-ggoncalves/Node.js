@@ -3,10 +3,23 @@ var database = require("../database/database");
 class IndexController{
     
     async login(req, res) {
-        var login = req.body.login;
-    var password = req.body.password;
-    
-    console.log(login + ' ' +password)
+    var login = await req.body.login;
+    var password = await req.body.password;
+    console.log("Login: " +login + ' asENHAAAAAA ' +password)
+    var query = await database.raw(`
+        select * from USUARIO where login = 'DG' and senha = '${password}'
+    `);
+
+    if(query == '') {
+        console.log(query)
+        console.log("Usuário ou senhas incorretos")
+    } else {
+        //req.session.login = login;
+        //req.session.password = password;
+        console.log("Login " + JSON.stringify(query))
+        res.send({success: "Usuário logado", login: login})
+    }
+
     }
 
     async home(req, res) {
