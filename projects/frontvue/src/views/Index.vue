@@ -5,81 +5,25 @@
         <nav id="sidebar">
             <ul class="list-unstyled components">
                 <div class="sidebar-header">
-                    <img class="img-fluid" src="/img/logo-white.png">
+                    <img class="img-fluid" src="../assets/img/logo-white.png">
                     <hr>
                 </div>
-                <li class="active">
-                    <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false"
-                        class="dropdown-toggle">Default</a>
-                    <ul class="collapse list-unstyled" id="homeSubmenu">
-                        <li>
-                            <a href="#">Atendimento</a>
-                        </li>
-                        <li>
-                            <a href="#">Cidade</a>
-                        </li>
-                        <li>
-                            <a href="#">Estado</a>
-                        </li>
-                        <li>
-                            <a href="#">Agenda de Eventos</a>
-                        </li>
-                        <li>
-                            <a href="#">Loja</a>
-                        </li>
-                        <li>
-                            <a href="#">Módulo</a>
-                        </li>
-                        <li>
-                            <a href="#">Meus Detalhes</a>
-                        </li>
-                        <li>
-                            <a href="#">Usuário</a>
-                        </li>
-                        <li>
-                            <a href="#">Rede</a>
-                        </li>
-                        <li>
-                            <a href="replicacao">Replicação</a>
-                        </li>
-                        <li>
-                            <a href="representante">Representante</a>
-                        </li>
-                        <li>
-                            <a href="#">Requisições ao Programador</a>
-                        </li>
-                        <li>
-                            <a href="#">Título Atendimento</a>
-                        </li>
-                    </ul>
+
+                <li>
+                    <a href="replicacao">Replicação</a>
                 </li>
 
                 <li>
-                    <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false"
-                        class="dropdown-toggle">Relatórios</a>
-                    <ul class="collapse list-unstyled" id="pageSubmenu">
-                        <li>
-                            <a href="#">Análises</a>
-                        </li>
-                        <li>
-                            <a href="#">Dashboards</a>
-                        </li>
-                        <li>
-                            <a href="#">Relatórios</a>
-                        </li>
-                    </ul>
+                    <a href="representante">Representante</a>
                 </li>
-                <li>
-                    <a href="#">Portfolio</a>
-                </li>
+
                 <li>
                     <a href="#">Sobre</a>
                 </li>
-                <form >
-                    <li>
-                        <a href="logout">Sair</a>
-                    </li>
-                </form>
+
+                <li>
+                    <a href="logout">Sair</a>
+                </li>
             </ul>
         </nav>
 
@@ -93,7 +37,11 @@
             </nav>
         </div>
     </div>
+      
   </div>
+
+
+
 </template>
 
 <script>
@@ -101,13 +49,13 @@
 export default {
     methods: {
         clique() {
-        var X = document.getElementById("sidebar").className;
-        if (X == "") {
-            document.getElementById("sidebar").className = "active"
-        } else {
-            document.getElementById("sidebar").className = ""
+            var X = document.getElementById("sidebar").className;
+            if (X == "") {
+                document.getElementById("sidebar").className = "active"
+            } else {
+                document.getElementById("sidebar").className = ""
+            }
         }
-    }
     }
 }
 </script>
