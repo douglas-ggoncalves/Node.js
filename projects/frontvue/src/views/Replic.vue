@@ -35,23 +35,24 @@
                     </button>
                 </div>
             </nav>
+
+            <h3>Home.vue</h3>
+            <div v-if="err">
+              <h3>{{ err }}</h3>
+            </div>
+
+            <div v-else>
+              <button @click="initVerify()">
+                Iniciar verificação
+              </button>
+
+              <div v-for="(poke, index) in data" :key="index">
+                <h5>{{data[index]}}</h5>
+              </div>
+            </div>
         </div>
-    </div>
 
-    <h3>Home.vue</h3>
-    <div v-if="err">
-      <h3>{{ err }}</h3>
-    </div>
-
-    <div v-else>
-      <button @click="initVerify()">
-        Iniciar verificação
-      </button>
-
-      <div v-for="(poke, index) in data" :key="index">
-        <h5>{{data[index]}}</h5>
-      </div>
-
+        
     </div>
   </div>
 </template>
@@ -109,13 +110,13 @@ export default {
           }
         }
     }, clique() {
-            var X = document.getElementById("sidebar").className;
-            if (X == "") {
-                document.getElementById("sidebar").className = "active"
-            } else {
-                document.getElementById("sidebar").className = ""
-            }
-        }
+        var X = document.getElementById("sidebar").className;
+          if (X == "") {
+              document.getElementById("sidebar").className = "active"
+           } else {
+              document.getElementById("sidebar").className = ""
+          }
+      }
   }
 }
 </script>
