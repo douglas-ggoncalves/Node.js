@@ -84,9 +84,9 @@
         </nav>
 
         <div id="content">
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <nav class="navbar navbar-expand-lg navbar-light">
                 <div class="container-fluid">
-                    <button type="button" id="sidebarCollapse" class="btn btn-outline-dark" onclick="clique()">
+                    <button type="button" id="sidebarCollapse" class="btn btn-outline-dark" @click="clique()">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                 </div>
@@ -97,8 +97,18 @@
 </template>
 
 <script>
-export default {
 
+export default {
+    methods: {
+        clique() {
+        var X = document.getElementById("sidebar").className;
+        if (X == "") {
+            document.getElementById("sidebar").className = "active"
+        } else {
+            document.getElementById("sidebar").className = ""
+        }
+    }
+    }
 }
 </script>
 
