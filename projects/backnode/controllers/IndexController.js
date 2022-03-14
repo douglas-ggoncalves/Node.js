@@ -14,10 +14,7 @@ class IndexController{
         console.log(query)
         console.log("Usuário ou senhas incorretos")
     } else {
-        //req.session.login = login;
-        //req.session.password = password;
-        console.log("Login " + JSON.stringify(query))
-        res.send({success: "Usuário logado", login: login})
+        res.send({success: "Usuário logado", login: login, password: password})
     }
 
     }

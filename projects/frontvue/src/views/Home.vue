@@ -66,10 +66,9 @@ export default {
           password: this.password
         })
         .then(res => {
-          localStorage.setItem("login", res.data.token);
-          alert("Logamos")
-          console.log(res)
-          console.log('Login é esse ' +this.login)
+          localStorage.setItem("login", res.data.login);
+          localStorage.setItem("password", res.data.password);
+           this.$router.push({name: "Index"})
         }).catch(err => {
           console.log(err)
         })
