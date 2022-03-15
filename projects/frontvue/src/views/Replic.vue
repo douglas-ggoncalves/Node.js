@@ -36,20 +36,54 @@
                 </div>
             </nav>
 
-            <h3>Home.vue</h3>
+            <div class="container">
+              <div class="row">
+                <div class="col-12">
+                    <h3>Replicações</h3>
+                </div>
+
+                <div class="col-12">
+
+                  <button class="btn btn-outline-dark" type="button" @click="initVerify()">
+                        Iniciar verificação
+                    </button>
+
+                    <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#replication">
+                      Novo
+                    </button>
+
+                    <button class="btn btn-outline-dark edit" type="button" id="edit" data-toggle="modal"
+                        data-target="#editModal">
+                        <i class="fa-solid fa-pencil"></i>
+                    </button>
+
+                    <button class="btn btn-outline-info" @click="reloadPage()">
+                        <i class="fa-solid fa-repeat"></i>
+                    </button>
+
+                    <button class="btn btn-outline-dark">
+                        <i class="fa-solid fa-sliders"></i>
+                    </button>
+                </div>
+                <div class="col d-flex justify-content-center">
+                    <hr class="bg-dark w-100 m-1">
+                </div>
+              </div>
+            </div>
+
             <div v-if="err">
               <h3>{{ err }}</h3>
             </div>
 
             <div v-else>
-              <button @click="initVerify()">
-                Iniciar verificação
-              </button>
+              
 
               <div v-for="(poke, index) in data" :key="index">
                 <h5>{{data[index]}}</h5>
               </div>
             </div>
+
+            
         </div>
 
         
@@ -109,17 +143,21 @@ export default {
             Vue.set(this.data, y, err.response.data)
           }
         }
-    }, clique() {
-        var X = document.getElementById("sidebar").className;
-          if (X == "") {
-              document.getElementById("sidebar").className = "active"
-           } else {
-              document.getElementById("sidebar").className = ""
-          }
+    }, 
+    clique() {
+      var X = document.getElementById("sidebar").className;
+      if (X == "") {
+          document.getElementById("sidebar").className = "active"
+        } else {
+          document.getElementById("sidebar").className = ""
       }
+    },
+    reloadPage() {
+      window.location.reload(true);
+    }
   }
 }
-</script>
+</script> 
 
 
 <style scoped>
@@ -230,6 +268,10 @@ ul ul a {
 button.btn.btn-link.aa:not(.collapsed){
     background-color: #e7f1ff;
     color: #0c63e4;
+}
+
+button {
+  margin: 0  .15rem !important;
 }
 
 </style>

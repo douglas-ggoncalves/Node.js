@@ -5,7 +5,6 @@ class IndexController{
     async login(req, res) {
     var login = await req.body.login;
     var password = await req.body.password;
-    console.log("Login: " +login + ' asENHAAAAAA ' +password)
     var query = await database.raw(`
         select * from USUARIO where login = 'DG' and senha = '${password}'
     `);
