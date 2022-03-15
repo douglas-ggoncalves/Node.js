@@ -71,19 +71,29 @@
               </div>
             </div>
 
-            <div v-if="err">
+            <div class="card" style="width: 100%;">
+              <div v-if="err">
               <h3>{{ err }}</h3>
             </div>
 
             <div v-else>
-              
-
               <div v-for="(poke, index) in data" :key="index">
                 <h5>{{data[index]}}</h5>
+
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item">An item</li>
+                  <li class="list-group-item">A second item</li>
+                  <li class="list-group-item">A third item</li>
+                </ul>
               </div>
             </div>
 
+                    
+                  </div>
+
             
+
+           
         </div>
 
         
