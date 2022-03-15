@@ -27,7 +27,7 @@
             </ul>
         </nav>
 
-        <div id="content">
+        <div class="container-fluid" id="content">
             <nav class="navbar navbar-expand-lg navbar-light">
                 <div class="container-fluid">
                     <button type="button" id="sidebarCollapse" class="btn btn-outline-dark" @click="clique()">
@@ -36,15 +36,14 @@
                 </div>
             </nav>
 
-            <div class="container">
-              <div class="row">
+            <div class="container d-flex justify-content-center">
+              <div class="row d-flex justify-content-center">
                 <div class="col-12">
                     <h3>Replicações</h3>
                 </div>
 
                 <div class="col-12">
-
-                  <button class="btn btn-outline-dark" type="button" @click="initVerify()">
+                  <button class="btn btn-outline-success" type="button" @click="initVerify()">
                         Iniciar verificação
                     </button>
 
@@ -65,38 +64,30 @@
                         <i class="fa-solid fa-sliders"></i>
                     </button>
                 </div>
-                <div class="col d-flex justify-content-center">
-                    <hr class="bg-dark w-100 m-1">
+                <div class="col d-flex justify-content-center mt-2">
+                  <hr class="bg-dark w-100 m-1">
                 </div>
               </div>
             </div>
 
-            <div class="card" style="width: 100%;">
+            <div class="card" style="width: 100%; border: none">
               <div v-if="err">
-              <h3>{{ err }}</h3>
-            </div>
+                <h3>{{ err }}</h3>
+              </div>
 
-            <div v-else>
-              <div v-for="(poke, index) in data" :key="index">
-                <h5>{{data[index]}}</h5>
+              <div v-else>
+                <div v-for="(poke, index) in data" :key="index">
+                  <h5>{{data[index]}}</h5>
 
-                <ul class="list-group list-group-flush">
-                  <li class="list-group-item">An item</li>
-                  <li class="list-group-item">A second item</li>
-                  <li class="list-group-item">A third item</li>
-                </ul>
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item">An item</li>
+                    <li class="list-group-item">A second item</li>
+                    <li class="list-group-item">A third item</li>
+                  </ul>
+                </div>
               </div>
             </div>
-
-                    
-                  </div>
-
-            
-
-           
         </div>
-
-        
     </div>
   </div>
 </template>
@@ -209,7 +200,6 @@ a[data-toggle="collapse"] {
 }
 
 @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
-
 
 body {
     font-family: 'Poppins', sans-serif;
