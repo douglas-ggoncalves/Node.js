@@ -28,65 +28,86 @@
         </nav>
 
         <div class="container-fluid" id="content">
-            <nav class="navbar navbar-expand-lg navbar-light">
-                <div class="container-fluid">
-                    <button type="button" id="sidebarCollapse" class="btn btn-outline-dark" @click="clique()">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                </div>
-            </nav>
+          <nav class="navbar navbar-expand-lg navbar-light">
+              <div class="container-fluid">
+                  <button type="button" id="sidebarCollapse" class="btn btn-outline-dark" @click="clique()">
+                      <span class="navbar-toggler-icon"></span>
+                  </button>
+              </div>
+          </nav>
 
-            <div class="container d-flex justify-content-center">
-              <div class="row d-flex justify-content-center">
-                <div class="col-12">
-                    <h3>Replicações</h3>
-                </div>
+          <div class="container d-flex justify-content-center">
+            <div class="row d-flex justify-content-center">
+              <div class="col-12">
+                <h3>Replicações</h3>
+              </div>
 
-                <div class="col-12">
-                  <button class="btn btn-outline-success" type="button" @click="initVerify()">
-                        Iniciar verificação
-                    </button>
+              <div class="col-12">
+                <button class="btn btn-outline-success" type="button" @click="initVerify()">
+                  Iniciar verificação
+                </button>
 
-                    <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#replication">
-                      Novo
-                    </button>
+                <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#replication">
+                  Novo
+                </button>
 
-                    <button class="btn btn-outline-dark edit" type="button" id="edit" data-toggle="modal"
-                        data-target="#editModal">
-                        <i class="fa-solid fa-pencil"></i>
-                    </button>
+                <button class="btn btn-outline-dark edit" type="button" id="edit" data-toggle="modal"
+                    data-target="#editModal">
+                  <i class="fa-solid fa-pencil"></i>
+                </button>
 
-                    <button class="btn btn-outline-info" @click="reloadPage()">
-                        <i class="fa-solid fa-repeat"></i>
-                    </button>
+                <button class="btn btn-outline-info" @click="reloadPage()">
+                    <i class="fa-solid fa-repeat"></i>
+                </button>
 
-                    <button class="btn btn-outline-dark">
-                        <i class="fa-solid fa-sliders"></i>
-                    </button>
-                </div>
-                <div class="col d-flex justify-content-center mt-2">
-                  <hr class="bg-dark w-100 m-1">
-                </div>
+                <button class="btn btn-outline-dark">
+                  <i class="fa-solid fa-sliders"></i>
+                </button>
+              </div>
+
+              <div class="col d-flex justify-content-center mt-2">
+                <hr class="bg-dark w-100 m-1">
               </div>
             </div>
+          </div>
 
-            <div class="card" style="width: 100%; border: none">
-              <div v-if="err">
-                <h3>{{ err }}</h3>
-              </div>
-
-              <div v-else>
-                <div v-for="(poke, index) in data" :key="index">
-                  <h5>{{data[index]}}</h5>
-
-                  <ul class="list-group list-group-flush">
-                    <li class="list-group-item">An item</li>
-                    <li class="list-group-item">A second item</li>
-                    <li class="list-group-item">A third item</li>
-                  </ul>
-                </div>
-              </div>
+          <div class="card" style="width: 100%; border: none;">
+            <div v-if="err">
+              <h3>{{ err }}</h3>
             </div>
+
+            <div v-else>
+              <table class="table table-bordered mt-3">
+                <thead>
+                  <tr>
+                    <th scope="col">Número Da Loja Origem</th>
+                    <th scope="col">Comandos</th>
+                    <th scope="col">Ações</th>
+                  </tr>
+                </thead>
+                <tbody v-for="(poke, index) in data" :key="index">
+
+                  <tr v-if="data[index].err">
+                    <td>{{ data[index].newArray.NOME_REDE }} {{ data[index].newArray.NUMERO_LOJA }}</td>
+                    <td>{{ data[index].err }} na loja {{ data[index].newArray.NUMERO_LOJA }}</td>
+                  </tr>
+
+                 <tr v-else>
+                    <td>{{ data[index].NOME_REDE }} {{ data[index].NUMERO_LOJA }}</td>
+                    <td>
+                      <div v-for="(arr, id) in data[index].result" :key="id">
+                      Loja Destino: {{ data[index].result[id].IDLojaDestino }} - Quantidade de Comandos: {{ data[index].result[id].QuantidadesDeComandos }}
+                      </div>
+                    </td>
+
+                    <td>@mdo</td>
+                  </tr>
+                  
+                </tbody>
+              </table>
+              
+            </div>
+          </div>
         </div>
     </div>
   </div>
@@ -142,6 +163,7 @@ export default {
             });
           } catch(err) {
             Vue.set(this.data, y, err.response.data)
+            console.log(err.response)
           }
         }
     }, 
