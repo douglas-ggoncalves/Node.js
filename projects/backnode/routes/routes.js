@@ -8,6 +8,7 @@ router.post('/', IndexController.login);
 router.get('/', IndexController.home);
 router.get('/index', IndexController.index);
 router.post('/replic', IndexController.searchComands);
+router.get('/searchRepresentative', IndexController.searchRepresentative);
 
 
 module.exports = router;

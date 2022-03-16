@@ -1,7 +1,6 @@
 var database = require("../database/database");
 
 class IndexController{
-    
     async login(req, res) {
     var login = await req.body.login;
     var password = await req.body.password;
@@ -61,7 +60,22 @@ class IndexController{
             res.send({newArray: array, err: "Ocorreu um erro de conexão"});
             return;
         }
-        
+    }
+
+    async searchRepresentative(req, res) {
+        var select =  `select * from pessoa, cidade, representante
+        where pessoa.cidade = cidade.codigo
+        and pessoa.codigo = representante.pessoa
+        asdsad`;
+        try{
+            await database.raw(select)
+            res.send({success: "Requisição feita com sucesso", select: select})
+
+        } catch(error) {
+            res.status(406);
+            res.send({err: select, select: select});
+            return;
+        }
     }
 }
 
