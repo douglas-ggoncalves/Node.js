@@ -4,6 +4,7 @@ import Home from '../views/Home.vue'
 import Replic from '../views/Replic.vue'
 import Index from '../views/Index.vue'
 import Representative from '../views/Representative.vue'
+import Teste from '../views/Teste.vue'
 
 Vue.use(VueRouter)
 
@@ -27,6 +28,11 @@ const routes = [
     path: '/representantes',
     name: 'Representative',
     component: Representative
+  },
+  {
+    path: '/teste',
+    name: 'Teste',
+    component: Teste
   }
 ]
 
