@@ -14,7 +14,7 @@
                 </li>
 
                 <li>
-                    <a href="representante">Representante</a>
+                    <a href="representantes">Representante</a>
                 </li>
 
                 <li>
@@ -85,8 +85,8 @@
                     <th scope="col">Ações</th>
                   </tr>
                 </thead>
-                <tbody v-for="(poke, index) in data" :key="index">
 
+                <tbody v-for="(poke, index) in data" :key="index">
                   <tr v-if="data[index].err">
                     <td>{{ data[index].newArray.NOME_REDE }} {{ data[index].newArray.NUMERO_LOJA }}</td>
                     <td>{{ data[index].err }} na loja {{ data[index].newArray.NUMERO_LOJA }}</td>
@@ -157,7 +157,7 @@ export default {
     async initVerify(){
         for(var y=0; y < this.data.length; y++) {
           try {
-            await axios.post("http://localhost:4000/replic", {array: this.data[y]})
+            await axios.post("http://localhost:4000/replicacoes", {array: this.data[y]})
             .then(res => {
               Vue.set(this.data, y, res.data.newArray)
             });

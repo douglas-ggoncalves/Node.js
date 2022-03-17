@@ -19,7 +19,7 @@ const routes = [
     component: Index
   },
   {
-    path: '/replicacao',
+    path: '/replicacoes',
     name: 'Replic',
     component: Replic
   },

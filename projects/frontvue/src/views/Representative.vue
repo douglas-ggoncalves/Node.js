@@ -14,7 +14,7 @@
                 </li>
 
                 <li>
-                    <a href="representante">Representante</a>
+                    <a href="representantes">Representante</a>
                 </li>
 
                 <li>
@@ -43,7 +43,7 @@
               </div>
 
               <div class="col-12">
-                <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#replication">
+                <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#repModal">
                   Novo
                 </button>
 
@@ -67,44 +67,61 @@
             </div>
           </div>
 
+            <button id="show-modal" @click="showModal = true">Show Modal</button>
+            <!-- use the modal component, pass in the prop -->
+            <modal v-if="showModal" @close="showModal = false">
+                <!--
+            you can use custom content here to overwrite
+            default content
+            -->
+                <h3 slot="header">custom header</h3>
+            </modal>
+
+          
+
           <div v-if="err != undefined">
-              <h3>Ocorreu um erro: {{ err }}</h3>
+              <h3>{{ err }}</h3>
           </div>
         </div>
     </div>
+
+    
   </div>
 </template>
 
 <script>
 import axios from 'axios';
+//import Vue from 'vue'
 
 export default {
 
     data(){
         return {
+            showModal: false,
             err: undefined
         }
     },
 
     created(){
-        axios.get("http://localhost:4000/searchRepresentative").then(res => {
+        axios.get("http://localhost:4000/representante").then(res => {
         console.log(res.data.select)
       }).catch(err => {
-          console.log(err)
-        //console.log("Ocorreu um erro " + JSON.stringify(err.response.data.err))
-        this.err = err.response.data.select
+        console.log(err.response.data.err)
+        console.log('Comando executado: ' + err.response.data.select)
+        this.err = "Ocorreu um erro, cheque o console para mais informações"
       })
     },
     methods: {
-    clique() {
-      var X = document.getElementById("sidebar").className;
-      if (X == "") {
-          document.getElementById("sidebar").className = "active"
-        } else {
-          document.getElementById("sidebar").className = ""
-      }
-    }
-}
+        clique() {
+        var X = document.getElementById("sidebar").className;
+            if (X == "") {
+                document.getElementById("sidebar").className = "active"
+            } else {
+                document.getElementById("sidebar").className = ""
+            }
+        }
+    }, 
+    
 }
 </script>
 
@@ -220,5 +237,70 @@ button.btn.btn-link.aa:not(.collapsed){
 button {
   margin: 0  .15rem !important;
 }
+
+.modal-mask {
+  position: fixed;
+  z-index: 9998;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: table;
+  transition: opacity 0.3s ease;
+}
+
+.modal-wrapper {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.modal-container {
+  width: 300px;
+  margin: 0px auto;
+  padding: 20px 30px;
+  background-color: #fff;
+  border-radius: 2px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
+  transition: all 0.3s ease;
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+.modal-header h3 {
+  margin-top: 0;
+  color: #42b983;
+}
+
+.modal-body {
+  margin: 20px 0;
+}
+
+.modal-default-button {
+  float: right;
+}
+
+/*
+ * The following styles are auto-applied to elements with
+ * transition="modal" when their visibility is toggled
+ * by Vue.js.
+ *
+ * You can easily play with the modal transition by editing
+ * these styles.
+ */
+
+.modal-enter {
+  opacity: 0;
+}
+
+.modal-leave-active {
+  opacity: 0;
+}
+
+.modal-enter .modal-container,
+.modal-leave-active .modal-container {
+  -webkit-transform: scale(1.1);
+  transform: scale(1.1);
+}
+
 
 </style>
