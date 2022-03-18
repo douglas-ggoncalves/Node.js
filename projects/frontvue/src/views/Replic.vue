@@ -211,10 +211,11 @@ export default {
               network: this.network
             })
             .then(res => {
-              console.log(res)
+              this.network = '';
+              alert(res.data.success)
             });
           } catch(err) {
-            alert('Ocorreu um erro ao tentar gravar o cadastro da rede ' +this.network + ' erro gerado: ' + JSON.stringify(err.response))
+            alert(JSON.stringify(err.response.data.err))
             console.log(err.response)
           }
         }

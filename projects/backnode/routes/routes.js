@@ -8,7 +8,6 @@ var RepresentativeController = require("../controllers/RepresentativeController"
 
 router.post('/', IndexController.login);
 router.get('/representantes', RepresentativeController.searchRepresentative);
-
 router.get('/replicacoes', ReplicController.getData);
 router.post('/replicacoes', ReplicController.searchComands);
 router.post('/redes', ReplicController.postNetworks);
