@@ -119,26 +119,18 @@
       <div class="row">
         <div class="card">
           <h4 class="card-header">Cadastrar Rede</h4>
-          
-          
-          <div class="card-body" style="">
-            <form action="">
-
+          <div class="card-body">
               <div class="col">
                   <label>Nome Da Rede</label>
-                  <input type="text" class="form-control" name="networkName" placeholder="Digite o nome da rede" required>
+                  <input type="text" class="form-control" placeholder="Digite o nome da rede" v-model="network" required>
               </div>
 
               <div class="col text-center mt-2">
-                  <button type="submit" class="btn btn-success">
+                  <button type="button" class="btn btn-success" @click="registerNetwork()">
                     Cadastrar
                   </button>
               </div>
-            </form>
-
           </div>
-
-          
         </div>
       </div>
     </modal>
@@ -161,6 +153,7 @@ export default {
   },
   data() {
     return {
+      network: '',
       err: undefined,
       data: [],
       arrays: 
@@ -205,6 +198,29 @@ export default {
           }
         }
     }, 
+    async registerNetwork(){
+      if(this.network.trim() == ""){
+        alert("Nome da rede não pode ser vazio")
+      } else{
+        var confirmation = await confirm("Deseja cadastrar a rede com o nome " + this.network +' ?');
+
+        if(confirmation) {
+          console.log(confirmation)
+          try {
+            await axios.post("http://localhost:4000/redes", {
+              network: this.network
+            })
+            .then(res => {
+              console.log(res)
+            });
+          } catch(err) {
+            alert('Ocorreu um erro ao tentar gravar o cadastro da rede ' +this.network + ' erro gerado: ' + JSON.stringify(err.response))
+            console.log(err.response)
+          }
+        }
+      }
+      //console.log("Chegou " + this.network)
+    },
     clique() {
       scrypt.clique(this);
     },

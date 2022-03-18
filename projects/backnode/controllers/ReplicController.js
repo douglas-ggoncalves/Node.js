@@ -1,7 +1,7 @@
 var database = require("../database/database");
 
 class ReplicController{
-    async pullData(req, res) {
+    async getData(req, res) {
         try{
             var idsNetworks = await database.raw(`
                 select rede.id from rede as rede
@@ -41,6 +41,26 @@ class ReplicController{
             res.send({newArray: array, err: "Ocorreu um erro de conexão"});
             return;
         }
+    }
+
+    async postNetworks(req, res) {
+        var networkName = await req.body.network;
+        var select;
+        try{
+            select = await database.raw(`
+                insert into rede (NOME_REDE) asdsd values ('${networkName}')
+            `);           
+        } catch(error) {
+            res.status(406);
+            res.send({err: `Ocorreu um erro na inserção da rede ${networkName}, segue a mensagem de erro 
+            
+            
+            ${error}`});
+            return;
+        }
+
+        res.send({success: "Rede cadastrada com sucesso!"})
+
     }
 }
 
