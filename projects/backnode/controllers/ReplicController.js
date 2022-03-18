@@ -44,12 +44,19 @@ class ReplicController{
     }
 
     async getNetworks(req, res) {
+        try{
+            var networks  = await database.raw(`
+	            select NOME_REDE from rede
+            `)
+        } catch(error){
+            res.status(406);
+            res.send({err: `Ocorreu um erro na inserção da rede ${networkName}, segue a mensagem de erro: ${error}`});
+            return;
+        } 
     }
 
     async postNetworks(req, res) {
-        //var networkFound = false;
         var networkName = await req.body.network;
-        var select;
         try{
             var networks  = await database.raw(`
 	            select NOME_REDE from rede
@@ -63,7 +70,7 @@ class ReplicController{
                 }
             }
 
-            select = await database.raw(`
+            var select = await database.raw(`
                 insert into rede (NOME_REDE) values ('${networkName}')
             `); 
         } catch(error) {
@@ -73,7 +80,6 @@ class ReplicController{
         }
 
         res.send({success: "Rede cadastrada com sucesso!"})
-
     }
 }
 
