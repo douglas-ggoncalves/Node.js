@@ -10,7 +10,7 @@
                 </div>
 
                 <li>
-                    <a href="replicacao">Replicação</a>
+                    <a href="replicacoes">Replicação</a>
                 </li>
 
                 <li>
@@ -43,12 +43,16 @@
               </div>
 
               <div class="col-12">
-                <button class="btn btn-outline-success" type="button" @click="initVerify()">
-                  Iniciar verificação
+                <button type="button" class="btn btn-outline-dark" @click="show()">
+                  Nova Rede
                 </button>
 
-                <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#replication">
-                  Novo
+                <button type="button" class="btn btn-outline-dark" data-toggle="modal" data-target="#replication">
+                  Nova Loja
+                </button>
+
+                <button class="btn btn-outline-success" type="button" @click="initVerify()">
+                  Iniciar verificação
                 </button>
 
                 <button class="btn btn-outline-dark edit" type="button" id="edit" data-toggle="modal"
@@ -56,7 +60,7 @@
                   <i class="fa-solid fa-pencil"></i>
                 </button>
 
-                <button class="btn btn-outline-info" @click="reloadPage()">
+                <button class="btn btn-outline-dark" @click="reloadPage()">
                     <i class="fa-solid fa-repeat"></i>
                 </button>
 
@@ -110,14 +114,46 @@
           </div>
         </div>
     </div>
+
+    <modal name="my-first-modal">
+      <div class="row">
+        <div class="card">
+          <h4 class="card-header">Cadastrar Rede</h4>
+          
+          
+          <div class="card-body" style="">
+            <form action="">
+
+              <div class="col">
+                  <label>Nome Da Rede</label>
+                  <input type="text" class="form-control" name="networkName" placeholder="Digite o nome da rede" required>
+              </div>
+
+              <div class="col text-center mt-2">
+                  <button type="submit" class="btn btn-success">
+                    Cadastrar
+                  </button>
+              </div>
+            </form>
+
+          </div>
+
+          
+        </div>
+      </div>
+    </modal>
+
   </div>
 </template>
 
 <script>
+import VModal from 'vue-js-modal'
 import axios from 'axios';
 import Vue from 'vue'
 import '../assets/style/style.css'
 import scrypt from "../assets/js/scrypt";
+
+Vue.use(VModal)
 
 export default {
   created(){
@@ -135,7 +171,7 @@ export default {
     }
   },
   methods: {
-    myFunction(){ axios.get("http://localhost:4000/index", )
+    myFunction(){ axios.get("http://localhost:4000/replicacoes", )
       .then(res => {
         this.arrays.idsNetworks.push(res.data.idsNetworks)
         this.arrays.lojas.push(res.data.stores)
@@ -174,7 +210,16 @@ export default {
     },
     reloadPage() {
       window.location.reload(true);
+    },
+    show () {
+      this.$modal.show('my-first-modal');
+    },
+    hide () {
+      this.$modal.hide('my-first-modal');
     }
+  }, 
+  mount () {
+    this.show()
   }
 }
 </script> 
@@ -182,5 +227,21 @@ export default {
 
 <style scoped>
 
+.row {
+  height: 100%;
+}
 
+.card {
+  border: none !important;
+}
+
+div.card-body{
+  margin-bottom: auto;
+  margin-top: auto;
+  text-align: left !important;
+}
+
+button {
+  margin-top: auto;
+}
 </style>

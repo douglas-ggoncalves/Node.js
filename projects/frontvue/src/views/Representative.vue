@@ -10,7 +10,7 @@
                 </div>
 
                 <li>
-                    <a href="replicacao">Replicação</a>
+                    <a href="replicacoes">Replicação</a>
                 </li>
 
                 <li>
@@ -104,7 +104,7 @@ export default {
     },
 
     created(){
-        axios.get("http://localhost:4000/representante").then(res => {
+        axios.get("http://localhost:4000/representantes").then(res => {
         console.log(res.data.select)
       }).catch(err => {
         console.log(err.response.data.err)
