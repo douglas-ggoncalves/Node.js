@@ -141,8 +141,8 @@
       </div>
     </modal>
 
-    <modal name="modalStore">
-      <div class="row" style="border: 1px solid red; height: 100vh">
+    <modal name="modalStore" id="modalStore">
+      <div class="row">
         <div class="card">
           <h4 class="card-header">Cadastrar Loja</h4>
           <div class="card-body">
@@ -170,17 +170,46 @@
             <div class="col">
               <div class="form-group">
                 <Label for="selectedStore">Selecione uma rede</Label>
-                <select id="selectedStore" class="form-control">
+                <select id="selectedStore" class="form-control" v-model="selected">
                   <option disabled value="">Escolha um item</option>
-                  <option>A</option>
-                  <option>B</option>
-                  <option>C</option>
+                  <option v-for="option in arrays.networks[0]" v-bind:value="option.NOME_REDE" :key="option.id">
+                    {{ option.NOME_REDE }}
+                  </option>
                 </select>
               </div>
             </div>
 
-            <div class="col text-center mt-2">
-                <button type="button" class="btn btn-success" @click="registerNetwork()">
+            <div class="col">
+              <div class="form-group">
+                <Label for="doorIP">Porta referente ao IP</Label>
+                <input type="text" id="doorIP" class="form-control" v-model="doorIP" placeholder="Informe a porta da loja" required readonly>
+              </div>
+            </div>
+      
+            <div class="col">
+              <div class="form-group">
+                <Label for="login">Login do banco</Label>
+                <input type="text" id="login" class="form-control" v-model="login" placeholder="Informe o login do banco" required readonly>
+              </div>
+            </div>
+
+            <div class="col">
+              <div class="form-group">
+                <Label for="password">Senha do banco</Label>
+                <input type="text" id="passwordBank" class="form-control" v-model="password" value="d120588$788455" placeholder="Informe a senha do banco" required readonly>
+              </div>
+            </div>
+
+            <div class="col mt-2">
+              <div class="text-center">
+                <button type="button" class="btn btn-outline-danger" @click="defaults()">
+                  Alterar valores padrões
+                </button>
+              </div>
+            </div>
+
+            <div class="col text-center mt-1">
+                <button type="button" class="btn btn-success" @click="registerStore()">
                   Cadastrar Loja
                 </button>
             </div>
@@ -233,11 +262,15 @@ export default {
       nameStore: '',
       ipStore: '',
       network: '',
+      selected: '',
+      login: 'sa',
+      doorIP: '3739',
+      password: 'd120588$788455',
       err: undefined,
       data: [],
       arrays: 
         {
-          idsNetworks: [],
+          networks: [],
           lojas: []
         }
     }
@@ -245,10 +278,12 @@ export default {
   methods: {
     myFunction(){ axios.get("http://localhost:4000/replicacoes", )
       .then(res => {
-        this.arrays.idsNetworks.push(res.data.idsNetworks)
+        this.arrays.networks.push(res.data.networks)
         this.arrays.lojas.push(res.data.stores)
 
-        for (var x=0;  x < this.arrays.idsNetworks[0].length; x++) {
+        console.log(JSON.stringify(res.data.networks))
+
+        for (var x=0;  x < this.arrays.networks[0].length; x++) {
           for(var i=0; i < this.arrays.lojas[0].length; i++ ){
             if(x+1 == this.arrays.lojas[0][i].id){
               if(this.arrays.lojas[0][i] != undefined){
@@ -302,6 +337,21 @@ export default {
       }
       //console.log("Chegou " + this.network)
     },
+    async registerStore() {
+      if(this.numberStoreNewStore.trim() == "" 
+        || this.nameStore.trim() == ""
+        || this.ipStore.trim() == ""
+        || this.selected.trim() == ""
+        || this.doorIP.trim() == ""
+        || this.login.trim() == ""
+        || this.password.trim() == ""
+      )
+      {
+        alert("Todos os dados devem ser preenchidos")
+      } else {
+        alert("Vamos cadastrar")
+      }
+    },
     clique() {
       scrypt.clique(this);
     },
@@ -329,6 +379,11 @@ export default {
        else if(this.numberStoreNewStore < 0){
         this.nameStore = 'Número da loja inválido'
       }
+    }, 
+    defaults() {
+      document.getElementById("login").removeAttribute("readonly");
+      document.getElementById("doorIP").removeAttribute("readonly");
+      document.getElementById("passwordBank").removeAttribute("readonly");
     }
   }/*, 
   mount () {
@@ -339,7 +394,6 @@ export default {
 
 
 <style scoped>
-
 .row {
   height: 100%;
 }

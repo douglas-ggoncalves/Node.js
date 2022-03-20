@@ -3,15 +3,15 @@ var database = require("../database/database");
 class ReplicController{
     async getData(req, res) {
         try{
-            var idsNetworks = await database.raw(`
-                select rede.id from rede as rede
-                left  join loja on rede.id = loja.redeid
-                group by rede.id
+            var networks = await database.raw(`
+                select rede.NOME_REDE, rede.id from rede as rede
+                left join loja on rede.id = loja.redeid
+                group by rede.NOME_REDE, rede.id
             `);
 
             var stores = await database.raw(`
                 select * from loja loja
-                left  join rede on rede.id  = loja.redeid
+                left join rede on rede.id  = loja.redeid
             `);
         } catch(error) {
             res.status(406);
@@ -19,7 +19,7 @@ class ReplicController{
             return;
         }
 
-        res.send({success: "Tudo OK", idsNetworks: idsNetworks, stores: stores})
+        res.send({success: "Tudo OK", networks: networks, stores: stores})
     }
 
     async searchComands(req, res) {
