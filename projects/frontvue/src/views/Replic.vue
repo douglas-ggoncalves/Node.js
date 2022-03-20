@@ -36,23 +36,27 @@
               </div>
           </nav>
 
-          <div class="container d-flex justify-content-center">
-            <div class="row d-flex justify-content-center">
+          <div class="container ">
+            <div class="row d-flex justify-content-center align-items-center">
               <div class="col-12">
                 <h3>Replicações</h3>
               </div>
 
               <div class="col-12">
-                <button type="button" class="btn btn-outline-dark" @click="show()">
+                <button type="button" class="btn btn-outline-dark" @click="showNewNetwork()">
                   Nova Rede
                 </button>
 
-                <button type="button" class="btn btn-outline-dark" data-toggle="modal" data-target="#replication">
+                <button type="button" class="btn btn-outline-dark" @click="showNewStore()">
                   Nova Loja
                 </button>
 
                 <button class="btn btn-outline-success" type="button" @click="initVerify()">
                   Iniciar verificação
+                </button>
+
+                <button class="btn btn-outline-success" type="button" @click="showFilterStores()">
+                  Filtrar Lojas
                 </button>
 
                 <button class="btn btn-outline-dark edit" type="button" id="edit" data-toggle="modal"
@@ -62,10 +66,6 @@
 
                 <button class="btn btn-outline-dark" @click="reloadPage()">
                     <i class="fa-solid fa-repeat"></i>
-                </button>
-
-                <button class="btn btn-outline-dark">
-                  <i class="fa-solid fa-sliders"></i>
                 </button>
               </div>
 
@@ -100,7 +100,7 @@
                     <td>{{ data[index].NOME_REDE }} {{ data[index].NUMERO_LOJA }}</td>
                     <td>
                       <div v-for="(arr, id) in data[index].result" :key="id">
-                      Loja Destino: {{ data[index].result[id].IDLojaDestino }} - Quantidade de Comandos: {{ data[index].result[id].QuantidadesDeComandos }}
+                        Loja Destino: {{ data[index].result[id].IDLojaDestino }} - Quantidade de Comandos: {{ data[index].result[id].QuantidadesDeComandos }}
                       </div>
                     </td>
 
@@ -115,7 +115,7 @@
         </div>
     </div>
 
-    <modal name="my-first-modal">
+    <modal name="modalNetwork">
       <div class="row">
         <div class="card">
           <h4 class="card-header">Cadastrar Rede</h4>
@@ -126,8 +126,82 @@
               </div>
 
               <div class="col text-center mt-2">
+                <button type="button" class="btn btn-outline-dark" @click="hideNewNetwork()">
+                  Fechar
+                </button>
+              </div>
+
+              <div class="col text-center mt-2">
                   <button type="button" class="btn btn-success" @click="registerNetwork()">
                     Cadastrar
+                  </button>
+              </div>
+          </div>
+        </div>
+      </div>
+    </modal>
+
+    <modal name="modalStore">
+      <div class="row" style="border: 1px solid red; height: 100vh">
+        <div class="card">
+          <h4 class="card-header">Cadastrar Loja</h4>
+          <div class="card-body">
+              <div class="col">
+              <div class="form-group">
+                <Label for="storeNumber">Número da loja</Label>
+                <input type="number" class="form-control" placeholder="Informe o número da loja" v-model="numberStoreNewStore" @change="updateStoreName()" required>
+              </div>
+            </div>
+
+            <div class="col">
+              <div class="form-group">
+                <Label for="storeName">Nome da loja</Label>
+                <input type="text" class="form-control" placeholder="Informe o nome da loja" v-model="nameStore" required>
+              </div>
+            </div>
+
+            <div class="col">
+              <div class="form-group">
+                <Label for="storeIP">IP da loja</Label>
+                <input type="text" class="form-control" placeholder="Informe o IP da loja" v-model="ipStore" required>
+              </div>
+            </div>
+
+            <div class="col">
+              <div class="form-group">
+                <Label for="selectedStore">Selecione uma rede</Label>
+                <select id="selectedStore" class="form-control">
+                  <option disabled value="">Escolha um item</option>
+                  <option>A</option>
+                  <option>B</option>
+                  <option>C</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="col text-center mt-2">
+                <button type="button" class="btn btn-success" @click="registerNetwork()">
+                  Cadastrar Loja
+                </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </modal>
+
+    <modal name="modalFilterStores">
+      <div class="row">
+        <div class="card">
+          <h4 class="card-header">Cadastrar Loja</h4>
+          <div class="card-body">
+              <div class="col">
+                  <label>Nome Da Rede</label>
+                  <input type="text" class="form-control" placeholder="Digite o nome da rede" v-model="network" required>
+              </div>
+
+              <div class="col text-center mt-2">
+                  <button type="button" class="btn btn-success" @click="registerNetwork()">
+                    Cadastrar Loja
                   </button>
               </div>
           </div>
@@ -145,7 +219,9 @@ import Vue from 'vue'
 import '../assets/style/style.css'
 import scrypt from "../assets/js/scrypt";
 
-Vue.use(VModal)
+Vue.use(VModal, {
+  dynamicDefaults: {height: 'auto'} 
+})
 
 export default {
   created(){
@@ -153,6 +229,9 @@ export default {
   },
   data() {
     return {
+      numberStoreNewStore: '',
+      nameStore: '',
+      ipStore: '',
       network: '',
       err: undefined,
       data: [],
@@ -174,7 +253,8 @@ export default {
             if(x+1 == this.arrays.lojas[0][i].id){
               if(this.arrays.lojas[0][i] != undefined){
                 this.data.push(this.arrays.lojas[0][i]);
-                Vue.set(this.arrays.lojas[0], i, ["zzzzzz"])
+                //this.data.push("asdasdasdas");
+                //Vue.set(this.data.lojas[0], i, ["zzzzzz"])
               }
             }
           }
@@ -228,16 +308,32 @@ export default {
     reloadPage() {
       window.location.reload(true);
     },
-    show () {
-      this.$modal.show('my-first-modal');
+    showNewNetwork () {
+      this.$modal.show('modalNetwork');
     },
-    hide () {
-      this.$modal.hide('my-first-modal');
+    hideNewNetwork () {
+      this.$modal.hide('modalNetwork');
+    }, 
+    showFilterStores(){
+      this.$modal.show('modalFilterStores');
+    },
+    showNewStore(){
+      this.$modal.show('modalStore');
+    },
+    updateStoreName(){
+      if(this.numberStoreNewStore == '0'){
+        this.nameStore = 'Integração';
+      } else if(this.numberStoreNewStore > 0) {
+        this.nameStore = 'Loja ' + this.numberStoreNewStore;
+      } 
+       else if(this.numberStoreNewStore < 0){
+        this.nameStore = 'Número da loja inválido'
+      }
     }
-  }, 
+  }/*, 
   mount () {
-    this.show()
-  }
+    this.showNewNetwork()
+  }*/
 }
 </script> 
 
