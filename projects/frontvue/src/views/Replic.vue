@@ -358,7 +358,7 @@ export default {
           }
         }
 
-
+        console.log(this.data)
         this.initVerify()
       }).catch(err => {
         console.log("Ocorreu um erro " +err.response.data)
