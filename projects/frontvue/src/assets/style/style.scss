@@ -113,10 +113,38 @@ button {
   margin: 0  .15rem !important;
 }
 
-#modalStore {
-    .vm--modal {
-        height: auto !important;
-        bottom: 2rem !important;
-        top: 2rem !important;
+#divMainReplic{
+    #modalStore, #modalStoreEdit {
+        .vm--modal {
+            height: auto !important;
+            bottom: 2rem !important;
+            top: 2rem !important;
+        }
     }
+
+    td,tr {
+        width: 20% !important;
+    }
+
+    .table > :not(:first-child){
+        border-top: none !important;
+    }
+
+    .row {
+        height: 100%;
+      }
+      
+      .card {
+        border: none !important;
+      }
+      
+      div.card-body{
+        margin-bottom: auto;
+        margin-top: auto;
+        text-align: left !important;
+      }
+      
+      button {
+        margin-top: auto;
+      }
 }

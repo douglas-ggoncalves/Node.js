@@ -115,8 +115,28 @@ button {
   margin: 0 0.15rem !important;
 }
 
-#modalStore .vm--modal {
+#divMainReplic #modalStore .vm--modal, #divMainReplic #modalStoreEdit .vm--modal {
   height: auto !important;
   bottom: 2rem !important;
   top: 2rem !important;
+}
+#divMainReplic td, #divMainReplic tr {
+  width: 20% !important;
+}
+#divMainReplic .table > :not(:first-child) {
+  border-top: none !important;
+}
+#divMainReplic .row {
+  height: 100%;
+}
+#divMainReplic .card {
+  border: none !important;
+}
+#divMainReplic div.card-body {
+  margin-bottom: auto;
+  margin-top: auto;
+  text-align: left !important;
+}
+#divMainReplic button {
+  margin-top: auto;
 }/*# sourceMappingURL=style.css.map */

@@ -11,6 +11,8 @@ router.get('/representantes', RepresentativeController.searchRepresentative);
 router.get('/replicacoes', ReplicController.getData);
 router.post('/replicacoes', ReplicController.searchComands);
 router.post('/redes', ReplicController.postNetworks);
+router.post('/lojas', ReplicController.postStores);
+router.patch('/lojas', ReplicController.patchStores);
 
 
 module.exports = router;

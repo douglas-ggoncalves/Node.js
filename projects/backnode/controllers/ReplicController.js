@@ -11,7 +11,7 @@ class ReplicController{
 
             var stores = await database.raw(`
                 select * from loja loja
-                left join rede on rede.id  = loja.redeid
+                left join rede on rede.id = loja.redeid
             `);
         } catch(error) {
             res.status(406);
@@ -33,8 +33,14 @@ class ReplicController{
                 );
             `).timeout(10000); // tempo limite de 10 segundos para a consulta ser realizada
 
-            array["result"] = result;
-            res.send({success: "Requisição feita com sucesso", newArray: array})
+            if(result.length == 0){
+                array["result"] = await [{semComandos: 'Não existem comandos pendentes'}];
+                res.send({success: "Requisição feita com sucesso", newArray: array})
+            } else {
+                array["result"] = await result;
+                res.send({success: "Requisição feita com sucesso", newArray: array})
+            }
+
         } catch(error) {
             res.status(406);
             array["err"] = "Ocorreu um erro de conexão";
@@ -80,6 +86,52 @@ class ReplicController{
         }
 
         res.send({success: "Rede cadastrada com sucesso!"})
+    }
+
+    async postStores(req, res) {
+        var numberStoreNewStore =  req.body.numberStoreNewStore;
+        var nameStore =  req.body.nameStore;
+        var ipStore =  req.body.ipStore;
+        var selected =  req.body.selected;
+        var doorIP =  req.body.doorIP;
+        var login =  req.body.login;
+        var password =  req.body.password;
+
+        try{
+            await database.raw(`
+                insert into loja (NUMERO_LOJA, NOME_LOJA, IP_LOJA, PORTA_LOJA, LOGIN_LOJA, SENHA_LOJA, REDEID)
+	            values('${numberStoreNewStore}', '${nameStore}', '${ipStore}', ${doorIP}, '${login}', '${password}', '${selected}')
+            `); 
+            
+        } catch(error) {
+            res.status(406);
+            res.send({err: `Ocorreu um erro na inserção da ${nameStore}, segue a mensagem de erro: ${error}`});
+            return;
+        }
+        res.send({success: `Loja cadastrada com sucesso`})
+    }
+
+    async patchStores(req, res) {
+        var idStore = req.body.idStore + 1; 
+        var editNumberStoreNewStore = req.body.editNumberStoreNewStore;
+        var editNameStore = req.body.editNameStore;
+        var editIpStore = req.body.editIpStore;
+        var editSelected = req.body.editSelected;
+        var editDoorIP = req.body.editDoorIP;
+        var editLogin =  req.body.editLogin; 
+
+        try{
+            await database.raw(`
+                update loja set NUMERO_LOJA = '${editNumberStoreNewStore}', NOME_LOJA = '${editNameStore}', 
+				IP_LOJA = '${editIpStore}', PORTA_LOJA = '${editDoorIP}', LOGIN_LOJA = '${editLogin}', REDEID = '${editSelected}'
+				where ID_LOJA = '${idStore}'
+            `); 
+        } catch(error) {
+            res.status(406);
+            res.send({err: `Ocorreu um erro na inserção da ${nameStore}, segue a mensagem de erro: ${error}`});
+            return;
+        }
+        res.send({success: `Loja cadastrada com sucesso`})
     }
 }
 

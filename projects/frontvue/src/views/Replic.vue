@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home" id="divMainReplic">
     <div class="wrapper">
         <!-- Sidebar -->
         <nav id="sidebar">
@@ -55,18 +55,18 @@
                   Iniciar verificação
                 </button>
 
-                <button class="btn btn-outline-success" type="button" @click="showFilterStores()">
-                  Filtrar Lojas
-                </button>
-
                 <button class="btn btn-outline-dark edit" type="button" id="edit" data-toggle="modal"
                     data-target="#editModal">
                   <i class="fa-solid fa-pencil"></i>
                 </button>
 
                 <button class="btn btn-outline-dark" @click="reloadPage()">
-                    <i class="fa-solid fa-repeat"></i>
+                  <i class="fa-solid fa-repeat"></i>
                 </button>
+              </div>
+
+               <div class="form-group">
+                <input type="email" class="form-control" id="search" placeholder="Digite o que você está procurando">
               </div>
 
               <div class="col d-flex justify-content-center mt-2">
@@ -80,36 +80,54 @@
               <h3>{{ err }}</h3>
             </div>
 
-            <div v-else>
-              <table class="table table-bordered mt-3">
+            <div v-else v-for="(network, aaaa) in arrays.networks[0]" :key="aaaa">
+              <table class="table table-bordered table-dark">
                 <thead>
                   <tr>
-                    <th scope="col">Número Da Loja Origem</th>
-                    <th scope="col">Comandos</th>
+                    <th scope="col"></th>
+                    <th scope="col" style="width: 60%">{{ network.NOME_REDE }}</th>
+                    <th scope="col"></th>
+                  </tr>
+
+                  <tr>
+                    <th scope="col">Loja Origem</th>
+                    <th scope="col" style="width: 60%">Comandos Pendentes</th>
                     <th scope="col">Ações</th>
                   </tr>
                 </thead>
-
+                
                 <tbody v-for="(poke, index) in data" :key="index">
-                  <tr v-if="data[index].err">
-                    <td>{{ data[index].newArray.NOME_REDE }} {{ data[index].newArray.NUMERO_LOJA }}</td>
-                    <td>{{ data[index].err }} na loja {{ data[index].newArray.NUMERO_LOJA }}</td>
+                  <tr v-if="poke.err" v-show="network.id == poke.REDEID">
+                    <td>{{ poke.NOME_REDE }} {{ poke.NUMERO_LOJA }}</td>
+                    <td>{{ poke.err }} com a loja {{ poke.NUMERO_LOJA }}</td>
+                    <td>
+                      <button type="button" class="btn btn-outline-light" @click="example(poke.ID_LOJA)">
+                        <i class="fa-solid fa-screwdriver-wrench"></i>
+                      </button>
+                    </td>
                   </tr>
 
-                 <tr v-else>
-                    <td>{{ data[index].NOME_REDE }} {{ data[index].NUMERO_LOJA }}</td>
+                 <tr v-if="!poke.err" v-show="network.id == poke.REDEID">
+                    <td>{{ poke.NOME_REDE }} {{ poke.NUMERO_LOJA }}</td>
                     <td>
                       <div v-for="(arr, id) in data[index].result" :key="id">
-                        Loja Destino: {{ data[index].result[id].IDLojaDestino }} - Quantidade de Comandos: {{ data[index].result[id].QuantidadesDeComandos }}
+                        <span v-if="!data[index].result[id].semComandos">
+                          Loja Destino: {{ data[index].result[id].IDLojaDestino }} - Quantidade de Comandos: {{ data[index].result[id].QuantidadesDeComandos }}
+                        </span>
+
+                        <span v-else>
+                          Não existem comandos pendentes
+                        </span>
                       </div>
                     </td>
-
-                    <td>@mdo</td>
+                    <td>
+                      <button type="button" class="btn btn-outline-light" @click="example(data[index].ID_LOJA)">
+                        <i class="fa-solid fa-screwdriver-wrench"></i>
+                      </button>
+                    </td>
                   </tr>
-                  
                 </tbody>
               </table>
-              
             </div>
           </div>
         </div>
@@ -121,8 +139,8 @@
           <h4 class="card-header">Cadastrar Rede</h4>
           <div class="card-body">
               <div class="col">
-                  <label>Nome Da Rede</label>
-                  <input type="text" class="form-control" placeholder="Digite o nome da rede" v-model="network" required>
+                <label>Nome Da Rede</label>
+                <input type="text" class="form-control" placeholder="Digite o nome da rede" v-model="network" required>
               </div>
 
               <div class="col text-center mt-2">
@@ -132,9 +150,9 @@
               </div>
 
               <div class="col text-center mt-2">
-                  <button type="button" class="btn btn-success" @click="registerNetwork()">
-                    Cadastrar
-                  </button>
+                <button type="button" class="btn btn-success" @click="registerNetwork()">
+                  Cadastrar
+                </button>
               </div>
           </div>
         </div>
@@ -171,8 +189,8 @@
               <div class="form-group">
                 <Label for="selectedStore">Selecione uma rede</Label>
                 <select id="selectedStore" class="form-control" v-model="selected">
-                  <option disabled value="">Escolha um item</option>
-                  <option v-for="option in arrays.networks[0]" v-bind:value="option.NOME_REDE" :key="option.id">
+                  <option disabled value="">Escolha uma rede</option>
+                  <option v-for="option in arrays.networks[0]" v-bind:value="option.id" :key="option.id">
                     {{ option.NOME_REDE }}
                   </option>
                 </select>
@@ -218,26 +236,68 @@
       </div>
     </modal>
 
-    <modal name="modalFilterStores">
+    <modal name="MyComponent" id="modalStoreEdit">
       <div class="row">
         <div class="card">
-          <h4 class="card-header">Cadastrar Loja</h4>
+          <h4 class="card-header">Editar Loja</h4>
           <div class="card-body">
               <div class="col">
-                  <label>Nome Da Rede</label>
-                  <input type="text" class="form-control" placeholder="Digite o nome da rede" v-model="network" required>
+              <div class="form-group">
+                <Label for="storeNumber">Número da loja</Label>
+                <input type="number" class="form-control" placeholder="Informe o número da loja" v-model="editNumberStoreNewStore" @change="editUpdateStoreName()" required>
               </div>
+            </div>
 
-              <div class="col text-center mt-2">
-                  <button type="button" class="btn btn-success" @click="registerNetwork()">
-                    Cadastrar Loja
-                  </button>
+            <div class="col">
+              <div class="form-group">
+                <Label for="storeName">Nome da loja</Label>
+                <input type="text" class="form-control" placeholder="Informe o nome da loja" v-model="editNameStore" required>
               </div>
+            </div>
+
+            <div class="col">
+              <div class="form-group">
+                <Label for="storeIP">IP da loja</Label>
+                <input type="text" class="form-control" placeholder="Informe o IP da loja" v-model="editIpStore" required>
+              </div>
+            </div>
+
+            <div class="col">
+              <div class="form-group">
+                <Label for="selectedStore">Selecione uma rede</Label>
+                <select id="selectedStore" class="form-control" v-model="editSelected">
+                  <option disabled value="">Escolha uma rede</option>
+                  <option v-for="option in arrays.networks[0]" v-bind:value="option.id" :key="option.id">
+                    {{ option.NOME_REDE }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <div class="col">
+              <div class="form-group">
+                <Label for="doorIP">Porta referente ao IP</Label>
+                <input type="text" id="doorIP" class="form-control" v-model="editDoorIP" placeholder="Informe a porta da loja" required>
+              </div>
+            </div>
+      
+            <div class="col">
+              <div class="form-group">
+                <Label for="login">Login do banco</Label>
+                <input type="text" id="login" class="form-control" v-model="editLogin" placeholder="Informe o login do banco" required>
+              </div>
+            </div>
+
+            <div class="col text-center mt-2">
+              <button type="button" class="btn btn-primary" @click="editStore()">
+                Editar Loja
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </modal>
-
+    
   </div>
 </template>
 
@@ -266,6 +326,13 @@ export default {
       login: 'sa',
       doorIP: '3739',
       password: 'd120588$788455',
+      buttonIdClicked: '',
+      editNumberStoreNewStore: '',
+      editNameStore: '',
+      editIpStore: '',
+      editSelected: '',
+      editDoorIP: '',
+      editLogin: '',
       err: undefined,
       data: [],
       arrays: 
@@ -281,22 +348,20 @@ export default {
         this.arrays.networks.push(res.data.networks)
         this.arrays.lojas.push(res.data.stores)
 
-        console.log(JSON.stringify(res.data.networks))
-
         for (var x=0;  x < this.arrays.networks[0].length; x++) {
           for(var i=0; i < this.arrays.lojas[0].length; i++ ){
             if(x+1 == this.arrays.lojas[0][i].id){
               if(this.arrays.lojas[0][i] != undefined){
                 this.data.push(this.arrays.lojas[0][i]);
-                //this.data.push("asdasdasdas");
-                //Vue.set(this.data.lojas[0], i, ["zzzzzz"])
               }
             }
           }
         }
+
+
         this.initVerify()
       }).catch(err => {
-        console.log("Ocorreu um erro " +err.response.data.err)
+        console.log("Ocorreu um erro " +err.response.data)
         this.err = err.response.data.err
       })
     }, 
@@ -308,10 +373,13 @@ export default {
               Vue.set(this.data, y, res.data.newArray)
             });
           } catch(err) {
-            Vue.set(this.data, y, err.response.data)
-            console.log(err.response)
+            Vue.set(this.data, y, err.response.data.newArray)
+            console.log(err.response.data.newArray)
           }
         }
+        console.log(JSON.stringify(this.data))
+
+
     }, 
     async registerNetwork(){
       if(this.network.trim() == ""){
@@ -341,7 +409,7 @@ export default {
       if(this.numberStoreNewStore.trim() == "" 
         || this.nameStore.trim() == ""
         || this.ipStore.trim() == ""
-        || this.selected.trim() == ""
+        || this.selected == ""
         || this.doorIP.trim() == ""
         || this.login.trim() == ""
         || this.password.trim() == ""
@@ -349,13 +417,39 @@ export default {
       {
         alert("Todos os dados devem ser preenchidos")
       } else {
-        alert("Vamos cadastrar")
+        var confirmation = await confirm("Confirma a criação desta loja ?");
+        if(confirmation){
+          try {
+            await axios.post("http://localhost:4000/lojas", {
+              numberStoreNewStore: this.numberStoreNewStore,
+              nameStore: this.nameStore,
+              ipStore: this.ipStore,
+              selected: this.selected,
+              doorIP: this.doorIP,
+              login: this.login,
+              password: this.password
+            })
+            .then(res => {
+              this.numberStoreNewStore = '',
+              this.nameStore = '',
+              this.ipStore = '',
+              this.selected = '',
+              this.doorIP = '3739',
+              this.login = 'sa',
+              this.password = 'd120588$788455'
+              alert(res.data.success)
+            });
+          } catch(err) {
+            alert(JSON.stringify(err.response.data.err))
+            console.log(err.response)
+          }
+        }
       }
     },
     clique() {
       scrypt.clique(this);
     },
-    reloadPage() {
+    async reloadPage() {
       window.location.reload(true);
     },
     showNewNetwork () {
@@ -363,12 +457,21 @@ export default {
     },
     hideNewNetwork () {
       this.$modal.hide('modalNetwork');
-    }, 
-    showFilterStores(){
-      this.$modal.show('modalFilterStores');
     },
     showNewStore(){
       this.$modal.show('modalStore');
+    },
+    example(message){
+      this.buttonIdClicked = message - 1
+      console.log(JSON.stringify(this.data[this.buttonIdClicked]))
+
+      this.editNumberStoreNewStore = this.data[this.buttonIdClicked].NUMERO_LOJA.toString()
+      this.editNameStore = this.data[this.buttonIdClicked].NOME_LOJA
+      this.editIpStore = this.data[this.buttonIdClicked].IP_LOJA
+      this.editSelected = this.data[this.buttonIdClicked].REDEID
+      this.editDoorIP = this.data[this.buttonIdClicked].PORTA_LOJA
+      this.editLogin = this.data[this.buttonIdClicked].LOGIN_LOJA
+      this.$modal.show('MyComponent');
     },
     updateStoreName(){
       if(this.numberStoreNewStore == '0'){
@@ -380,10 +483,60 @@ export default {
         this.nameStore = 'Número da loja inválido'
       }
     }, 
+    editUpdateStoreName(){
+      if(this.editNumberStoreNewStore == '0'){
+        this.editNameStore = 'Integração';
+      } else if(this.editNumberStoreNewStore > 0) {
+        this.editNameStore = 'Loja ' + this.editNumberStoreNewStore;
+      } 
+       else if(this.editNumberStoreNewStore < 0){
+        this.editNameStore = 'Número da loja inválido'
+      }
+    }, 
     defaults() {
       document.getElementById("login").removeAttribute("readonly");
       document.getElementById("doorIP").removeAttribute("readonly");
       document.getElementById("passwordBank").removeAttribute("readonly");
+    },
+    async editStore() {
+      if(this.editNameStore.trim() == ""
+        || this.editIpStore.trim() == ""
+        || this.editSelected == ""
+        || this.editLogin.trim() == ""
+      )
+      {
+        alert("Todos os dados devem ser preenchidos")
+      } else if(this.editNumberStoreNewStore < 0||  this.editDoorIP.length < 4){
+        alert("Número da loja ou ip da loja estão incorretos")
+      }  else {
+        var confirmation = await confirm("Confirma a alteração de dados ?");
+        if(confirmation){
+          try {
+            await axios.patch("http://localhost:4000/lojas", {
+              editNumberStoreNewStore: this.editNumberStoreNewStore,
+              editNameStore: this.editNameStore,
+              editIpStore: this.editIpStore,
+              editSelected: this.editSelected,
+              editDoorIP: this.editDoorIP,
+              editLogin: this.editLogin,
+              idStore: this.buttonIdClicked
+            })
+            .then(res => {
+              this.editNumberStoreNewStore = '',
+              this.editNameStore = '',
+              this.editIpStore = '',
+              this.editSelected = '',
+              this.editDoorIP = '',
+              this.editLogin = ''
+              alert(res.data.success)
+            });
+          } catch(err) {
+            alert(JSON.stringify(err.response.data.err))
+            console.log(err.response)
+          }
+        }
+      }
+    
     }
   }/*, 
   mount () {
@@ -394,21 +547,5 @@ export default {
 
 
 <style scoped>
-.row {
-  height: 100%;
-}
 
-.card {
-  border: none !important;
-}
-
-div.card-body{
-  margin-bottom: auto;
-  margin-top: auto;
-  text-align: left !important;
-}
-
-button {
-  margin-top: auto;
-}
 </style>
