@@ -12,6 +12,7 @@ class ReplicController{
             var stores = await database.raw(`
                 select * from loja loja
                 left join rede on rede.id = loja.redeid
+                order by REDEID, NUMERO_LOJA
             `);
         } catch(error) {
             res.status(406);

@@ -65,10 +65,6 @@
                 </button>
               </div>
 
-               <div class="form-group">
-                <input type="email" class="form-control" id="search" placeholder="Digite o que você está procurando">
-              </div>
-
               <div class="col d-flex justify-content-center mt-2">
                 <hr class="bg-dark w-100 m-1">
               </div>
@@ -80,7 +76,7 @@
               <h3>{{ err }}</h3>
             </div>
 
-            <div v-else v-for="(network, aaaa) in arrays.networks[0]" :key="aaaa">
+            <div v-else v-for="network in arrays.networks[0]" :key="network.id">
               <table class="table table-bordered table-dark">
                 <thead>
                   <tr>
@@ -98,7 +94,7 @@
                 
                 <tbody v-for="(poke, index) in data" :key="index">
                   <tr v-if="poke.err" v-show="network.id == poke.REDEID">
-                    <td>{{ poke.NOME_REDE }} {{ poke.NUMERO_LOJA }}</td>
+                    <td>{{ poke.NOME_LOJA }}</td>
                     <td>{{ poke.err }} com a loja {{ poke.NUMERO_LOJA }}</td>
                     <td>
                       <button type="button" class="btn btn-outline-light" @click="example(poke.ID_LOJA)">
@@ -108,7 +104,7 @@
                   </tr>
 
                  <tr v-if="!poke.err" v-show="network.id == poke.REDEID">
-                    <td>{{ poke.NOME_REDE }} {{ poke.NUMERO_LOJA }}</td>
+                    <td>{{ poke.NOME_LOJA }}</td>
                     <td>
                       <div v-for="(arr, id) in data[index].result" :key="id">
                         <span v-if="!data[index].result[id].semComandos">
@@ -358,10 +354,9 @@ export default {
           }
         }
 
-        console.log(this.data)
+        //console.log(this.data)
         this.initVerify()
       }).catch(err => {
-        console.log("Ocorreu um erro " +err.response.data)
         this.err = err.response.data.err
       })
     }, 
@@ -374,10 +369,8 @@ export default {
             });
           } catch(err) {
             Vue.set(this.data, y, err.response.data.newArray)
-            console.log(err.response.data.newArray)
           }
         }
-        console.log(JSON.stringify(this.data))
 
 
     }, 
@@ -388,7 +381,6 @@ export default {
         var confirmation = await confirm("Deseja cadastrar a rede com o nome " + this.network +' ?');
 
         if(confirmation) {
-          console.log(confirmation)
           try {
             await axios.post("http://localhost:4000/redes", {
               network: this.network
@@ -399,7 +391,6 @@ export default {
             });
           } catch(err) {
             alert(JSON.stringify(err.response.data.err))
-            console.log(err.response)
           }
         }
       }
@@ -441,7 +432,6 @@ export default {
             });
           } catch(err) {
             alert(JSON.stringify(err.response.data.err))
-            console.log(err.response)
           }
         }
       }
@@ -463,7 +453,6 @@ export default {
     },
     example(message){
       this.buttonIdClicked = message - 1
-      console.log(JSON.stringify(this.data[this.buttonIdClicked]))
 
       this.editNumberStoreNewStore = this.data[this.buttonIdClicked].NUMERO_LOJA.toString()
       this.editNameStore = this.data[this.buttonIdClicked].NOME_LOJA
@@ -532,7 +521,6 @@ export default {
             });
           } catch(err) {
             alert(JSON.stringify(err.response.data.err))
-            console.log(err.response)
           }
         }
       }
