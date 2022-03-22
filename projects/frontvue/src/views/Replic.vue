@@ -36,7 +36,7 @@
               </div>
           </nav>
 
-          <div class="container ">
+          <div class="container">
             <div class="row d-flex justify-content-center align-items-center">
               <div class="col-12">
                 <h3>Replicações</h3>
@@ -54,6 +54,16 @@
                 <button class="btn btn-outline-success" type="button" @click="initVerify()">
                   Iniciar verificação
                 </button>
+
+                <div class="dropdown">
+                  <button class="btn btn-outline-dark dropbtn"><i class="fa-solid fa-filter"></i></button>
+                  <div class="dropdown-content" >
+                    <input class="form-check-input" type="checkbox" id="gridCheck">
+      <label class="form-check-label" for="gridCheck">
+        Check me out
+      </label>
+                  </div>
+                </div>
 
                 <button class="btn btn-outline-dark edit" type="button" id="edit" data-toggle="modal"
                     data-target="#editModal">
@@ -344,17 +354,24 @@ export default {
         this.arrays.networks.push(res.data.networks)
         this.arrays.lojas.push(res.data.stores)
 
+        //
+
         for (var x=0;  x < this.arrays.networks[0].length; x++) {
-          for(var i=0; i < this.arrays.lojas[0].length; i++ ){
-            if(x+1 == this.arrays.lojas[0][i].id){
-              if(this.arrays.lojas[0][i] != undefined){
-                this.data.push(this.arrays.lojas[0][i]);
+          console.log(this.arrays.networks[0][x])
+          if(this.arrays.networks[0][x].Ativo == '0'){
+            for(var i=0; i < this.arrays.lojas[0].length; i++ ){
+              if(x+1 == this.arrays.lojas[0][i].id){
+                if(this.arrays.lojas[0][i] != undefined){
+                  this.data.push(this.arrays.lojas[0][i]);
+                }
               }
             }
           }
+          
         }
 
-        //console.log(this.data)
+        //console.log(this.arrays.networks[0])
+        //console.log(res.data.stores)
         this.initVerify()
       }).catch(err => {
         this.err = err.response.data.err
@@ -371,8 +388,6 @@ export default {
             Vue.set(this.data, y, err.response.data.newArray)
           }
         }
-
-
     }, 
     async registerNetwork(){
       if(this.network.trim() == ""){

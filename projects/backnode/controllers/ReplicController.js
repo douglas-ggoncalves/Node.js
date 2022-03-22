@@ -19,7 +19,13 @@ class ReplicController{
             res.send({err: "Ocorreu um erro na consulta do banco de dados  "+ error});
             return;
         }
+        //networks["zzzzzzzzzzzzzzzzzzzzzzz"] = await 'yrdyr';
 
+        for(var i=0; i<networks.length; i++) {
+            networks[i]["Ativo"] = '0';
+        }
+
+        console.log(networks)
         res.send({success: "Tudo OK", networks: networks, stores: stores})
     }
 
@@ -39,6 +45,7 @@ class ReplicController{
                 res.send({success: "Requisição feita com sucesso", newArray: array})
             } else {
                 array["result"] = await result;
+                //array["zzzzzzzzzzzzzzzzzzzzzzz"] = await result;
                 res.send({success: "Requisição feita com sucesso", newArray: array})
             }
 
