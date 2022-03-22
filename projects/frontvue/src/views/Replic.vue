@@ -356,6 +356,11 @@ export default {
 
         //
 
+        array.forEach(element => {
+          
+        });
+
+        /*
         for (var x=0;  x < this.arrays.networks[0].length; x++) {
           console.log(this.arrays.networks[0][x])
           if(this.arrays.networks[0][x].ativo == '1'){
@@ -367,8 +372,8 @@ export default {
               }
             }
           }
-          
         }
+        */
 
         //console.log(this.arrays.networks[0])
         //console.log(res.data.stores)
