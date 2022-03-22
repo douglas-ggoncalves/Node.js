@@ -59,9 +59,9 @@
                   <button class="btn btn-outline-dark dropbtn"><i class="fa-solid fa-filter"></i></button>
                   <div class="dropdown-content" >
                     <input class="form-check-input" type="checkbox" id="gridCheck">
-      <label class="form-check-label" for="gridCheck">
-        Check me out
-      </label>
+                    <label class="form-check-label" for="gridCheck">
+                      Check me out
+                    </label>
                   </div>
                 </div>
 
@@ -87,10 +87,10 @@
             </div>
 
             <div v-else v-for="network in arrays.networks[0]" :key="network.id">
-              <table class="table table-bordered table-dark">
+              <table class="table table-bordered table-dark" v-if="network.ativo == 1">
                 <thead>
                   <tr>
-                    <th scope="col"></th>
+                    <th scope="col">{{ network.ativo }}</th>
                     <th scope="col" style="width: 60%">{{ network.NOME_REDE }}</th>
                     <th scope="col"></th>
                   </tr>
@@ -358,7 +358,7 @@ export default {
 
         for (var x=0;  x < this.arrays.networks[0].length; x++) {
           console.log(this.arrays.networks[0][x])
-          if(this.arrays.networks[0][x].Ativo == '0'){
+          if(this.arrays.networks[0][x].ativo == '1'){
             for(var i=0; i < this.arrays.lojas[0].length; i++ ){
               if(x+1 == this.arrays.lojas[0][i].id){
                 if(this.arrays.lojas[0][i] != undefined){

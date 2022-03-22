@@ -22,10 +22,19 @@ class ReplicController{
         //networks["zzzzzzzzzzzzzzzzzzzzzzz"] = await 'yrdyr';
 
         for(var i=0; i<networks.length; i++) {
-            networks[i]["Ativo"] = '0';
+            if(networks[i].id == 1) {
+                networks[i]["ativo"] = '1';
+            }
+            else {
+                networks[i]["ativo"] = '1';
+            }
+            //console.log(JSON.stringify(networks[i].id))
+            
+            //networks[i]["ativo"] = '0';
+           
         }
 
-        console.log(networks)
+        //console.log(networks)
         res.send({success: "Tudo OK", networks: networks, stores: stores})
     }
 
