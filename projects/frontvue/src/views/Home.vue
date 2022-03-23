@@ -17,7 +17,7 @@
               </div>
 
               <div class="input-group" style="margin-top: 20px">
-                <input type="password" class="form-control" placeholder="Digite sua senha" v-model="password"/>
+                <input type="password" class="form-control" placeholder="Digite sua senha" autocomplete="on" v-model="password"/>
               </div>
 
               <div class="row d-flex justify-content-center mt-3">
@@ -70,6 +70,7 @@ export default {
           localStorage.setItem("password", res.data.password);
            this.$router.push({name: "Index"})
         }).catch(err => {
+          alert("Login ou senha incorretos")
           console.log(err)
         })
       }

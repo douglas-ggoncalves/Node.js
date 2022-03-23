@@ -55,15 +55,7 @@
                   Iniciar verificação
                 </button>
 
-                <div class="dropdown">
-                  <button class="btn btn-outline-dark dropbtn"><i class="fa-solid fa-filter"></i></button>
-                  <div class="dropdown-content" >
-                    <input class="form-check-input" type="checkbox" id="gridCheck">
-                    <label class="form-check-label" for="gridCheck">
-                      Check me out
-                    </label>
-                  </div>
-                </div>
+                
 
                 <button class="btn btn-outline-dark edit" type="button" id="edit" data-toggle="modal"
                     data-target="#editModal">
@@ -75,7 +67,18 @@
                 </button>
               </div>
 
-              <div class="col d-flex justify-content-center mt-2">
+              <div class="form-group col-md-4 mt-2">
+                <select class="form-control" v-model="selectNetwork">
+                  <option disabled value="">Filtrar rede</option>
+                  <option v-for="option in arrays.networks[0]" v-bind:value="option.id" :key="option.id">
+                    {{ option.NOME_REDE }}
+                    <input class="" type="checkbox">
+
+                  </option>
+                </select>
+              </div>
+
+              <div class="col-12 d-flex justify-content-center mt-2">
                 <hr class="bg-dark w-100 m-1">
               </div>
             </div>
@@ -339,6 +342,7 @@ export default {
       editSelected: '',
       editDoorIP: '',
       editLogin: '',
+      selectNetwork: '',
       err: undefined,
       data: [],
       arrays: 
@@ -354,15 +358,7 @@ export default {
         this.arrays.networks.push(res.data.networks)
         this.arrays.lojas.push(res.data.stores)
 
-        //
-
-        array.forEach(element => {
-          
-        });
-
-        /*
         for (var x=0;  x < this.arrays.networks[0].length; x++) {
-          console.log(this.arrays.networks[0][x])
           if(this.arrays.networks[0][x].ativo == '1'){
             for(var i=0; i < this.arrays.lojas[0].length; i++ ){
               if(x+1 == this.arrays.lojas[0][i].id){
@@ -373,7 +369,6 @@ export default {
             }
           }
         }
-        */
 
         //console.log(this.arrays.networks[0])
         //console.log(res.data.stores)
