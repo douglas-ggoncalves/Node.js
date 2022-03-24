@@ -1,46 +1,38 @@
+<!-- Vue component -->
 <template>
-  <div id="app">
-    <div class="example">
-    <Multiselect
-      v-model="example1.value"
-      v-bind="example1"
-    ></Multiselect>
-    </div>
+  <div>
+    <label class="typo__label">Simple select / dropdown</label>
+      <multiselect v-model="value" :options="options" :multiple="true" :close-on-select="false" :clear-on-select="false" :preserve-search="true" placeholder="Pick some" label="name" track-by="name" :preselect-first="true">
+        <template slot="selection" slot-scope="{ values, isOpen }"><span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen">{{ values.length }} options selected</span></template>
+      </multiselect>
+    <pre class="language-json"><code>{{ value  }}</code></pre>
   </div>
 </template>
 
 <script>
-import Vue from 'vue'
-import '../assets/style/style.css'
+  import Vue from 'vue'
+  import Multiselect from 'vue-multiselect'
+  Vue.component('multiselect', Multiselect)
 
-import VueCompositionAPI from '@vue/composition-api'
-import Multiselect from '@vueform/multiselect/dist/multiselect.vue2.js'
-Vue.use(VueCompositionAPI)
-
-export default {
-  components: {
-    Multiselect
-    },
-  data(){
-    return{
-      
-      example1: {
-      value: 0,
-      options: ['Batman', 'Robin', 'Joker']
-    }
+  export default {
+  data () {
+    return {
+      value: [],
+      options: [
+          { name: 'Vue.js', language: 'JavaScript' },
+          { name: 'Adonis', language: 'JavaScript' },
+          { name: 'Rails', language: 'Ruby' },
+          { name: 'Sinatra', language: 'Ruby' },
+          { name: 'Laravel', language: 'PHP' },
+          { name: 'Phoenix', language: 'Elixir' }
+        ]
+      }
     }
   }
-}
 </script>
 
-<style scoped>
-.multiselect-green {
-  --ms-tag-bg: #D1FAE5;
-  --ms-tag-color: #059669;
-}
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 
-.multiselect-blue {
-  --ms-tag-bg: #DBEAFE;
-  --ms-tag-color: #2563EB;
-}
+<style>
+  
 </style>

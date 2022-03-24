@@ -55,8 +55,6 @@
                   Iniciar verificação
                 </button>
 
-                
-
                 <button class="btn btn-outline-dark edit" type="button" id="edit" data-toggle="modal"
                     data-target="#editModal">
                   <i class="fa-solid fa-pencil"></i>
@@ -67,15 +65,20 @@
                 </button>
               </div>
 
-              <div class="form-group col-md-4 mt-2">
-                <select class="form-control" v-model="selectNetwork">
-                  <option disabled value="">Filtrar rede</option>
-                  <option v-for="option in arrays.networks[0]" v-bind:value="option.id" :key="option.id">
-                    {{ option.NOME_REDE }}
-                    <input class="" type="checkbox">
+              <div class="col-md-6 mt-2">
+                <label class="typo__label">Simple select / dropdown</label>
+                <multiselect v-model="value" :options="options" :multiple="true" :close-on-select="false" :clear-on-select="false" :preserve-search="true" placeholder="Filtrar redes" label="name" track-by="name" :preselect-first="false">
+                  <template slot="selection" slot-scope="{ values, isOpen }"><span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen">{{ values.length }} redes selecionadas</span></template>
+                </multiselect>
+              <!-- <pre class="language-json"><code>{{ value  }}</code></pre> -->
+              </div>
 
-                  </option>
-                </select>
+              <div class="col-md-6 mt-2">
+                <label class="typo__label">Simple select / dropdown</label>
+                <multiselect v-model="value" :options="teste" :multiple="true" :close-on-select="false" :clear-on-select="false" :preserve-search="true" placeholder="Filtrar redes" label="NOME_REDE" track-by="NOME_REDE" :preselect-first="false">
+                  <template slot="selection" slot-scope="{ values, isOpen }"><span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen">{{ values.length }} redes selecionadas</span></template>
+                </multiselect>
+              <!-- <pre class="language-json"><code>{{ value  }}</code></pre> -->
               </div>
 
               <div class="col-12 d-flex justify-content-center mt-2">
@@ -84,7 +87,7 @@
             </div>
           </div>
 
-          <div class="card" style="width: 100%; border: none;">
+          <div class="card" style="width: 100%;">
             <div v-if="err">
               <h3>{{ err }}</h3>
             </div>
@@ -316,6 +319,9 @@ import axios from 'axios';
 import Vue from 'vue'
 import '../assets/style/style.css'
 import scrypt from "../assets/js/scrypt";
+import Multiselect from 'vue-multiselect'
+
+Vue.component('multiselect', Multiselect)
 
 Vue.use(VModal, {
   dynamicDefaults: {height: 'auto'} 
@@ -327,6 +333,16 @@ export default {
   },
   data() {
     return {
+      value: [],
+      options: [
+          { name: 'Vue.js', language: 'JavaScript' },
+          { name: 'Adonis', language: 'JavaScript' },
+          { name: 'Rails', language: 'Ruby' },
+          { name: 'Sinatra', language: 'Ruby' },
+          { name: 'Laravel', language: 'PHP' },
+          { name: 'Phoenix', language: 'Elixir' }
+        ],
+      
       numberStoreNewStore: '',
       nameStore: '',
       ipStore: '',
@@ -350,11 +366,19 @@ export default {
           networks: [],
           lojas: []
         }
+        ,
+        teste:[{ name: 'Vue.js', language: 'JavaScript' },
+          { name: 'Adonis', language: 'JavaScript' },
+          { name: 'Rails', language: 'Ruby' },
+          { name: 'Sinatra', language: 'Ruby' },
+          { name: 'Laravel', language: 'PHP' },
+          { name: 'Phoenix', language: 'Elixir' }]
     }
   },
   methods: {
     myFunction(){ axios.get("http://localhost:4000/replicacoes", )
       .then(res => {
+        //this.teste.push(res.data.networks)
         this.arrays.networks.push(res.data.networks)
         this.arrays.lojas.push(res.data.stores)
 
@@ -548,6 +572,7 @@ export default {
 }
 </script> 
 
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 
 <style scoped>
 

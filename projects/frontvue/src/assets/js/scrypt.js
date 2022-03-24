@@ -11,5 +11,4 @@ exports.clique = () => {
     }
 };
 
-
 export default exports
