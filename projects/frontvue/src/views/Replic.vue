@@ -70,6 +70,9 @@
                 <multiselect v-model="value" :options="networks" :multiple="true" :close-on-select="false" :clear-on-select="false" :preserve-search="true" placeholder="Filtrar redes" label="NOME_REDE" track-by="NOME_REDE" :preselect-first="false">
                   <template slot="selection" slot-scope="{ values, isOpen }"><span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen">{{ values.length }} redes selecionadas</span></template>
                 </multiselect>
+
+
+                value.id?????
                 <!-- <pre class="language-json"><code>{{ value  }}</code></pre> -->
               </div>
 
