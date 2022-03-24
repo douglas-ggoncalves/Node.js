@@ -66,19 +66,11 @@
               </div>
 
               <div class="col-md-6 mt-2">
-                <label class="typo__label">Simple select / dropdown</label>
-                <multiselect v-model="value" :options="options" :multiple="true" :close-on-select="false" :clear-on-select="false" :preserve-search="true" placeholder="Filtrar redes" label="name" track-by="name" :preselect-first="false">
+                <!-- <label class="typo__label">Simple select / dropdown</label> -->
+                <multiselect v-model="value" :options="networks" :multiple="true" :close-on-select="false" :clear-on-select="false" :preserve-search="true" placeholder="Filtrar redes" label="NOME_REDE" track-by="NOME_REDE" :preselect-first="false">
                   <template slot="selection" slot-scope="{ values, isOpen }"><span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen">{{ values.length }} redes selecionadas</span></template>
                 </multiselect>
-              <!-- <pre class="language-json"><code>{{ value  }}</code></pre> -->
-              </div>
-
-              <div class="col-md-6 mt-2">
-                <label class="typo__label">Simple select / dropdown</label>
-                <multiselect v-model="value" :options="teste" :multiple="true" :close-on-select="false" :clear-on-select="false" :preserve-search="true" placeholder="Filtrar redes" label="NOME_REDE" track-by="NOME_REDE" :preselect-first="false">
-                  <template slot="selection" slot-scope="{ values, isOpen }"><span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen">{{ values.length }} redes selecionadas</span></template>
-                </multiselect>
-              <!-- <pre class="language-json"><code>{{ value  }}</code></pre> -->
+                <!-- <pre class="language-json"><code>{{ value  }}</code></pre> -->
               </div>
 
               <div class="col-12 d-flex justify-content-center mt-2">
@@ -92,7 +84,7 @@
               <h3>{{ err }}</h3>
             </div>
 
-            <div v-else v-for="network in arrays.networks[0]" :key="network.id">
+            <div v-else v-for="network in networks" :key="network.id">
               <table class="table table-bordered table-dark" v-if="network.ativo == 1">
                 <thead>
                   <tr>
@@ -202,7 +194,7 @@
                 <Label for="selectedStore">Selecione uma rede</Label>
                 <select id="selectedStore" class="form-control" v-model="selected">
                   <option disabled value="">Escolha uma rede</option>
-                  <option v-for="option in arrays.networks[0]" v-bind:value="option.id" :key="option.id">
+                  <option v-for="option in networks" v-bind:value="option.id" :key="option.id">
                     {{ option.NOME_REDE }}
                   </option>
                 </select>
@@ -279,7 +271,7 @@
                 <Label for="selectedStore">Selecione uma rede</Label>
                 <select id="selectedStore" class="form-control" v-model="editSelected">
                   <option disabled value="">Escolha uma rede</option>
-                  <option v-for="option in arrays.networks[0]" v-bind:value="option.id" :key="option.id">
+                  <option v-for="option in networks" v-bind:value="option.id" :key="option.id">
                     {{ option.NOME_REDE }}
                   </option>
                 </select>
@@ -361,41 +353,30 @@ export default {
       selectNetwork: '',
       err: undefined,
       data: [],
-      arrays: 
-        {
-          networks: [],
-          lojas: []
-        }
-        ,
-        teste:[{ name: 'Vue.js', language: 'JavaScript' },
-          { name: 'Adonis', language: 'JavaScript' },
-          { name: 'Rails', language: 'Ruby' },
-          { name: 'Sinatra', language: 'Ruby' },
-          { name: 'Laravel', language: 'PHP' },
-          { name: 'Phoenix', language: 'Elixir' }]
+      networks: [],
+      lojas: []
     }
   },
   methods: {
     myFunction(){ axios.get("http://localhost:4000/replicacoes", )
       .then(res => {
-        //this.teste.push(res.data.networks)
-        this.arrays.networks.push(res.data.networks)
-        this.arrays.lojas.push(res.data.stores)
+        this.networks = res.data.networks
+        this.lojas = res.data.stores
+        console.log(JSON.stringify(this.teste))
+        console.log(JSON.stringify(this.networks))
 
-        for (var x=0;  x < this.arrays.networks[0].length; x++) {
-          if(this.arrays.networks[0][x].ativo == '1'){
-            for(var i=0; i < this.arrays.lojas[0].length; i++ ){
-              if(x+1 == this.arrays.lojas[0][i].id){
-                if(this.arrays.lojas[0][i] != undefined){
-                  this.data.push(this.arrays.lojas[0][i]);
+        for (var x=0;  x < this.networks.length; x++) {
+          if(this.networks[x].ativo == '1'){
+            for(var i=0; i < this.lojas.length; i++ ){
+              if(x+1 == this.lojas[i].id){
+                if(this.lojas[i] != undefined){
+                  this.data.push(this.lojas[i]);
                 }
               }
             }
           }
         }
 
-        //console.log(this.arrays.networks[0])
-        //console.log(res.data.stores)
         this.initVerify()
       }).catch(err => {
         this.err = err.response.data.err
