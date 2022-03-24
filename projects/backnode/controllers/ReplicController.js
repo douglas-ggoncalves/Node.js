@@ -19,8 +19,7 @@ class ReplicController{
             res.send({err: "Ocorreu um erro na consulta do banco de dados  "+ error});
             return;
         }
-        //networks["zzzzzzzzzzzzzzzzzzzzzzz"] = await 'yrdyr';
-
+        
         for(var i=0; i<networks.length; i++) {
             if(networks[i].id == 1) {
                 networks[i]["ativo"] = '1';
@@ -34,7 +33,7 @@ class ReplicController{
            
         }
 
-        //console.log(networks)
+        console.log(networks)
         res.send({success: "Tudo OK", networks: networks, stores: stores})
     }
 

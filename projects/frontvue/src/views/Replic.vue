@@ -68,12 +68,10 @@
               <div class="col-md-6 mt-2">
                 <!-- <label class="typo__label">Simple select / dropdown</label> -->
                 <multiselect v-model="value" :options="networks" :multiple="true" :close-on-select="false" :clear-on-select="false" :preserve-search="true" placeholder="Filtrar redes" label="NOME_REDE" track-by="NOME_REDE" :preselect-first="false">
-                  <template slot="selection" slot-scope="{ values, isOpen }"><span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen">{{ values.length }} redes selecionadas</span></template>
+                  <template slot="selection" slot-scope="{ values, isOpen }"><span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen">{{ values.length }} redes selecionadas</span>
+                  
+                  </template>
                 </multiselect>
-
-
-                value.id?????
-                <!-- <pre class="language-json"><code>{{ value  }}</code></pre> -->
               </div>
 
               <div class="col-12 d-flex justify-content-center mt-2">
@@ -365,27 +363,31 @@ export default {
       .then(res => {
         this.networks = res.data.networks
         this.lojas = res.data.stores
-        console.log(JSON.stringify(this.teste))
-        console.log(JSON.stringify(this.networks))
 
         for (var x=0;  x < this.networks.length; x++) {
           if(this.networks[x].ativo == '1'){
             for(var i=0; i < this.lojas.length; i++ ){
               if(x+1 == this.lojas[i].id){
-                if(this.lojas[i] != undefined){
                   this.data.push(this.lojas[i]);
-                }
               }
             }
           }
         }
 
-        this.initVerify()
+        //this.initVerify()
       }).catch(err => {
         this.err = err.response.data.err
       })
     }, 
     async initVerify(){
+      /*
+      if(this.value.length > 0) {
+        alert("Tem dados")
+      } else {
+        alert("Informe uma rede")
+      }*/
+
+      console.log(this.value)
         for(var y=0; y < this.data.length; y++) {
           try {
             await axios.post("http://localhost:4000/replicacoes", {array: this.data[y]})

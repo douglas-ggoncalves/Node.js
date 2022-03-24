@@ -66,19 +66,12 @@
               </div>
 
               <div class="col-md-6 mt-2">
-                <label class="typo__label">Simple select / dropdown</label>
-                <multiselect v-model="value" :options="options" :multiple="true" :close-on-select="false" :clear-on-select="false" :preserve-search="true" placeholder="Filtrar redes" label="name" track-by="name" :preselect-first="false">
-                  <template slot="selection" slot-scope="{ values, isOpen }"><span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen">{{ values.length }} redes selecionadas</span></template>
-                </multiselect>
-              <!-- <pre class="language-json"><code>{{ value  }}</code></pre> -->
-              </div>
-
-              <div class="col-md-6 mt-2">
-                <label class="typo__label">Simple select / dropdown</label>
+                <!-- <label class="typo__label">Simple select / dropdown</label> -->
                 <multiselect v-model="value" :options="networks" :multiple="true" :close-on-select="false" :clear-on-select="false" :preserve-search="true" placeholder="Filtrar redes" label="NOME_REDE" track-by="NOME_REDE" :preselect-first="false">
-                  <template slot="selection" slot-scope="{ values, isOpen }"><span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen">{{ values.length }} redes selecionadas</span></template>
+                  <template slot="selection" slot-scope="{ values, isOpen }"><span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen">{{ values.length }} redes selecionadas</span>
+                  
+                  </template>
                 </multiselect>
-              <!-- <pre class="language-json"><code>{{ value  }}</code></pre> -->
               </div>
 
               <div class="col-12 d-flex justify-content-center mt-2">
@@ -92,7 +85,7 @@
               <h3>{{ err }}</h3>
             </div>
 
-            <div v-else v-for="network in networks" :key="network.id">
+            <div v-else v-show="showData" v-for="network in networks" :key="network.id">
               <table class="table table-bordered table-dark" v-if="network.ativo == 1">
                 <thead>
                   <tr>
@@ -334,15 +327,6 @@ export default {
   data() {
     return {
       value: [],
-      options: [
-          { name: 'Vue.js', language: 'JavaScript' },
-          { name: 'Adonis', language: 'JavaScript' },
-          { name: 'Rails', language: 'Ruby' },
-          { name: 'Sinatra', language: 'Ruby' },
-          { name: 'Laravel', language: 'PHP' },
-          { name: 'Phoenix', language: 'Elixir' }
-        ],
-      
       numberStoreNewStore: '',
       nameStore: '',
       ipStore: '',
@@ -362,7 +346,8 @@ export default {
       err: undefined,
       data: [],
       networks: [],
-      lojas: []
+      lojas: [],
+      showData: true
     }
   },
   methods: {
@@ -370,27 +355,33 @@ export default {
       .then(res => {
         this.networks = res.data.networks
         this.lojas = res.data.stores
-        console.log(JSON.stringify(this.teste))
-        console.log(JSON.stringify(this.networks))
+
 
         for (var x=0;  x < this.networks.length; x++) {
-          if(this.networks[x].ativo == '1'){
+          //if(this.networks[x].ativo == '1'){
             for(var i=0; i < this.lojas.length; i++ ){
               if(x+1 == this.lojas[i].id){
-                if(this.lojas[i] != undefined){
                   this.data.push(this.lojas[i]);
-                }
               }
             }
-          }
+          //}
         }
-
-        this.initVerify()
+        
+        //this.initVerify()
       }).catch(err => {
         this.err = err.response.data.err
       })
     }, 
     async initVerify(){
+      if(this.value.length > 0) {
+        this.value.forEach(element => {
+          //console.log(element.NOME_REDE)
+          console.log(element.id)
+        });
+      } else {
+        alert("Informe uma rede")
+      }
+
         for(var y=0; y < this.data.length; y++) {
           try {
             await axios.post("http://localhost:4000/replicacoes", {array: this.data[y]})
