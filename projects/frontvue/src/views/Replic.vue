@@ -391,7 +391,6 @@ export default {
           }
         }
       }
-        //this.showData = true;
     }, 
     async registerNetwork(){
       if(this.network.trim() == ""){
