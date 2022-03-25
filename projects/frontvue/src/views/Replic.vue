@@ -85,7 +85,7 @@
               <h3>{{ err }}</h3>
             </div>
 
-            <div v-else v-for="network in networks" :key="network.id">
+            <div v-else v-show="showData" v-for="network in networks" :key="network.id">
               <table class="table table-bordered table-dark" v-if="network.ativo == 1">
                 <thead>
                   <tr>
@@ -302,7 +302,6 @@
         </div>
       </div>
     </modal>
-    
   </div>
 </template>
 
@@ -327,15 +326,6 @@ export default {
   data() {
     return {
       value: [],
-      options: [
-          { name: 'Vue.js', language: 'JavaScript' },
-          { name: 'Adonis', language: 'JavaScript' },
-          { name: 'Rails', language: 'Ruby' },
-          { name: 'Sinatra', language: 'Ruby' },
-          { name: 'Laravel', language: 'PHP' },
-          { name: 'Phoenix', language: 'Elixir' }
-        ],
-      
       numberStoreNewStore: '',
       nameStore: '',
       ipStore: '',
@@ -355,7 +345,8 @@ export default {
       err: undefined,
       data: [],
       networks: [],
-      lojas: []
+      lojas: [],
+      showData: false
     }
   },
   methods: {
@@ -363,41 +354,44 @@ export default {
       .then(res => {
         this.networks = res.data.networks
         this.lojas = res.data.stores
-
         for (var x=0;  x < this.networks.length; x++) {
-          if(this.networks[x].ativo == '1'){
+          //if(this.networks[x].ativo == '1'){
             for(var i=0; i < this.lojas.length; i++ ){
               if(x+1 == this.lojas[i].id){
-                  this.data.push(this.lojas[i]);
+                this.data.push(this.lojas[i]);
               }
             }
-          }
+          //}
         }
-
+        
         //this.initVerify()
       }).catch(err => {
         this.err = err.response.data.err
       })
     }, 
     async initVerify(){
-      /*
-      if(this.value.length > 0) {
-        alert("Tem dados")
-      } else {
-        alert("Informe uma rede")
-      }*/
 
-      console.log(this.value)
+      if(this.value.length == 0){
+        alert("Informe uma rede para iniciar a verificação")
+      } else{
         for(var y=0; y < this.data.length; y++) {
-          try {
-            await axios.post("http://localhost:4000/replicacoes", {array: this.data[y]})
-            .then(res => {
-              Vue.set(this.data, y, res.data.newArray)
-            });
-          } catch(err) {
-            Vue.set(this.data, y, err.response.data.newArray)
+          for(var x = 0; x< this.value.length; x++){
+
+            if(this.data[y].REDEID == this.value[x].id){
+              try {
+                await axios.post("http://localhost:4000/replicacoes", {array: this.data[y]})
+                .then(res => {
+                  Vue.set(this.data, y, res.data.newArray)
+                });
+                this.showData = true;
+              } catch(err) {
+                Vue.set(this.data, y, err.response.data.newArray)
+              }
+            }
           }
         }
+      }
+        //this.showData = true;
     }, 
     async registerNetwork(){
       if(this.network.trim() == ""){

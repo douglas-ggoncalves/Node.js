@@ -30,7 +30,6 @@ class ReplicController{
             //console.log(JSON.stringify(networks[i].id))
             
             //networks[i]["ativo"] = '0';
-           
         }
 
         console.log(networks)

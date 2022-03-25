@@ -361,7 +361,7 @@ export default {
           //if(this.networks[x].ativo == '1'){
             for(var i=0; i < this.lojas.length; i++ ){
               if(x+1 == this.lojas[i].id){
-                  this.data.push(this.lojas[i]);
+                this.data.push(this.lojas[i]);
               }
             }
           //}
@@ -373,25 +373,27 @@ export default {
       })
     }, 
     async initVerify(){
-      if(this.value.length > 0) {
-        this.value.forEach(element => {
-          //console.log(element.NOME_REDE)
-          console.log(element.id)
-        });
-      } else {
-        alert("Informe uma rede")
-      }
 
+      if(this.value.length == 0){
+        alert("Informe uma rede para iniciar a verificação")
+      } else{
         for(var y=0; y < this.data.length; y++) {
-          try {
-            await axios.post("http://localhost:4000/replicacoes", {array: this.data[y]})
-            .then(res => {
-              Vue.set(this.data, y, res.data.newArray)
-            });
-          } catch(err) {
-            Vue.set(this.data, y, err.response.data.newArray)
+          for(var x = 0; x< this.value.length; x++){
+
+            if(this.data[y].REDEID == this.value[x].id){
+              try {
+                await axios.post("http://localhost:4000/replicacoes", {array: this.data[y]})
+                .then(res => {
+                  Vue.set(this.data, y, res.data.newArray)
+                });
+              } catch(err) {
+                Vue.set(this.data, y, err.response.data.newArray)
+              }
+            }
           }
         }
+      }
+        //this.showData = true;
     }, 
     async registerNetwork(){
       if(this.network.trim() == ""){
