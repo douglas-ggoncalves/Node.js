@@ -19,20 +19,6 @@ class ReplicController{
             res.send({err: "Ocorreu um erro na consulta do banco de dados  "+ error});
             return;
         }
-        /*
-        for(var i=0; i<networks.length; i++) {
-            if(networks[i].id == 1) {
-                networks[i]["ativo"] = '1';
-            }
-            else {
-                networks[i]["ativo"] = '1';
-            }
-            //console.log(JSON.stringify(networks[i].id))
-            
-            //networks[i]["ativo"] = '0';
-        }
-*/
-        console.log(networks)
         res.send({success: "Tudo OK", networks: networks, stores: stores})
     }
 
@@ -52,7 +38,6 @@ class ReplicController{
                 res.send({success: "Requisição feita com sucesso", newArray: array})
             } else {
                 array["result"] = await result;
-                //array["zzzzzzzzzzzzzzzzzzzzzzz"] = await result;
                 res.send({success: "Requisição feita com sucesso", newArray: array})
             }
 

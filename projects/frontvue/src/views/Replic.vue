@@ -67,10 +67,13 @@
 
               <div class="col-md-6 mt-2">
                 <!-- <label class="typo__label">Simple select / dropdown</label> -->
-                <multiselect v-model="value" :options="networks" :multiple="true" :close-on-select="false" :clear-on-select="false" :preserve-search="true" placeholder="Filtrar redes" label="NOME_REDE" track-by="NOME_REDE" :preselect-first="false">
+                <multiselect v-model="value" :options="networks" :multiple="true" :selectLabel="'Selecionar esta rede'" :selectedLabel="'Rede selecionada'" :deselectLabel="'Remover rede'" :close-on-select="false" :clear-on-select="false" :preserve-search="true" placeholder="Filtrar redes" label="NOME_REDE" track-by="NOME_REDE" :preselect-first="false">
                   <template slot="selection" slot-scope="{ values, isOpen }"><span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen">{{ values.length }} redes selecionadas</span>
-                  
+                    
                   </template>
+                  <span slot="noResult">
+                      Sua pesquisa não retornou nenhum resultado
+                    </span>
                 </multiselect>
               </div>
 
@@ -86,10 +89,11 @@
             </div>
 
             <div v-else v-show="showData" v-for="network in networks" :key="network.id">
-              <table class="table table-bordered table-dark" v-if="network.ativo == 1">
+              <div v-for="(peguei, index) in value" :key="index"> 
+              <table class="table table-bordered table-dark" v-if="network.id == value[index].id">
                 <thead>
                   <tr>
-                    <th scope="col">{{ network.ativo }}</th>
+                    <th scope="col"></th>
                     <th scope="col" style="width: 60%">{{ network.NOME_REDE }}</th>
                     <th scope="col"></th>
                   </tr>
@@ -133,6 +137,9 @@
                   </tr>
                 </tbody>
               </table>
+
+              </div>
+
             </div>
           </div>
         </div>
@@ -355,13 +362,11 @@ export default {
         this.networks = res.data.networks
         this.lojas = res.data.stores
         for (var x=0;  x < this.networks.length; x++) {
-          //if(this.networks[x].ativo == '1'){
             for(var i=0; i < this.lojas.length; i++ ){
               if(x+1 == this.lojas[i].id){
                 this.data.push(this.lojas[i]);
               }
             }
-          //}
         }
         
         //this.initVerify()
@@ -376,7 +381,6 @@ export default {
       } else{
         for(var y=0; y < this.data.length; y++) {
           for(var x = 0; x< this.value.length; x++){
-
             if(this.data[y].REDEID == this.value[x].id){
               try {
                 await axios.post("http://localhost:4000/replicacoes", {array: this.data[y]})
