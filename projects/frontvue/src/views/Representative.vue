@@ -117,6 +117,5 @@ export default {
         scrypt.clique(this);
       }
     }, 
-    
 }
 </script>

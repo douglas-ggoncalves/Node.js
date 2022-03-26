@@ -368,7 +368,7 @@ export default {
               }
             }
         }
-        
+        //console.log(this.data)
         //this.initVerify()
       }).catch(err => {
         this.err = err.response.data.err
@@ -382,12 +382,12 @@ export default {
         for(var y=0; y < this.data.length; y++) {
           for(var x = 0; x< this.value.length; x++){
             if(this.data[y].REDEID == this.value[x].id){
+              this.showData = true;
               try {
                 await axios.post("http://localhost:4000/replicacoes", {array: this.data[y]})
                 .then(res => {
                   Vue.set(this.data, y, res.data.newArray)
                 });
-                this.showData = true;
               } catch(err) {
                 Vue.set(this.data, y, err.response.data.newArray)
               }
