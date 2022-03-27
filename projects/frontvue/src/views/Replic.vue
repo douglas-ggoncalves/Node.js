@@ -362,11 +362,11 @@ export default {
         this.networks = res.data.networks
         this.lojas = res.data.stores
         for (var x=0;  x < this.networks.length; x++) {
-            for(var i=0; i < this.lojas.length; i++ ){
-              if(x+1 == this.lojas[i].id){
-                this.data.push(this.lojas[i]);
-              }
+          for(var i=0; i < this.lojas.length; i++ ){
+            if(x+1 == this.lojas[i].id){
+              this.data.push(this.lojas[i]);
             }
+          }
         }
         //console.log(this.data)
         //this.initVerify()

@@ -52,6 +52,10 @@
                 <hr class="bg-dark w-100 m-1">
               </div>
 
+                <div class="form-group">
+                    <input type="text" class="form-control" v-model="busca" placeholder="Busca por login do usuário">
+                </div>
+
                 <table class="table table-hover">
                     <thead>
                         <tr>
@@ -61,11 +65,12 @@
                         <th scope="col">Handle</th>
                         </tr>
                     </thead>
-                    <tbody  v-for="client in clients" :key="client.ID_USUARIO">
+
+                    <tbody v-for="client in searchClient" :key="client.ID_USUARIO">
                         <tr>
-                        <th scope="row">{{ client.LOGIN_USUARIO }}</th>
+                            <th scope="row">{{ client.LOGIN_USUARIO }}</th>
                             <td>{{ client.CARGO_USUARIO }}</td>
-                            <td>{{ client.REDEID_USUARIO }}</td>
+                            <td>{{ client.NOME_REDE }}</td>
                             <td>
                                 <button class="btn btn-outline-dark">
                                     <i class="fa-solid fa-pencil"></i>
@@ -82,7 +87,7 @@
         </div>
     </div>
 
-    <modal name="modalNewUser"  id="modalStore">
+    <modal name="modalNewUser" id="modalStore">
         <div class="container">
             <div class="row">
                 <div class="card">
@@ -90,36 +95,35 @@
                     <div class="card-body">
                         <div class="col">
                             <label>Login</label>
-                            <input type="text" class="form-control" placeholder="Informe o seu login" v-model="loginUser" required>
+                            <input type="text" class="form-control" placeholder="Informe o login" v-model="loginUser" required>
                         </div>
 
                         <div class="col">
                             <label>Senha</label>
-                            <input type="password" class="form-control" placeholder="Informe sua senha" v-model="passwordUser" required>
+                            <input type="password" class="form-control" placeholder="Informe a senha" v-model="passwordUser" required>
                         </div>
 
                         <div class="col">
                             <div class="form-group">
                                 <Label for="selectedRole">Selecione um cargo</Label>
                                 <select id="selectedRole" class="form-control" v-model="abbreviatedRoleUser">
-                                <option disabled value="">Escolha um cargo</option>
-                                <option v-for="user in users" v-bind:value="user.abbreviatedRoleUser" :key="user.id">
-                                    {{ user.role }}
-                                </option>
+                                    <option disabled value="">Escolha um cargo</option>
+                                    <option v-for="user in users" v-bind:value="user.abbreviatedRoleUser" :key="user.id">
+                                        {{ user.role }}
+                                    </option>
                                 </select>
                             </div>
                         </div>
                         
                         <div class="col">
-
-                        <div class="form-group">
-                            <Label for="selectedStore">Selecione uma rede</Label>
-                            <select id="selectedStore" class="form-control" v-model="selected">
-                                <option disabled value="">Escolha uma rede</option>
-                                <option v-for="option in networks" v-bind:value="option.id" :key="option.id">
-                                {{ option.NOME_REDE }}
-                                </option>
-                            </select>
+                            <div class="form-group">
+                                <Label for="selectedStore">Selecione uma rede</Label>
+                                <select id="selectedStore" class="form-control" v-model="selected">
+                                    <option disabled value="">Escolha uma rede</option>
+                                    <option v-for="option in networks" v-bind:value="option.id" :key="option.id">
+                                    {{ option.NOME_REDE }}
+                                    </option>
+                                </select>
                             </div>
                         </div>
 
@@ -162,6 +166,7 @@ export default {
     data(){
         return{
             clients: [],
+            busca: '',
             loginUser: '',
             passwordUser: '',
             abbreviatedRoleUser: '',
@@ -237,6 +242,15 @@ export default {
     created(){
         this.myFunction();
         this.myFunction2();
+    },
+    computed: {
+        searchClient: function(){
+            if(this.busca.trim() == ''){
+                return this.clients;
+            } else{
+                return this.clients.filter(client => client.LOGIN_USUARIO.toLowerCase().match(this.busca.toLowerCase()));
+            }
+        }
     }
 }
 </script>

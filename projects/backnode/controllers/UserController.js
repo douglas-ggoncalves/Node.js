@@ -6,32 +6,26 @@ var secret = "as55a6a5as5d4a5qvjnkalçKASNFJLkakfnJKKjknldjsn";
 var bcrypt = require("bcrypt");
 
 class UserController{
-    
-
     async login(req, res) {
         var login = await req.body.login;
         var password = await req.body.password;
+        var user = await User.findLogin(login);
 
-        var verifyLogin = await User.findLogin(login);
+        if(user != undefined) {
+            var result = await bcrypt.compare(password, user.SENHA_USUARIO);
 
-        /*
-
-        try{
-            var query = await database.raw(`
-                select * from USUARIO where login = '${login}' and senha = '${password}'
-            `);
-        } catch(err) {
-            console.log(err)
+            if(result) {
+                var token = jwt.sign({ idNetworkUser: user.REDEID_USUARIO, role: user.CARGO_USUARIO }, secret);
+                res.status(200);
+                res.send({token: token})
+            } else {
+                res.status(406);
+                res.send({err: "Senha incorreta"});
+            }
+        } else{
+            res.status(406);
+            res.json({status: false, err: "O usuário não existe"})
         }
-
-        if(query.length == 0) {
-            res.status(404)
-            res.send({err: "Login ou senha incorretos"})
-            return
-        } else {
-            res.send({success: "Usuário logado", login: login, password: password})
-        }
-        */
     }
 
     async create(req, res) {
@@ -58,8 +52,10 @@ class UserController{
         var users = await User.findAllUser();
         res.send(users)
     }
-    
-    
+
+    async validate(req, res) {
+        res.send("Ok");
+    }
 }
 
 module.exports = new UserController();

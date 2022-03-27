@@ -1,6 +1,6 @@
 var knex = require("../database/database");
 var bcrypt = require("bcrypt");
-//const PasswordTokens = require("./PasswordTokens");
+const PasswordTokens = require("./PasswordTokens");
 
 class User{
     async findLogin(login) {
@@ -31,27 +31,9 @@ class User{
         }
     }
 
-    async loginUser(login, password) {
-        try{
-            var query = await database.raw(`
-                select * from USUARIO where login = '${login}' and senha = '${password}'
-            `);
-        } catch(err) {
-            console.log(err)
-        }
-
-        if(query.length == 0) {
-            res.status(404)
-            res.send({err: "Login ou senha incorretos"})
-            return
-        } else {
-            res.send({success: "Usuário logado", login: login, password: password})
-        }
-    }
-
     async findAllUser(){
         try {
-            var result = await knex.select().table("USUARIO");
+            var result = await knex.select().from("USUARIO").leftOuterJoin('rede', 'rede.id', 'USUARIO.REDEID_USUARIO');
             return result;
         } catch(err) {
             console.log(err);

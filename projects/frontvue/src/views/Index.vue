@@ -10,7 +10,7 @@
                 </div>
 
                 <li>
-                    <a href="replicacao">Replicação</a>
+                    <a href="replicacoes">Replicação</a>
                 </li>
 
                 <li>

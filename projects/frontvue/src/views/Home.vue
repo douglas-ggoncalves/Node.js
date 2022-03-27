@@ -56,19 +56,17 @@ export default {
       err: true
     }
   }, methods: {
-
-    log(){
+    async log(){
       if(this.login.trim() == '' || this.password.trim() == ''){
         alert("Usuário ou senha inválidos")
       } else {
-        axios.post("http://localhost:4000/", {
+        await axios.post("http://localhost:4000/", {
           login: this.login,
           password: this.password
         })
         .then(res => {
-          localStorage.setItem("login", res.data.login);
-          localStorage.setItem("password", res.data.password);
-           this.$router.push({name: "Index"})
+          localStorage.setItem("token", res.data.token);
+          this.$router.push({name: "Index"})
         }).catch(err => {
           alert("Login ou senha incorretos")
           console.log(err)
