@@ -9,6 +9,10 @@
                     <hr>
                 </div>
 
+                <li v-if="roleUserLogged == 'M'">
+                  <a href="adminUsers">Painel Administrativo</a>
+                </li>
+
                 <li>
                     <a href="replicacoes">Replicação</a>
                 </li>
@@ -45,10 +49,21 @@ import '../assets/style/style.css'
 import scrypt from "../assets/js/scrypt";
 
 export default {
+    data(){
+        return {
+            roleUserLogged: ''
+        }
+    },
+    created(){
+        this.myFunction();
+    },
     methods: {
         clique() {
             scrypt.clique(this);
+        }, myFunction(){
+            this.roleUserLogged = localStorage.getItem("roleUser")
         }
     }
+
 }
 </script>

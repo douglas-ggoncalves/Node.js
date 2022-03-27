@@ -9,6 +9,10 @@
                     <hr>
                 </div>
 
+                <li v-if="roleUserLogged == 'M'">
+                  <a href="adminUsers">Painel Administrativo</a>
+                </li>
+
                 <li>
                     <a href="replicacoes">Replicação</a>
                 </li>
@@ -166,6 +170,7 @@ export default {
     data(){
         return{
             clients: [],
+            roleUserLogged: '',
             busca: '',
             loginUser: '',
             passwordUser: '',
@@ -191,6 +196,7 @@ export default {
             axios.get("http://localhost:4000/users", )
             .then(res => {
                 this.clients = res.data
+                this.roleUserLogged = localStorage.getItem("roleUser")
             }).catch(err => {
                 alert("Ocorreu um erro " + err.response.data.err)
             })

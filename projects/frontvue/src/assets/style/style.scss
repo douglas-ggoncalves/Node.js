@@ -189,4 +189,10 @@ button {
       .dropdown:hover .dropbtn {
         background-color: #3e8e41;
       }
+
+      a.btn.btn-outline-light{
+        &:hover {
+            color: black !important;
+        }
+      }
 }

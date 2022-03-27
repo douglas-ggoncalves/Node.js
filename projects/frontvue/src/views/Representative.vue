@@ -9,6 +9,10 @@
                     <hr>
                 </div>
 
+                <li v-if="roleUserLogged == 'M'">
+                  <a href="adminUsers">Painel Administrativo</a>
+                </li>
+
                 <li>
                     <a href="replicacoes">Replicação</a>
                 </li>
@@ -97,14 +101,15 @@ import scrypt from "../assets/js/scrypt";
 
 export default {
     data(){
-        return {
-            showModal: false,
-            err: undefined
-        }
+      return {
+          roleUserLogged: '',
+          showModal: false,
+          err: undefined
+      }
     },
-
     created(){
         axios.get("http://localhost:4000/representantes").then(res => {
+        this.roleUserLogged = localStorage.getItem("roleUser")
         console.log(res.data.select)
       }).catch(err => {
         console.log(err.response.data.err)

@@ -14,9 +14,9 @@ class UserController{
         if(user != undefined) {
             var result = await bcrypt.compare(password, user.SENHA_USUARIO);
             if(result) {
-                var token = jwt.sign({ idNetworkUser: user.REDEID_USUARIO, role: user.CARGO_USUARIO }, secret);
+                var token = await jwt.sign({ idNetworkUser: user.REDEID_USUARIO, role: user.CARGO_USUARIO }, secret);
                 res.status(200);
-                res.send({token: token})
+                res.send({token: token, user: user})
             } else {
                 res.status(406);
                 res.send({err: "Senha incorreta"});
@@ -53,6 +53,7 @@ class UserController{
     }
 
     async validate(req, res) {
+        res.status(200)
         res.send("Ok");
     }
 }

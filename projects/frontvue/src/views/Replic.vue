@@ -9,6 +9,10 @@
                     <hr>
                 </div>
 
+                <li v-if="roleUserLogged == 'M'">
+                  <a href="adminUsers">Painel Administrativo</a>
+                </li>
+
                 <li>
                     <a href="replicacoes">Replicação</a>
                 </li>
@@ -43,11 +47,11 @@
               </div>
 
               <div class="col-12">
-                <button type="button" class="btn btn-outline-dark" @click="showNewNetwork()">
+                <button type="button" class="btn btn-outline-dark" @click="showNewNetwork()" v-if="roleUserLogged == 'M'">
                   Nova Rede
                 </button>
 
-                <button type="button" class="btn btn-outline-dark" @click="showNewStore()">
+                <button type="button" class="btn btn-outline-dark" @click="showNewStore()" v-if="roleUserLogged == 'M'">
                   Nova Loja
                 </button>
 
@@ -55,17 +59,16 @@
                   Iniciar verificação
                 </button>
 
-                <button class="btn btn-outline-dark edit" type="button" id="edit" data-toggle="modal"
-                    data-target="#editModal">
+                <button class="btn btn-outline-dark edit" type="button" v-if="roleUserLogged == 'M'">
                   <i class="fa-solid fa-pencil"></i>
-                </button>
+                </button >
 
                 <button class="btn btn-outline-dark" @click="reloadPage()">
                   <i class="fa-solid fa-repeat"></i>
                 </button>
               </div>
 
-              <div class="col-md-6 mt-2">
+              <div class="col-md-6 mt-2" v-if="roleUserLogged == 'M'">
                 <!-- <label class="typo__label">Simple select / dropdown</label> -->
                 <multiselect v-model="value" :options="networks" :multiple="true" :selectLabel="'Selecionar esta rede'" :selectedLabel="'Rede selecionada'" :deselectLabel="'Remover rede'" :close-on-select="false" :clear-on-select="false" :preserve-search="true" placeholder="Filtrar redes" label="NOME_REDE" track-by="NOME_REDE" :preselect-first="false">
                   <template slot="selection" slot-scope="{ values, isOpen }"><span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen">{{ values.length }} redes selecionadas</span>
@@ -110,9 +113,14 @@
                     <td>{{ poke.NOME_LOJA }}</td>
                     <td>{{ poke.err }} com a loja {{ poke.NUMERO_LOJA }}</td>
                     <td>
-                      <button type="button" class="btn btn-outline-light" @click="example(poke.ID_LOJA)">
+                      <a v-bind:href="`https://api.whatsapp.com/send?phone=5562999770941&text=Olá! gostaria que alguém verificasse a replicação da ${network.NOME_REDE} ${poke.NOME_LOJA}`" class="btn btn-outline-light" v-if="roleUserLogged == 'A'" target="_blank">
+                        <i class="fa-solid fa-headset"></i>
+                      </a>
+
+                      <button type="button" class="btn btn-outline-light" @click="example(poke.ID_LOJA)" v-if="roleUserLogged == 'M'">
                         <i class="fa-solid fa-screwdriver-wrench"></i>
                       </button>
+
                     </td>
                   </tr>
 
@@ -130,7 +138,11 @@
                       </div>
                     </td>
                     <td>
-                      <button type="button" class="btn btn-outline-light" @click="example(data[index].ID_LOJA)">
+                      <a v-bind:href="`https://api.whatsapp.com/send?phone=5562999770941&text=Olá! gostaria que alguém verificasse a replicação da ${network.NOME_REDE} ${poke.NOME_LOJA}`" class="btn btn-outline-light" v-if="roleUserLogged == 'A'" target="_blank">
+                        <i class="fa-solid fa-headset"></i>
+                      </a>
+
+                      <button type="button" class="btn btn-outline-light" @click="example(data[index].ID_LOJA)" v-if="roleUserLogged == 'M'">
                         <i class="fa-solid fa-screwdriver-wrench"></i>
                       </button>
                     </td>
@@ -353,7 +365,9 @@ export default {
       data: [],
       networks: [],
       lojas: [],
-      showData: false
+      showData: false,
+      redeIdUserLogged: '',
+      roleUserLogged: ''
     }
   },
   methods: {
@@ -368,17 +382,34 @@ export default {
             }
           }
         }
-        //console.log(this.data)
-        //this.initVerify()
+
+        this.redeIdUserLogged = localStorage.getItem("redeIdUser")
+        this.roleUserLogged = localStorage.getItem("roleUser")
+
+        if(this.redeIdUserLogged != 'null') {
+          console.log("entrou no if rapaz " + this.redeIdUserLogged)
+          this.value.push({"id": this.redeIdUserLogged});
+          this.initVerify();
+        }
       }).catch(err => {
         this.err = err.response.data.err
       })
     }, 
     async initVerify(){
-
       if(this.value.length == 0){
         alert("Informe uma rede para iniciar a verificação")
       } else{
+        for(var e=0; e < this.data.length; e++) { // for para deixar array vazio antes de fazer novas consultas
+          for(var i = 0; i< this.value.length; i++){
+            if(this.data[e].result){
+              this.data[e].result = []
+            }
+
+            if(this.data[e].err){
+              this.data[e].err = ''
+            }
+          }}
+
         for(var y=0; y < this.data.length; y++) {
           for(var x = 0; x< this.value.length; x++){
             if(this.data[y].REDEID == this.value[x].id){
@@ -416,7 +447,6 @@ export default {
           }
         }
       }
-      //console.log("Chegou " + this.network)
     },
     async registerStore() {
       if(this.numberStoreNewStore.trim() == "" 

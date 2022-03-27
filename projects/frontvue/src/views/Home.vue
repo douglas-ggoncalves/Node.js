@@ -66,6 +66,8 @@ export default {
         })
         .then(res => {
           localStorage.setItem("token", res.data.token);
+          localStorage.setItem("roleUser", res.data.user.CARGO_USUARIO);
+          localStorage.setItem("redeIdUser", res.data.user.REDEID_USUARIO);
           this.$router.push({name: "Index"})
         }).catch(err => {
           alert("Login ou senha incorretos")
