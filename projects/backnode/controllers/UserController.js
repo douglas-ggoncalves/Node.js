@@ -32,7 +32,6 @@ class UserController{
         var role = await req.body.role;
         var networkId = await req.body.networkId;
 
-
         try{
             if(login != undefined && password != undefined){
                 var loginExists = await User.findLogin(login);
@@ -59,7 +58,6 @@ class UserController{
             res.status(406);
             return;
         }
-       
     }
 
     async delete(req, res) {
@@ -84,6 +82,39 @@ class UserController{
                 res.status(404)
                 res.send({else: `Ocorreu um erro ao tentar excluir ${login}`})
             }
+        }
+    }
+
+    async edit(req, res) {
+        var login = await req.body.editLoginUser;
+        var role = await req.body.editRoleUser;
+        var network = await req.body.editRoleNetwork;
+
+        try{
+            if(login != undefined && role != undefined){
+                var loginExists = await User.findLogin(login);
+    
+                if(loginExists != undefined){ // login existe
+                    res.status(404)
+                    res.send({err: "Já existe um usuário com este login"})
+                    return
+                } else{
+                    var newUser = await User.newUser(login, password, role, networkId)
+                    console.log(JSON.stringify(newUser))
+                    if(newUser != undefined){
+                        res.send({success: "Usuário criado com sucesso"})
+                        return;
+                    } else {
+                        res.status(406);
+                        res.send({err: 'Ocorreu um erro ao tentar cadastrar o usuário '});
+                        return;
+                    }
+                }
+            }
+        } catch(err)  {
+            res.send({err: 'Ocorreu um erro ' + err});
+            res.status(406);
+            return;
         }
     }
 

@@ -10,6 +10,7 @@ var MasterAuth = require("../middleware/MasterAuth")
 router.post('/', UserController.login);
 router.get('/users',MasterAuth, UserController.getUsers);
 router.post('/user', UserController.create);
+router.patch('/user', UserController.edit);
 router.delete('/user/:login', UserController.delete);
 router.get('/representantes', RepresentativeController.searchRepresentative);
 router.get('/replicacoes', AdminAuth, ReplicController.getData);

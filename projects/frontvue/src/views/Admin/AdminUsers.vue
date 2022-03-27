@@ -70,13 +70,13 @@
                         </tr>
                     </thead>
 
-                    <tbody v-for="client in searchClient" :key="client.ID_USUARIO">
+                    <tbody v-for="(client, index) in searchClient" :key="client.ID_USUARIO">
                         <tr>
                             <th scope="row">{{ client.LOGIN_USUARIO }}</th>
                             <td>{{ client.CARGO_USUARIO }}</td>
                             <td>{{ client.NOME_REDE }}</td>
                             <td>
-                                <button class="btn btn-outline-dark">
+                                <button type="button" class="btn btn-outline-dark" @click="editClient(index)" v-if="roleUserLogged == 'M'">
                                     <i class="fa-solid fa-pencil"></i>
                                 </button>
 
@@ -148,6 +148,52 @@
             </div>
         </div>
     </modal>
+
+    <modal name="MyComponent" id="modalStoreEdit">
+      <div class="row">
+        <div class="card">
+          <h4 class="card-header">Editar Usuário</h4>
+          <div class="card-body">
+            <div class="col">
+              <div class="form-group">
+                <Label for="loginUser">Login do Usuário</Label>
+                <input type="text" id="loginUser" class="form-control" v-model="editLoginUser" required>
+              </div>
+            </div>
+
+            <div class="col">
+                <div class="form-group">
+                    <Label for="selectedRole">Selecione um cargo</Label>
+                    <select id="selectedRole" class="form-control" v-model="editRoleUser">
+                        <option disabled value="">Escolha um cargo</option>
+                        <option v-for="user in users" v-bind:value="user.abbreviatedRoleUser" :key="user.id">
+                            {{ user.role }}
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="form-group">
+                    <Label for="selectedStore">Selecione uma rede</Label>
+                     <select id="selectedStore" class="form-control" v-model="editRoleNetwork">
+                        <option disabled value="">Escolha uma rede</option>
+                        <option v-for="option in networks" v-bind:value="option.id" :key="option.id">
+                            {{ option.NOME_REDE }}
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col text-center mt-2">
+              <button type="button" class="btn btn-primary" @click="editStore()">
+                Editar Usuário
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </modal>
 </div>
 
     
@@ -178,6 +224,9 @@ export default {
             abbreviatedRoleUser: '',
             selected: '',
             networks: [],
+            editLoginUser: '',
+            editRoleUser:'',
+            editRoleNetwork:'',
             users: [
                 {
                     id: 1,
@@ -266,6 +315,33 @@ export default {
                     } catch(err) {
                         alert(JSON.stringify(err.response.data.err))
                     }
+            }
+        },
+        editClient(indexClient){
+            this.editLoginUser = this.clients[indexClient].LOGIN_USUARIO
+            this.editRoleUser = this.clients[indexClient].CARGO_USUARIO
+            this.editRoleNetwork = this.clients[indexClient].REDEID_USUARIO
+            this.$modal.show('MyComponent');
+        },
+        async editStore() {
+            if(this.editLoginUser.trim() == "" || this.editRoleUser.trim() == "") {
+                alert("Todos os dados devem ser preenchidos")
+            } else {
+                var confirmation = await confirm("Confirma a alteração de dados ?");
+                if(confirmation){
+                    try {
+                        await axios.patch("http://localhost:4000/user", {
+                        editLoginUser: this.editLoginUser,
+                        editRoleUser: this.editRoleUser,
+                        editRoleNetwork: this.editRoleNetwork
+                        })
+                        .then(res => {
+                            alert(res.data.success)
+                        });
+                    } catch(err) {
+                        alert(JSON.stringify(err.response.data.err))
+                    }
+                }
             }
         },
         clique() {
