@@ -16,6 +16,6 @@ router.post('/replicacoes', ReplicController.searchComands);
 router.post('/redes', ReplicController.postNetworks);
 router.post('/lojas', ReplicController.postStores);
 router.patch('/lojas', ReplicController.patchStores);
-router.post('/validate', UserController.validate);
+router.post('/validate', AdminAuth, UserController.validate);
 
 module.exports = router;

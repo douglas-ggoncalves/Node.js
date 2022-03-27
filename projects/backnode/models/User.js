@@ -5,7 +5,7 @@ const PasswordTokens = require("./PasswordTokens");
 class User{
     async findLogin(login) {
         try {
-            var result = await knex.select().where({LOGIN_USUARIO: login}).table("USUARIO");
+            var result = await knex.select().where({LOGIN_USUARIO: login}).from("USUARIO").leftOuterJoin('rede', 'rede.id', 'USUARIO.REDEID_USUARIO');
             if(result.length > 0) {
                 return result[0];
             } else {

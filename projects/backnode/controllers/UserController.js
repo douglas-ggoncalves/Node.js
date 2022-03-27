@@ -13,7 +13,6 @@ class UserController{
 
         if(user != undefined) {
             var result = await bcrypt.compare(password, user.SENHA_USUARIO);
-
             if(result) {
                 var token = jwt.sign({ idNetworkUser: user.REDEID_USUARIO, role: user.CARGO_USUARIO }, secret);
                 res.status(200);

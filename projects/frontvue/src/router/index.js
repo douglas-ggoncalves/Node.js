@@ -8,16 +8,14 @@ import AdminUsers from '../views/Admin/AdminUsers.vue'
 import Teste from '../views/Teste.vue'
 import axios from 'axios';
 
-
-function AdminAuth(to, from, next){
+function AdminAuth(to, from, next) {
   if(localStorage.getItem('token') != undefined) {
     var req = {
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token")
       }
     }
-    console.log(req)
-
+   
     axios.post("http://localhost:4000/validate", {}, req).then(() => {
       next()
     }).catch(err => {
@@ -27,7 +25,7 @@ function AdminAuth(to, from, next){
   } else{
     next("/");
   }
-}
+} 
 
 Vue.use(VueRouter)
 
