@@ -16,8 +16,8 @@ async function AdminAuth(to, from, next) {
       }
     }
    
-    await axios.post("http://localhost:4000/validate", {}, req).then(res => {
-      console.log(res)
+    await axios.post("http://localhost:4000/validate", {}, req).then(() => {
+      //console.log(res)
       next();
     }).catch(err => {
       console.log(err.response)

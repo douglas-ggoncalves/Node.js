@@ -20,14 +20,27 @@ class User{
     async newUser(login, password, role, networkId){
         try {
             var hash = await bcrypt.hash(password, 10);
+            var result;
             if(networkId == ''){
-                await knex.insert({LOGIN_USUARIO: login, CARGO_USUARIO: role, SENHA_USUARIO: hash}).table("USUARIO");
+                result = await knex.insert({LOGIN_USUARIO: login, CARGO_USUARIO: role, SENHA_USUARIO: hash}).table("USUARIO");
+                return result;
             } else{
-                await knex.insert({LOGIN_USUARIO: login, CARGO_USUARIO: role, SENHA_USUARIO: hash, REDEID_USUARIO: networkId}).table("USUARIO");
+                result = await knex.insert({LOGIN_USUARIO: login, CARGO_USUARIO: role, SENHA_USUARIO: hash, REDEID_USUARIO: networkId}).table("USUARIO");
+                return result;
             }
-            console.log(login, password, role)
         } catch(err) {
             console.log(err)
+            return undefined;
+        }
+    }
+
+    async deleteUser(login){
+        try {
+            var result = await knex.select().where({LOGIN_USUARIO: login}).from("USUARIO").del();
+            return result;
+        } catch(err) {
+            console.log(err);
+            return undefined;
         }
     }
 

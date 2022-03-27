@@ -5,14 +5,14 @@ var UserController = require("../controllers/UserController");
 var ReplicController = require("../controllers/ReplicController");
 var RepresentativeController = require("../controllers/RepresentativeController");
 var AdminAuth = require("../middleware/AdminAuth")
+var MasterAuth = require("../middleware/MasterAuth")
 
 router.post('/', UserController.login);
-router.get('/users', UserController.getUsers);
+router.get('/users',MasterAuth, UserController.getUsers);
 router.post('/user', UserController.create);
-
+router.delete('/user/:login', UserController.delete);
 router.get('/representantes', RepresentativeController.searchRepresentative);
-//router.get('/replicacoes', AdminAuth, ReplicController.getData);
-router.get('/replicacoes', ReplicController.getData);
+router.get('/replicacoes', AdminAuth, ReplicController.getData);
 router.post('/replicacoes', ReplicController.searchComands);
 router.post('/redes', ReplicController.postNetworks);
 router.post('/lojas', ReplicController.postStores);

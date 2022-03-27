@@ -46,7 +46,7 @@
                 <h3>Gestão de Usuários</h3>
               </div>
 
-              <div class="col-12">
+              <div class="col-12" v-if="roleUserLogged == 'M'">
                 <button type="button" class="btn btn-outline-dark" @click="showModalNewUser()">
                   Novo usuário
                 </button>
@@ -59,7 +59,7 @@
                 <div class="form-group">
                     <input type="text" class="form-control" v-model="busca" placeholder="Busca por login do usuário">
                 </div>
-
+                
                 <table class="table table-hover">
                     <thead>
                         <tr>
@@ -79,7 +79,8 @@
                                 <button class="btn btn-outline-dark">
                                     <i class="fa-solid fa-pencil"></i>
                                 </button>
-                                <button class="btn btn-outline-danger">
+
+                                <button class="btn btn-outline-danger" @click="deleteUser(client.ID_USUARIO, client.LOGIN_USUARIO)">
                                     <i class="fa-solid fa-trash-can"></i>
                                 </button>
                             </td>
@@ -193,16 +194,27 @@ export default {
     },
     methods: {
         myFunction(){
-            axios.get("http://localhost:4000/users", )
+            axios.get("http://localhost:4000/users", {
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token")
+                }   
+            })
             .then(res => {
                 this.clients = res.data
                 this.roleUserLogged = localStorage.getItem("roleUser")
+                
             }).catch(err => {
-                alert("Ocorreu um erro " + err.response.data.err)
+                alert(err.response.data)
             })
         },
-        myFunction2(){ axios.get("http://localhost:4000/replicacoes", )
+        myFunction2(){
+            axios.get("http://localhost:4000/replicacoes", {
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token")
+                }
+            })
             .then(res => {
+                console.log(res)
                 this.networks = res.data.networks
             }).catch(err => {
                 this.err = err.response.data.err
@@ -219,23 +231,41 @@ export default {
                         alert("O campo cargo é obrigatório")
                     } else{
                         try {
-                        await axios.post("http://localhost:4000/user", {
-                            login: this.loginUser,
-                            password: this.passwordUser,
-                            role: this.abbreviatedRoleUser,
-                            networkId: this.selected
-                        })
-                        .then(res => {
-                            this.loginUser = '',
-                            this.passwordUser = '',
-                            this.abbreviatedRoleUser = '',
-                            alert(res.data.success)
-                        });
-                        } catch(err) {
-                        alert(JSON.stringify(err.response.data.err))
-                        }
+                            await axios.post("http://localhost:4000/user", {
+                                login: this.loginUser,
+                                password: this.passwordUser,
+                                role: this.abbreviatedRoleUser,
+                                networkId: this.selected
+                            })
+                            .then(res => {
+                                this.loginUser = '',
+                                this.passwordUser = '',
+                                this.abbreviatedRoleUser = '',
+                                alert(res.data.success)
+                                //document.location.reload(true);
+                            });
+                            } catch(err) {
+                                alert(JSON.stringify(err.response.data.err))
+                                console.log(err.response)
+                            }
                     }
                 }
+            }
+        },
+        async deleteUser(id, login){
+            var confirmation = await confirm("Deseja excluir " + login + ' ?');
+            if(confirmation) {
+                //alert("confirmou, bora deletar o usuário de id " + id)
+                try {
+                    await axios.delete(`http://localhost:4000/user/${login}`)
+                    .then(res => {
+                        this.clients = this.clients.filter(client => client.LOGIN_USUARIO != login)
+                        alert(res.data.success)
+
+                    });
+                    } catch(err) {
+                        alert(JSON.stringify(err.response.data.err))
+                    }
             }
         },
         clique() {

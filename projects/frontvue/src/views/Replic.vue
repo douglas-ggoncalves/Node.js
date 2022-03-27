@@ -59,11 +59,11 @@
                   Iniciar verificação
                 </button>
 
-                <button class="btn btn-outline-dark edit" type="button" v-if="roleUserLogged == 'M'">
+                <!-- <button class="btn btn-outline-dark edit" type="button" v-if="roleUserLogged == 'M'">
                   <i class="fa-solid fa-pencil"></i>
                 </button >
-
-                <button class="btn btn-outline-dark" @click="reloadPage()">
+                -->
+                <button class="btn btn-outline-dark" @click="initVerify()">
                   <i class="fa-solid fa-repeat"></i>
                 </button>
               </div>
@@ -238,7 +238,7 @@
             <div class="col">
               <div class="form-group">
                 <Label for="password">Senha do banco</Label>
-                <input type="text" id="passwordBank" class="form-control" v-model="password" value="d120588$788455" placeholder="Informe a senha do banco" required readonly>
+                <input type="password" id="passwordBank" class="form-control" v-model="password" placeholder="Informe a senha do banco" required readonly>
               </div>
             </div>
 
@@ -367,11 +367,17 @@ export default {
       lojas: [],
       showData: false,
       redeIdUserLogged: '',
-      roleUserLogged: ''
+      roleUserLogged: '',
+      
     }
   },
   methods: {
-    myFunction(){ axios.get("http://localhost:4000/replicacoes", )
+    myFunction(){
+      axios.get("http://localhost:4000/replicacoes", {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token")
+        }
+      })
       .then(res => {
         this.networks = res.data.networks
         this.lojas = res.data.stores
@@ -387,7 +393,6 @@ export default {
         this.roleUserLogged = localStorage.getItem("roleUser")
 
         if(this.redeIdUserLogged != 'null') {
-          console.log("entrou no if rapaz " + this.redeIdUserLogged)
           this.value.push({"id": this.redeIdUserLogged});
           this.initVerify();
         }
@@ -432,13 +437,14 @@ export default {
         alert("Nome da rede não pode ser vazio")
       } else{
         var confirmation = await confirm("Deseja cadastrar a rede com o nome " + this.network +' ?');
-
         if(confirmation) {
           try {
             await axios.post("http://localhost:4000/redes", {
               network: this.network
             })
             .then(res => {
+              var lastIdNetwork = this.networks.length + 1
+              this.networks.push({NOME_REDE: this.network, id: lastIdNetwork})
               this.network = '';
               alert(res.data.success)
             });

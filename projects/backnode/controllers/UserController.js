@@ -1,6 +1,5 @@
 var database = require("../database/database");
 var User = require("../models/User");
-
 var jwt = require("jsonwebtoken");
 var secret = "as55a6a5as5d4a5qvjnkalçKASNFJLkakfnJKKjknldjsn";
 var bcrypt = require("bcrypt");
@@ -32,17 +31,58 @@ class UserController{
         var password = await req.body.password;
         var role = await req.body.role;
         var networkId = await req.body.networkId;
-        
-        if(login != undefined && password != undefined){
+
+
+        try{
+            if(login != undefined && password != undefined){
+                var loginExists = await User.findLogin(login);
+    
+                if(loginExists != undefined){ // login existe
+                    res.status(404)
+                    res.send({err: "Já existe um usuário com este login"})
+                    return
+                } else{
+                    var newUser = await User.newUser(login, password, role, networkId)
+                    console.log(JSON.stringify(newUser))
+                    if(newUser != undefined){
+                        res.send({success: "Usuário criado com sucesso"})
+                        return;
+                    } else {
+                        res.status(406);
+                        res.send({err: 'Ocorreu um erro ao tentar cadastrar o usuário '});
+                        return;
+                    }
+                }
+            }
+        } catch(err)  {
+            res.send({err: 'Ocorreu um erro ' + err});
+            res.status(406);
+            return;
+        }
+       
+    }
+
+    async delete(req, res) {
+        var login = req.params.login;
+
+        console.log(login)
+        if(login != undefined){
             var loginExists = await User.findLogin(login);
 
             if(loginExists != undefined){ // login existe
-                res.status(404)
-                res.send({err: "Já existe um usuário com este login"})
-                return
+                res.status(200)
+                var userDeleted = await User.deleteUser(login);
+                if(userDeleted) {
+                    res.send({success: "Usuário excluido"})
+                    return
+                }
+                else{
+                    res.status(404)
+                    res.send({else: `Ocorreu um erro ao tentar excluir ${login}`})
+                }
             } else{
-                var newUser = await User.newUser(login, password, role, networkId)
-                res.send({success: "Usuário criado com sucesso"})
+                res.status(404)
+                res.send({else: `Ocorreu um erro ao tentar excluir ${login}`})
             }
         }
     }

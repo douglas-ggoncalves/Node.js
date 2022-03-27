@@ -3,7 +3,6 @@ var secret = "as55a6a5as5d4a5qvjnkalçKASNFJLkakfnJKKjknldjsn";
 
 module.exports = function(req, res, next) {
     const authToken = req.headers['authorization'];
-    console.log('auth aqui ' + authToken)
 
     if(authToken != undefined) {
         const bearer = authToken.split(" ");
@@ -11,9 +10,8 @@ module.exports = function(req, res, next) {
 
         try{
             var decoded = jwt.verify(token, secret);
-            console.log(decoded)
+            console.log('decoded ' +decoded.role)
             if(decoded.role == 'M' || decoded.role == 'A') {
-                res.status(200);
                 next();
             } else{
                 res.status(403);
