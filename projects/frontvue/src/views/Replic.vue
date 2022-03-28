@@ -491,7 +491,7 @@ export default {
               this.lojas = [];
               this.data = [];
               this.myFunction();
-              this.initVerify();
+              //this.initVerify();
               alert(res.data.success)
             });
           } catch(err) {
@@ -588,7 +588,6 @@ export default {
           }
         }
       }
-    
     }
   }/*, 
   mount () {

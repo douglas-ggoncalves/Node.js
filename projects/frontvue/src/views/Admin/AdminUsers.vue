@@ -46,7 +46,7 @@
                 <h3>Gestão de Usuários</h3>
               </div>
 
-              <div class="col-12" v-if="roleUserLogged == 'M' || roleUserLogged == 'A'">
+              <div class="col-12" >
                 <button type="button" class="btn btn-outline-dark" @click="showModalNewUser()">
                   Novo usuário
                 </button>
