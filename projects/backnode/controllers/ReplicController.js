@@ -137,7 +137,7 @@ class ReplicController{
             res.send({err: `Ocorreu um erro na inserção da ${nameStore}, segue a mensagem de erro: ${error}`});
             return;
         }
-        res.send({success: `Loja cadastrada com sucesso`})
+        res.send({success: `Loja alterada com sucesso`})
     }
 }
 

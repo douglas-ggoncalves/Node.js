@@ -262,6 +262,7 @@ export default {
                 }
             }).catch(err => {
                 alert(err.response.data)
+                this.$router.push({name: "Home"})
             })
         },
         myFunction2(){
@@ -301,12 +302,11 @@ export default {
                             })
                             .then(res => {
                                 this.loginUser = '',
-                                this.passwordUser = '',
-                                this.abbreviatedRoleUser = ''
+                                //this.passwordUser = '',
+                                //this.abbreviatedRoleUser = ''
                                 this.clients = '';
                                 this.myFunction();
                                 alert(res.data.success)
-                                //document.location.reload(true);
                             });
                             } catch(err) {
                                 alert(JSON.stringify(err.response.data.err))

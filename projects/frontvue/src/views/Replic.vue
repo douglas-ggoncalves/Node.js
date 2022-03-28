@@ -581,6 +581,10 @@ export default {
               this.editSelected = '',
               this.editDoorIP = '',
               this.editLogin = ''
+              this.networks = [];
+              this.lojas = [];
+              this.data = [];
+              this.myFunction();
               alert(res.data.success)
             });
           } catch(err) {
