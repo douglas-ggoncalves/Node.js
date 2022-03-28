@@ -8,7 +8,7 @@ var AdminAuth = require("../middleware/AdminAuth")
 var MasterAuth = require("../middleware/MasterAuth")
 
 router.post('/', UserController.login);
-router.get('/users',MasterAuth, UserController.getUsers);
+router.get('/users',AdminAuth, UserController.getUsers);
 router.post('/user', UserController.create);
 router.patch('/user', UserController.edit);
 router.delete('/user/:login', UserController.delete);

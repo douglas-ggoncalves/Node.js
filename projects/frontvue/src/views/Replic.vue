@@ -9,8 +9,8 @@
                     <hr>
                 </div>
 
-                <li v-if="roleUserLogged == 'M'">
-                  <a href="adminUsers">Painel Administrativo</a>
+                <li v-if="roleUserLogged == 'M' || roleUserLogged == 'A'">
+                  <a href="adminUsers">Gestão de Usuários</a>
                 </li>
 
                 <li>
@@ -443,9 +443,10 @@ export default {
               network: this.network
             })
             .then(res => {
-              var lastIdNetwork = this.networks.length + 1
-              this.networks.push({NOME_REDE: this.network, id: lastIdNetwork})
-              this.network = '';
+              this.networks = [];
+              this.lojas = [];
+              this.data = [];
+              this.myFunction();
               alert(res.data.success)
             });
           } catch(err) {
@@ -486,6 +487,11 @@ export default {
               this.doorIP = '3739',
               this.login = 'sa',
               this.password = 'd120588$788455'
+              this.networks = [];
+              this.lojas = [];
+              this.data = [];
+              this.myFunction();
+              this.initVerify();
               alert(res.data.success)
             });
           } catch(err) {

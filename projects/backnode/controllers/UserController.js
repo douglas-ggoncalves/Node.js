@@ -89,25 +89,33 @@ class UserController{
         var login = await req.body.editLoginUser;
         var role = await req.body.editRoleUser;
         var network = await req.body.editRoleNetwork;
-
+        var idUser = await req.body.idUser;
+        
         try{
-            if(login != undefined && role != undefined){
-                var loginExists = await User.findLogin(login);
+            var loginExists = await User.findLogin(login);
+            if(loginExists != undefined){ // login existe
+                res.status(404)
+                res.send({err: "Já existe um usuário com este login"})
+                return
+            } else {
+                if(login != undefined && idUser != undefined){
+                    var idExist = await User.findUserById(idUser);
+        
+                    if(idExist != undefined){ // login existe
     
-                if(loginExists != undefined){ // login existe
-                    res.status(404)
-                    res.send({err: "Já existe um usuário com este login"})
-                    return
-                } else{
-                    var newUser = await User.newUser(login, password, role, networkId)
-                    console.log(JSON.stringify(newUser))
-                    if(newUser != undefined){
-                        res.send({success: "Usuário criado com sucesso"})
-                        return;
-                    } else {
-                        res.status(406);
-                        res.send({err: 'Ocorreu um erro ao tentar cadastrar o usuário '});
-                        return;
+                        var editUser = await User.editUser(login, role, network, idUser);
+                        
+                        if(editUser != undefined) {
+                            res.status(200);
+                            res.send({success: "Usuário editado com sucesso"})
+                            return;
+                        } else{
+                            res.status(404)
+                            res.send({success: "Não foi possível editar o usuário"})
+                        }
+                    } else{
+                        res.status(404)
+                        res.send({err: "Usuário não encontrado, não foi possível alterar o mesmo"})
                     }
                 }
             }

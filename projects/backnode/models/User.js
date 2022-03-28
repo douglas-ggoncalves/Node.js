@@ -17,6 +17,20 @@ class User{
         }
     }
 
+    async findUserById(id) {
+        try {
+            var result = await knex.select().where({ID_USUARIO: id}).from("USUARIO").leftOuterJoin('rede', 'rede.id', 'USUARIO.REDEID_USUARIO');
+            if(result.length > 0) {
+                return result[0];
+            } else {
+                return undefined;
+            }
+        } catch(err) {
+            console.log(err);
+            return undefined;
+        }
+    }
+
     async newUser(login, password, role, networkId){
         try {
             var hash = await bcrypt.hash(password, 10);
@@ -50,6 +64,16 @@ class User{
             return result;
         } catch(err) {
             console.log(err);
+            return undefined;
+        }
+    }
+
+    async editUser(login, role, network, idUser){
+        try {
+            var result = await knex.where('ID_USUARIO', '=', idUser).update({ LOGIN_USUARIO: login, CARGO_USUARIO: role, REDEID_USUARIO: network }).table("USUARIO")
+            return result;
+        } catch(err) {
+            console.log(err)
             return undefined;
         }
     }

@@ -9,8 +9,8 @@
                     <hr>
                 </div>
 
-                <li v-if="roleUserLogged == 'M'">
-                  <a href="adminUsers">Painel Administrativo</a>
+                <li v-if="roleUserLogged == 'M' || roleUserLogged == 'A'">
+                  <a href="adminUsers">Gestão de Usuários</a>
                 </li>
 
                 <li>
@@ -46,7 +46,7 @@
                 <h3>Gestão de Usuários</h3>
               </div>
 
-              <div class="col-12" v-if="roleUserLogged == 'M'">
+              <div class="col-12" v-if="roleUserLogged == 'M' || roleUserLogged == 'A'">
                 <button type="button" class="btn btn-outline-dark" @click="showModalNewUser()">
                   Novo usuário
                 </button>
@@ -76,7 +76,7 @@
                             <td>{{ client.CARGO_USUARIO }}</td>
                             <td>{{ client.NOME_REDE }}</td>
                             <td>
-                                <button type="button" class="btn btn-outline-dark" @click="editClient(index)" v-if="roleUserLogged == 'M'">
+                                <button type="button" class="btn btn-outline-dark" @click="editClient(index)" v-if="roleUserLogged == 'M' || roleUserLogged == 'A'">
                                     <i class="fa-solid fa-pencil"></i>
                                 </button>
 
@@ -149,7 +149,7 @@
         </div>
     </modal>
 
-    <modal name="MyComponent" id="modalStoreEdit">
+    <modal name="modalEditUser" id="modalStoreEdit">
       <div class="row">
         <div class="card">
           <h4 class="card-header">Editar Usuário</h4>
@@ -186,10 +186,11 @@
             </div>
 
             <div class="col text-center mt-2">
-              <button type="button" class="btn btn-primary" @click="editStore()">
+              <button type="button" class="btn btn-success" @click="editStore()">
                 Editar Usuário
               </button>
             </div>
+
           </div>
         </div>
       </div>
@@ -217,7 +218,6 @@ export default {
     data(){
         return{
             clients: [],
-            roleUserLogged: '',
             busca: '',
             loginUser: '',
             passwordUser: '',
@@ -227,6 +227,9 @@ export default {
             editLoginUser: '',
             editRoleUser:'',
             editRoleNetwork:'',
+            roleUserLogged: '',
+            redeIdUserLogged: '',
+            idUser: '',
             users: [
                 {
                     id: 1,
@@ -249,9 +252,14 @@ export default {
                 }   
             })
             .then(res => {
-                this.clients = res.data
                 this.roleUserLogged = localStorage.getItem("roleUser")
-                
+                this.redeIdUserLogged = localStorage.getItem("redeIdUser")
+                if(this.redeIdUserLogged != 'null') {
+                    this.redeIdUserLogged = localStorage.getItem("redeIdUser")
+                    this.clients = res.data.filter(r => r.REDEID_USUARIO == this.redeIdUserLogged)
+                } else{
+                    this.clients = res.data
+                }
             }).catch(err => {
                 alert(err.response.data)
             })
@@ -263,8 +271,13 @@ export default {
                 }
             })
             .then(res => {
-                console.log(res)
-                this.networks = res.data.networks
+                this.roleUserLogged = localStorage.getItem("roleUser")
+                if(this.redeIdUserLogged != 'null') {
+                    this.redeIdUserLogged = localStorage.getItem("redeIdUser")
+                    this.networks = res.data.networks.filter(r => r.id == this.redeIdUserLogged)
+                } else{
+                    this.networks = res.data.networks
+                }
             }).catch(err => {
                 this.err = err.response.data.err
             })
@@ -289,7 +302,9 @@ export default {
                             .then(res => {
                                 this.loginUser = '',
                                 this.passwordUser = '',
-                                this.abbreviatedRoleUser = '',
+                                this.abbreviatedRoleUser = ''
+                                this.clients = '';
+                                this.myFunction();
                                 alert(res.data.success)
                                 //document.location.reload(true);
                             });
@@ -321,7 +336,8 @@ export default {
             this.editLoginUser = this.clients[indexClient].LOGIN_USUARIO
             this.editRoleUser = this.clients[indexClient].CARGO_USUARIO
             this.editRoleNetwork = this.clients[indexClient].REDEID_USUARIO
-            this.$modal.show('MyComponent');
+            this.idUser = this.clients[indexClient].ID_USUARIO
+            this.$modal.show('modalEditUser');
         },
         async editStore() {
             if(this.editLoginUser.trim() == "" || this.editRoleUser.trim() == "") {
@@ -333,9 +349,12 @@ export default {
                         await axios.patch("http://localhost:4000/user", {
                         editLoginUser: this.editLoginUser,
                         editRoleUser: this.editRoleUser,
-                        editRoleNetwork: this.editRoleNetwork
+                        editRoleNetwork: this.editRoleNetwork,
+                        idUser: this.idUser
                         })
                         .then(res => {
+                            this.clients = '';
+                            this.myFunction();
                             alert(res.data.success)
                         });
                     } catch(err) {
@@ -349,6 +368,9 @@ export default {
         },
         showModalNewUser () {
             this.$modal.show('modalNewUser');
+        },
+        hideModalEditUser () {
+            this.$modal.show('modalEditUser');
         }
     },
     created(){

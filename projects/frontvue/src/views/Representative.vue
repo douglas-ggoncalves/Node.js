@@ -9,8 +9,8 @@
                     <hr>
                 </div>
 
-                <li v-if="roleUserLogged == 'M'">
-                  <a href="adminUsers">Painel Administrativo</a>
+                <li v-if="roleUserLogged == 'M' || roleUserLogged == 'A'">
+                  <a href="adminUsers">Gestão de Usuários</a>
                 </li>
 
                 <li>
