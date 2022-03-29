@@ -63,7 +63,6 @@ class UserController{
     async delete(req, res) {
         var login = req.params.login;
 
-        console.log(login)
         if(login != undefined){
             var loginExists = await User.findLogin(login);
 
@@ -90,19 +89,19 @@ class UserController{
         var role = await req.body.editRoleUser;
         var network = await req.body.editRoleNetwork;
         var idUser = await req.body.idUser;
-        
+
         try{
             var loginExists = await User.findLogin(login);
-            if(loginExists != undefined){ // login existe
-                res.status(404)
-                res.send({err: "Já existe um usuário com este login"})
-                return
+
+            if(loginExists != undefined && loginExists.ID_USUARIO != idUser){ // login existe e não é o mesmo login do usuário que mandou requisição
+                    res.status(404)
+                    res.send({err: "Já existe um usuário com este login"})
+                    return
             } else {
                 if(login != undefined && idUser != undefined){
                     var idExist = await User.findUserById(idUser);
         
                     if(idExist != undefined){ // login existe
-    
                         var editUser = await User.editUser(login, role, network, idUser);
                         
                         if(editUser != undefined) {

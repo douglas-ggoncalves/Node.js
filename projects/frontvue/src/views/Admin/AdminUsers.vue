@@ -347,10 +347,10 @@ export default {
                 if(confirmation){
                     try {
                         await axios.patch("http://localhost:4000/user", {
-                        editLoginUser: this.editLoginUser,
-                        editRoleUser: this.editRoleUser,
-                        editRoleNetwork: this.editRoleNetwork,
-                        idUser: this.idUser
+                            editLoginUser: this.editLoginUser,
+                            editRoleUser: this.editRoleUser,
+                            editRoleNetwork: this.editRoleNetwork,
+                            idUser: this.idUser
                         })
                         .then(res => {
                             this.clients = '';
