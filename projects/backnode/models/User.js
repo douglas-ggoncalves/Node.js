@@ -64,7 +64,7 @@ class User{
             return result;
         } catch(err) {
             console.log(err);
-            return undefined;
+            return err;
         }
     }
 

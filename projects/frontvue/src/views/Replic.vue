@@ -59,17 +59,12 @@
                   Iniciar verificação
                 </button>
 
-                <!-- <button class="btn btn-outline-dark edit" type="button" v-if="roleUserLogged == 'M'">
-                  <i class="fa-solid fa-pencil"></i>
-                </button >
-                -->
                 <button class="btn btn-outline-dark" @click="initVerify()">
                   <i class="fa-solid fa-repeat"></i>
                 </button>
               </div>
 
               <div class="col-md-6 mt-2" v-if="roleUserLogged == 'M'">
-                <!-- <label class="typo__label">Simple select / dropdown</label> -->
                 <multiselect v-model="value" :options="networks" :multiple="true" :selectLabel="'Selecionar esta rede'" :selectedLabel="'Rede selecionada'" :deselectLabel="'Remover rede'" :close-on-select="false" :clear-on-select="false" :preserve-search="true" placeholder="Filtrar redes" label="NOME_REDE" track-by="NOME_REDE" :preselect-first="false">
                   <template slot="selection" slot-scope="{ values, isOpen }"><span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen">{{ values.length }} redes selecionadas</span>
                     
@@ -121,6 +116,9 @@
                         <i class="fa-solid fa-screwdriver-wrench"></i>
                       </button>
 
+                      <button class="btn btn-outline-danger" @click="deleteStore(data[index].ID_LOJA)">
+                        <i class="fa-solid fa-trash-can"></i>
+                      </button>
                     </td>
                   </tr>
 
@@ -144,6 +142,10 @@
 
                       <button type="button" class="btn btn-outline-light" @click="example(data[index].ID_LOJA)" v-if="roleUserLogged == 'M'">
                         <i class="fa-solid fa-screwdriver-wrench"></i>
+                      </button>
+
+                      <button class="btn btn-outline-danger" @click="deleteStore(data[index].ID_LOJA)">
+                        <i class="fa-solid fa-trash-can"></i>
                       </button>
                     </td>
                   </tr>
@@ -373,7 +375,7 @@ export default {
   },
   methods: {
     myFunction(){
-      axios.get("http://localhost:4000/replicacoes", {
+      axios.get("http://localhost:4000/replicacao", {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token")
         }
@@ -420,7 +422,7 @@ export default {
             if(this.data[y].REDEID == this.value[x].id){
               this.showData = true;
               try {
-                await axios.post("http://localhost:4000/replicacoes", {array: this.data[y]})
+                await axios.post("http://localhost:4000/replicacao", {array: this.data[y]})
                 .then(res => {
                   Vue.set(this.data, y, res.data.newArray)
                 });
@@ -439,7 +441,7 @@ export default {
         var confirmation = await confirm("Deseja cadastrar a rede com o nome " + this.network +' ?');
         if(confirmation) {
           try {
-            await axios.post("http://localhost:4000/redes", {
+            await axios.post("http://localhost:4000/rede", {
               network: this.network
             })
             .then(res => {
@@ -470,7 +472,7 @@ export default {
         var confirmation = await confirm("Confirma a criação desta loja ?");
         if(confirmation){
           try {
-            await axios.post("http://localhost:4000/lojas", {
+            await axios.post("http://localhost:4000/loja", {
               numberStoreNewStore: this.numberStoreNewStore,
               nameStore: this.nameStore,
               ipStore: this.ipStore,
@@ -565,7 +567,7 @@ export default {
         var confirmation = await confirm("Confirma a alteração de dados ?");
         if(confirmation){
           try {
-            await axios.patch("http://localhost:4000/lojas", {
+            await axios.patch("http://localhost:4000/loja", {
               editNumberStoreNewStore: this.editNumberStoreNewStore,
               editNameStore: this.editNameStore,
               editIpStore: this.editIpStore,
@@ -592,11 +594,24 @@ export default {
           }
         }
       }
+    },
+    async deleteStore(id){
+      var confirmation = await confirm("Deseja excluir " + this.data[id-1].NOME_LOJA +' da rede ' + this.data[id-1].NOME_REDE + ' ?');
+        console.log(JSON.stringify(this.data[id-1]))
+      if(confirmation) {
+        try {
+          await axios.delete(`http://localhost:4000/loja/${id}`)
+          .then(res => {
+            this.data[id-1] = []
+            console.log(JSON.stringify(this.data[id-1]))
+            alert(res.data.success)
+          });
+          } catch(err) {
+            alert(JSON.stringify(err.response.data.err))
+          }
+      }
     }
-  }/*, 
-  mount () {
-    this.showNewNetwork()
-  }*/
+  }
 }
 </script> 
 

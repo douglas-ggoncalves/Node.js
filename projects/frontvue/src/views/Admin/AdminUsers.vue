@@ -246,7 +246,7 @@ export default {
     },
     methods: {
         myFunction(){
-            axios.get("http://localhost:4000/users", {
+            axios.get("http://localhost:4000/user", {
                 headers: {
                     Authorization: "Bearer " + localStorage.getItem("token")
                 }   
@@ -261,12 +261,12 @@ export default {
                     this.clients = res.data
                 }
             }).catch(err => {
-                alert(err.response.data)
+                alert(err.response.data.err)
                 this.$router.push({name: "Home"})
             })
         },
         myFunction2(){
-            axios.get("http://localhost:4000/replicacoes", {
+            axios.get("http://localhost:4000/replicacao", {
                 headers: {
                     Authorization: "Bearer " + localStorage.getItem("token")
                 }

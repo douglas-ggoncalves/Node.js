@@ -108,7 +108,7 @@ export default {
       }
     },
     created(){
-        axios.get("http://localhost:4000/representantes").then(res => {
+        axios.get("http://localhost:4000/representante").then(res => {
         this.roleUserLogged = localStorage.getItem("roleUser")
         console.log(res.data.select)
       }).catch(err => {

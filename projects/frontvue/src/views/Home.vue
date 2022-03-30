@@ -60,7 +60,7 @@ export default {
       if(this.login.trim() == '' || this.password.trim() == ''){
         alert("Usuário ou senha inválidos")
       } else {
-        await axios.post("http://localhost:4000/", {
+        await axios.post("http://localhost:4000/login", {
           login: this.login,
           password: this.password
         })

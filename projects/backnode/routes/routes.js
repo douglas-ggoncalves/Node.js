@@ -7,17 +7,18 @@ var RepresentativeController = require("../controllers/RepresentativeController"
 var AdminAuth = require("../middleware/AdminAuth")
 var MasterAuth = require("../middleware/MasterAuth")
 
-router.post('/', UserController.login);
-router.get('/users',AdminAuth, UserController.getUsers);
+router.post('/login', UserController.login);
+router.get('/user',AdminAuth, UserController.getUsers);
 router.post('/user', UserController.create);
 router.patch('/user', UserController.edit);
 router.delete('/user/:login', UserController.delete);
-router.get('/representantes', RepresentativeController.searchRepresentative);
-router.get('/replicacoes',/* AdminAuth,*/ ReplicController.getData);
-router.post('/replicacoes', ReplicController.searchComands);
-router.post('/redes', ReplicController.postNetworks);
-router.post('/lojas', ReplicController.postStores);
-router.patch('/lojas', ReplicController.patchStores);
+router.get('/representante', RepresentativeController.searchRepresentative);
+router.get('/replicacao',/* AdminAuth,*/ ReplicController.getData);
+router.post('/replicacao', ReplicController.searchComands);
+router.post('/rede', ReplicController.postNetworks);
+router.post('/loja', ReplicController.postStores);
+router.delete('/loja/:id', ReplicController.delete);
+router.patch('/loja', ReplicController.patchStores);
 router.post('/validate', AdminAuth, UserController.validate);
 
 module.exports = router;

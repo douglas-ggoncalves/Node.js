@@ -98,12 +98,6 @@ class ReplicController{
         var password =  req.body.password;
 
         try{
-            /*
-            await database.raw(`
-                insert into loja (NUMERO_LOJA, NOME_LOJA, IP_LOJA, PORTA_LOJA, LOGIN_LOJA, SENHA_LOJA, REDEID)
-	            values('${numberStoreNewStore}', '${nameStore}', '${ipStore}', ${doorIP}, '${login}', '${password}', '${selected}')
-            `); 
-            */
             await database.raw(`
                 insert into loja (NUMERO_LOJA, NOME_LOJA, IP_LOJA, PORTA_LOJA, LOGIN_LOJA, SENHA_LOJA, REDEID)
                 values('${numberStoreNewStore}', '${nameStore}', '${ipStore}', ${doorIP}, '${login}', '${password}', '${selected}')
@@ -138,6 +132,21 @@ class ReplicController{
             return;
         }
         res.send({success: `Loja alterada com sucesso`})
+    }
+
+    async delete(req, res) {
+        var id = req.params.id;
+        console.log(id)
+        /*
+        try {
+            await database.select().where({ID_LOJA: id}).from("LOJA").del();
+        } catch(err) {
+            res.status(406);
+            res.send({err: 'Ocorreu um erro ' +err})
+            return;
+        }
+*/
+        res.send({success: `Loja excluida com sucesso`})
     }
 }
 
