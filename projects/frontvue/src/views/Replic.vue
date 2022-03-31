@@ -602,6 +602,8 @@ export default {
         try {
           await axios.delete(`http://localhost:4000/loja/${id}`)
           .then(res => {
+            this.clients = this.clients.filter(client => client.LOGIN_USUARIO != login)
+
             this.data[id-1] = []
             console.log(JSON.stringify(this.data[id-1]))
             alert(res.data.success)
