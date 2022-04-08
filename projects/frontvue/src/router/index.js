@@ -16,11 +16,12 @@ async function AdminAuth(to, from, next) {
       }
     }
    
-    await axios.post("http://localhost:4000/validate", {}, req).then(() => {
+    await axios.post("http://192.168.1.26:4000/validate", {}, req).then(() => {
       //console.log(res)
       next();
     }).catch(err => {
       console.log(err.response)
+      alert(err.response)
       next("/");
     })
   } else{

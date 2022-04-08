@@ -13,7 +13,7 @@ router.post('/user', UserController.create);
 router.patch('/user', UserController.edit);
 router.delete('/user/:login', UserController.delete);
 router.get('/representante', RepresentativeController.searchRepresentative);
-router.get('/replicacao',/* AdminAuth,*/ ReplicController.getData);
+router.get('/replicacao', AdminAuth, ReplicController.getData);
 router.post('/replicacao', ReplicController.searchComands);
 router.post('/rede', ReplicController.postNetworks);
 router.post('/loja', ReplicController.postStores);

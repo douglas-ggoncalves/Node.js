@@ -375,7 +375,7 @@ export default {
   },
   methods: {
     myFunction(){
-      axios.get("http://localhost:4000/replicacao", {
+      axios.get("http://192.168.1.26:4000/replicacao", {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token")
         }
@@ -393,7 +393,6 @@ export default {
 
         this.redeIdUserLogged = localStorage.getItem("redeIdUser")
         this.roleUserLogged = localStorage.getItem("roleUser")
-
         if(this.redeIdUserLogged != 'null') {
           this.value.push({"id": this.redeIdUserLogged});
           this.initVerify();
@@ -422,7 +421,7 @@ export default {
             if(this.data[y].REDEID == this.value[x].id){
               this.showData = true;
               try {
-                await axios.post("http://localhost:4000/replicacao", {array: this.data[y]})
+                await axios.post("http://192.168.1.26:4000/replicacao", {array: this.data[y]})
                 .then(res => {
                   Vue.set(this.data, y, res.data.newArray)
                 });
@@ -441,7 +440,7 @@ export default {
         var confirmation = await confirm("Deseja cadastrar a rede com o nome " + this.network +' ?');
         if(confirmation) {
           try {
-            await axios.post("http://localhost:4000/rede", {
+            await axios.post("http://192.168.1.26:4000/rede", {
               network: this.network
             })
             .then(res => {
@@ -472,7 +471,7 @@ export default {
         var confirmation = await confirm("Confirma a criação desta loja ?");
         if(confirmation){
           try {
-            await axios.post("http://localhost:4000/loja", {
+            await axios.post("http://192.168.1.26:4000/loja", {
               numberStoreNewStore: this.numberStoreNewStore,
               nameStore: this.nameStore,
               ipStore: this.ipStore,
@@ -567,7 +566,7 @@ export default {
         var confirmation = await confirm("Confirma a alteração de dados ?");
         if(confirmation){
           try {
-            await axios.patch("http://localhost:4000/loja", {
+            await axios.patch("http://192.168.1.26:4000/loja", {
               editNumberStoreNewStore: this.editNumberStoreNewStore,
               editNameStore: this.editNameStore,
               editIpStore: this.editIpStore,
@@ -600,7 +599,7 @@ export default {
         console.log(JSON.stringify(this.data[id-1]))
       if(confirmation) {
         try {
-          await axios.delete(`http://localhost:4000/loja/${id}`)
+          await axios.delete(`http://192.168.1.26:4000/loja/${id}`)
           .then(res => {
             //this.clients = this.clients.filter(client => client.LOGIN_USUARIO != login)
 

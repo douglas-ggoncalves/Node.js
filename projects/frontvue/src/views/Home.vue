@@ -60,7 +60,7 @@ export default {
       if(this.login.trim() == '' || this.password.trim() == ''){
         alert("Usuário ou senha inválidos")
       } else {
-        await axios.post("http://localhost:4000/login", {
+        await axios.post("http://192.168.1.26:4000/login", {
           login: this.login,
           password: this.password
         })
@@ -70,7 +70,7 @@ export default {
           localStorage.setItem("redeIdUser", res.data.user.REDEID_USUARIO);
           this.$router.push({name: "Index"})
         }).catch(err => {
-          alert("Login ou senha incorretos")
+          alert("Login ou senha incorretos " +err)
           console.log(err)
         })
       }

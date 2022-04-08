@@ -246,7 +246,7 @@ export default {
     },
     methods: {
         myFunction(){
-            axios.get("http://localhost:4000/user", {
+            axios.get("http://192.168.1.26:4000/user", {
                 headers: {
                     Authorization: "Bearer " + localStorage.getItem("token")
                 }   
@@ -266,7 +266,7 @@ export default {
             })
         },
         myFunction2(){
-            axios.get("http://localhost:4000/replicacao", {
+            axios.get("http://192.168.1.26:4000/replicacao", {
                 headers: {
                     Authorization: "Bearer " + localStorage.getItem("token")
                 }
@@ -294,7 +294,7 @@ export default {
                         alert("O campo cargo é obrigatório")
                     } else{
                         try {
-                            await axios.post("http://localhost:4000/user", {
+                            await axios.post("http://192.168.1.26:4000/user", {
                                 login: this.loginUser,
                                 password: this.passwordUser,
                                 role: this.abbreviatedRoleUser,
@@ -321,7 +321,7 @@ export default {
             if(confirmation) {
                 //alert("confirmou, bora deletar o usuário de id " + id)
                 try {
-                    await axios.delete(`http://localhost:4000/user/${login}`)
+                    await axios.delete(`http://192.168.1.26:4000/user/${login}`)
                     .then(res => {
                         this.clients = this.clients.filter(client => client.LOGIN_USUARIO != login)
                         alert(res.data.success)
@@ -346,7 +346,7 @@ export default {
                 var confirmation = await confirm("Confirma a alteração de dados ?");
                 if(confirmation){
                     try {
-                        await axios.patch("http://localhost:4000/user", {
+                        await axios.patch("http://192.168.1.26:4000/user", {
                             editLoginUser: this.editLoginUser,
                             editRoleUser: this.editRoleUser,
                             editRoleNetwork: this.editRoleNetwork,
