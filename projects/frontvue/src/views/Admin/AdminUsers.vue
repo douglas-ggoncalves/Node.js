@@ -41,6 +41,41 @@
           </nav>
 
           <div class="container">
+              <div class="vm--overlay" style="z-index: 9999" @click="closeToastErr()" v-if="err != ''">
+              <div class="position-fixed top-0 start-50 translate-middle-x p-3">
+                <div id="liveToast" class="toast show" role="alert" aria-live="assertive" aria-atomic="true" style="">
+                  <div class="toast-header">
+                    <img src="../../assets/img/icone_maximus_gestao.png" style="height: 30px" class="rounded img-fluid me-2" alt="...">
+                    
+                    <strong class="me-auto">Maximus Gestão</strong>
+                    <button type="button" class="btn-close" @click="closeToastErr()"></button>
+                  </div>
+                  <div class="toast-body text-white bg-primary">
+                    {{ err }}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="vm--overlay" style="z-index: 9999" @click="closeToastSuccess()" v-if="success != ''">
+              <div class="position-fixed top-50 start-50 translate-middle p-3">
+                <div id="liveToast" class="toast show" role="alert" aria-live="assertive" aria-atomic="true" style="">
+                  <div class="toast-header">
+                    <img src="../../assets/img/icone_maximus_gestao.png" style="height: 30px" class="rounded img-fluid me-2" alt="...">
+                    
+                    <strong class="me-auto">Maximus Gestão</strong>
+                    <button type="button" class="btn-close" @click="closeToastSuccess()"></button>
+                  </div>
+                  <div class="toast-body bg-light">
+                    {{ success }}
+                    <button class="btn btn-success mt-3 d-block mx-auto">
+                      CONFIRMAR
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <div class="row d-flex justify-content-center align-items-center">
               <div class="col-12">
                 <h3>Gestão de Usuários</h3>
@@ -208,15 +243,19 @@ import scrypt from "../../assets/js/scrypt";
 import Vue from 'vue'
 import Multiselect from 'vue-multiselect'
 
+
 Vue.component('multiselect', Multiselect)
 
 Vue.use(VModal, {
   dynamicDefaults: {height: 'auto'} 
 })
 
+
+
 export default {
     data(){
         return{
+            serverIP: '',
             clients: [],
             busca: '',
             loginUser: '',
@@ -230,6 +269,8 @@ export default {
             roleUserLogged: '',
             redeIdUserLogged: '',
             idUser: '',
+            err: '',
+            success: '',
             users: [
                 {
                     id: 1,
@@ -246,7 +287,7 @@ export default {
     },
     methods: {
         myFunction(){
-            axios.get("http://192.168.1.26:4000/user", {
+            axios.get(`http://${this.serverIP}/user`, {
                 headers: {
                     Authorization: "Bearer " + localStorage.getItem("token")
                 }   
@@ -261,12 +302,12 @@ export default {
                     this.clients = res.data
                 }
             }).catch(err => {
-                alert(err.response.data.err)
+                this.err = err.response.data.err
                 this.$router.push({name: "Home"})
             })
         },
         myFunction2(){
-            axios.get("http://192.168.1.26:4000/replicacao", {
+            axios.get(`http://${this.serverIP}/replicacao`, {
                 headers: {
                     Authorization: "Bearer " + localStorage.getItem("token")
                 }
@@ -285,16 +326,16 @@ export default {
         },
         async registerUser(){
             if(this.loginUser.trim() == ''){
-                alert("O campo login é obrigatório")
+                this.err = 'O campo login é obrigatório'
             } else{
                 if(this.passwordUser.trim() == ''){
-                alert("O campo senha é obrigatório")
+                    this.err = 'O campo senha é obrigatório'
                 } else {
                     if(this.abbreviatedRoleUser == ""){
-                        alert("O campo cargo é obrigatório")
+                        this.err = 'O campo cargo é obrigatório'
                     } else{
                         try {
-                            await axios.post("http://192.168.1.26:4000/user", {
+                            await axios.post(`http://${this.serverIP}/user`, {
                                 login: this.loginUser,
                                 password: this.passwordUser,
                                 role: this.abbreviatedRoleUser,
@@ -302,15 +343,14 @@ export default {
                             })
                             .then(res => {
                                 this.loginUser = '',
-                                //this.passwordUser = '',
-                                //this.abbreviatedRoleUser = ''
+                                this.passwordUser = '',
+                                this.abbreviatedRoleUser = ''
                                 this.clients = '';
                                 this.myFunction();
-                                alert(res.data.success)
+                                this.success = res.data.success
                             });
                             } catch(err) {
-                                alert(JSON.stringify(err.response.data.err))
-                                console.log(err.response)
+                                this.err = err.response.data.err
                             }
                     }
                 }
@@ -321,7 +361,7 @@ export default {
             if(confirmation) {
                 //alert("confirmou, bora deletar o usuário de id " + id)
                 try {
-                    await axios.delete(`http://192.168.1.26:4000/user/${login}`)
+                    await axios.delete(`http://${this.serverIP}/user/${login}`)
                     .then(res => {
                         this.clients = this.clients.filter(client => client.LOGIN_USUARIO != login)
                         alert(res.data.success)
@@ -346,7 +386,7 @@ export default {
                 var confirmation = await confirm("Confirma a alteração de dados ?");
                 if(confirmation){
                     try {
-                        await axios.patch("http://192.168.1.26:4000/user", {
+                        await axios.patch(`http://${this.serverIP}:4000/user`, {
                             editLoginUser: this.editLoginUser,
                             editRoleUser: this.editRoleUser,
                             editRoleNetwork: this.editRoleNetwork,
@@ -371,9 +411,19 @@ export default {
         },
         hideModalEditUser () {
             this.$modal.show('modalEditUser');
+        },
+        closeToastErr(){
+            this.err = ''
+        },
+        closeToastSuccess(){
+            this.success = ''
+        },
+        hideNewNetwork(){
+            this.$modal.hide('modalNewUser');
         }
     },
     created(){
+        this.serverIP = scrypt.serverIP
         this.myFunction();
         this.myFunction2();
     },

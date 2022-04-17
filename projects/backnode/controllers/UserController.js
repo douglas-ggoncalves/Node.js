@@ -22,7 +22,7 @@ class UserController{
             }
         } else{
             res.status(406);
-            res.json({status: false, err: "O usuário não existe"})
+            res.json({status: false, err: "O usuário informado não existe"})
         }
     }
 

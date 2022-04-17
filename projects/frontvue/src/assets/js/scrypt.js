@@ -1,7 +1,5 @@
-
-
 let exports = {};
-
+//var x= 'aaa';
 exports.clique = () => {
     var X = document.getElementById("sidebar").className;
     if (X == "") {
@@ -11,4 +9,7 @@ exports.clique = () => {
     }
 };
 
+exports.serverIP = 'localhost:4000'
+
 export default exports
+

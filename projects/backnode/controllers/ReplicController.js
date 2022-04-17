@@ -137,7 +137,7 @@ class ReplicController{
     async delete(req, res) {
         var id = req.params.id;
         console.log(id)
-        /*
+        
         try {
             await database.select().where({ID_LOJA: id}).from("LOJA").del();
         } catch(err) {
@@ -145,7 +145,7 @@ class ReplicController{
             res.send({err: 'Ocorreu um erro ' +err})
             return;
         }
-*/
+
         res.send({success: `Loja excluida com sucesso`})
     }
 }

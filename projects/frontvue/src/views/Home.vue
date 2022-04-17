@@ -1,6 +1,20 @@
 <template>
   <div id="app">
     <div class="container">
+      <div class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 11" v-if="err != ''">
+        <div id="liveToast" class="toast show" role="alert" aria-live="assertive" aria-atomic="true" style="">
+          <div class="toast-header">
+            <img src="../assets/img/icone_maximus_gestao.png" style="height: 30px" class="rounded img-fluid me-2" alt="...">
+            
+            <strong class="me-auto">Maximus Gestão</strong>
+            <button type="button" class="btn-close" @click="closeToast()"></button>
+          </div>
+          <div class="toast-body text-white bg-primary">
+            {{ err }}
+          </div>
+        </div>
+      </div>
+
       <div class="row d-flex justify-content-center">
         <div class="bg-dark text-center col-8 col-md-6 col-lg-4 py-4">
           <div class="m-auto pb-3">
@@ -9,20 +23,21 @@
 
           <div class="col-12 col-lg-9 mx-auto">
             <form>
-              <div class="input-group mt-4">
-                <input type="text" class="form-control" placeholder="Digite seu usuário" v-model="login"/>
-                <div class="form-control invalid-feedback" style="font-size: 1.07em; color: white" v-if="err">
+              <div class="mt-4">
+                <input id="inputLogin" type="text" class="form-control" placeholder="Digite seu usuário" v-model="login" @keydown="clear()">
+              </div>
+
+              <div class="mt-4">
+                <input id="inputPassword" type="password" class="form-control" placeholder="Digite sua senha" autocomplete="on" v-model="password"
+                @keydown="clear()">
+                <div class="invalid-feedback" v-if="err">
                   Usuário e/ou senha incorretos
                 </div>
               </div>
 
-              <div class="input-group" style="margin-top: 20px">
-                <input type="password" class="form-control" placeholder="Digite sua senha" autocomplete="on" v-model="password"/>
-              </div>
-
               <div class="row d-flex justify-content-center mt-3">
-                <button type="button" class="btn btn-outline-light" @click="log()">
-                  Entrar
+                  <button type="button" class="btn btn-outline-light" @click="log()">
+                    Entrar
                 </button>
               </div>
 
@@ -47,20 +62,24 @@
 
 <script>
 import axios from 'axios';
+import scrypt from "../assets/js/scrypt";
 
 export default {
    data(){
     return {
       login: '',
       password: '',
-      err: true
+      err: '',
+      serverIP: ''
     }
   }, methods: {
     async log(){
       if(this.login.trim() == '' || this.password.trim() == ''){
-        alert("Usuário ou senha inválidos")
+        this.err = `Usuário e/ou senha inválidos`
+        document.getElementById('inputLogin').classList.add("is-invalid")
+        document.getElementById('inputPassword').classList.add("is-invalid")
       } else {
-        await axios.post("http://192.168.1.26:4000/login", {
+        await axios.post(`http://${this.serverIP}/login`, {
           login: this.login,
           password: this.password
         })
@@ -70,11 +89,27 @@ export default {
           localStorage.setItem("redeIdUser", res.data.user.REDEID_USUARIO);
           this.$router.push({name: "Index"})
         }).catch(err => {
-          alert("Login ou senha incorretos " +err)
-          console.log(err)
+          this.err = `${err.response.data.err}`
+          document.getElementById('inputLogin').classList.add("is-invalid")
+          document.getElementById('inputPassword').classList.add("is-invalid")
+          if(err.response){
+            this.err = `${err.response.data.err}`
+          } else{
+            this.err = `${err}`
+          }
         })
       }
+    }, 
+    clear(){
+      this.err = '';
+      document.getElementById('inputLogin').classList.remove("is-invalid");
+      document.getElementById('inputPassword').classList.remove("is-invalid");
+    },
+    closeToast(){
+      this.err = '';
     }
+  }, created(){
+    this.serverIP = scrypt.serverIP
   }
 };
 
@@ -96,9 +131,12 @@ button {
   cursor: pointer;
 }
 
-
 .btn.btn-link{
   text-decoration: none !important;
+}
+
+.toast{
+  border: none;
 }
 
 </style>

@@ -3,32 +3,32 @@
     <div class="wrapper">
         <!-- Sidebar -->
         <nav id="sidebar">
-            <ul class="list-unstyled components">
-                <div class="sidebar-header">
-                    <img class="img-fluid" src="../assets/img/logo-white.png">
-                    <hr>
-                </div>
+          <ul class="list-unstyled components">
+            <div class="sidebar-header">
+              <img class="img-fluid" src="../assets/img/logo-white.png">
+              <hr>
+            </div>
 
-                <li v-if="roleUserLogged == 'M' || roleUserLogged == 'A'">
-                  <a href="adminUsers">Gestão de Usuários</a>
-                </li>
+            <li v-if="roleUserLogged == 'M' || roleUserLogged == 'A'">
+              <a href="adminUsers">Gestão de Usuários</a>
+            </li>
 
-                <li>
-                    <a href="replicacoes">Replicação</a>
-                </li>
+            <li>
+              <a href="replicacoes">Replicação</a>
+            </li>
 
-                <li>
-                    <a href="representantes">Representante</a>
-                </li>
+            <li>
+              <a href="representantes">Representante</a>
+            </li>
 
-                <li>
-                    <a href="#">Sobre</a>
-                </li>
+            <li>
+              <a href="#">Sobre</a>
+            </li>
 
-                <li>
-                    <a href="logout">Sair</a>
-                </li>
-            </ul>
+            <li>
+              <a href="logout">Sair</a>
+            </li>
+          </ul>
         </nav>
 
         <div class="container-fluid" id="content">
@@ -91,15 +91,17 @@ export default {
       return {
         redeIdUserLogged: '',
         roleUserLogged: '',
-        err: undefined
+        err: undefined,
+        serverIP: ''
       }
     },
     created(){
+      this.serverIP = scrypt.serverIP
       this.redeIdUserLogged = localStorage.getItem("redeIdUser")
-        this.roleUserLogged = localStorage.getItem("roleUser")
-        axios.get("http://192.168.1.26:4000/representante").then(res => {
-        
-        console.log(res.data.select)
+      this.roleUserLogged = localStorage.getItem("roleUser")
+      axios.get(`http://${this.serverIP}/representante`).then(res => {
+      
+      console.log(res.data.select)
       }).catch(err => {
         console.log(err.response.data.err)
         console.log('Comando executado: ' + err.response.data.select)

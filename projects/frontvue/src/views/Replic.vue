@@ -4,30 +4,30 @@
         <!-- Sidebar -->
         <nav id="sidebar">
             <ul class="list-unstyled components">
-                <div class="sidebar-header">
-                    <img class="img-fluid" src="../assets/img/logo-white.png">
-                    <hr>
-                </div>
+              <div class="sidebar-header">
+                <img class="img-fluid" src="../assets/img/logo-white.png">
+                <hr>
+              </div>
 
-                <li v-if="roleUserLogged == 'M' || roleUserLogged == 'A'">
-                  <a href="adminUsers">Gestão de Usuários</a>
-                </li>
+              <li v-if="roleUserLogged == 'M' || roleUserLogged == 'A'">
+                <a href="adminUsers">Gestão de Usuários</a>
+              </li>
 
-                <li>
-                    <a href="replicacoes">Replicação</a>
-                </li>
+              <li>
+                <a href="replicacoes">Replicação</a>
+              </li>
 
-                <li>
-                    <a href="representantes">Representante</a>
-                </li>
+              <li>
+                  <a href="representantes">Representante</a>
+              </li>
 
-                <li>
-                    <a href="#">Sobre</a>
-                </li>
+              <li>
+                  <a href="#">Sobre</a>
+              </li>
 
-                <li>
-                    <a href="logout">Sair</a>
-                </li>
+              <li>
+                  <a href="logout">Sair</a>
+              </li>
             </ul>
         </nav>
 
@@ -41,6 +41,42 @@
           </nav>
 
           <div class="container">
+            <div class="vm--overlay" style="z-index: 9999" @click="closeToastErr()" v-if="err != ''">
+              <div class="position-fixed top-0 start-50 translate-middle-x p-3">
+                <div id="liveToast" class="toast show" role="alert" aria-live="assertive" aria-atomic="true" style="">
+                  <div class="toast-header">
+                    <img src="../assets/img/icone_maximus_gestao.png" style="height: 30px" class="rounded img-fluid me-2" alt="...">
+                    
+                    <strong class="me-auto">Maximus Gestão</strong>
+                    <button type="button" class="btn-close" @click="closeToastErr()"></button>
+                  </div>
+                  <div class="toast-body text-white bg-primary">
+                    {{ err }}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="vm--overlay" style="z-index: 9999" @click="closeToastSuccess()" v-if="success != ''">
+              <div class="position-fixed top-50 start-50 translate-middle p-3">
+                <div id="liveToast" class="toast show" role="alert" aria-live="assertive" aria-atomic="true" style="">
+                  <div class="toast-header">
+                    <img src="../assets/img/icone_maximus_gestao.png" style="height: 30px" class="rounded img-fluid me-2" alt="...">
+                    
+                    <strong class="me-auto">Maximus Gestão</strong>
+                    <button type="button" class="btn-close" @click="closeToastSuccess()"></button>
+                  </div>
+                  <div class="toast-body bg-light">
+                    {{ success }}
+
+                    <button class="btn btn-success mt-3 d-block mx-auto">
+                      CONFIRMAR
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <div class="row d-flex justify-content-center align-items-center">
               <div class="col-12">
                 <h3>Replicações</h3>
@@ -81,12 +117,8 @@
             </div>
           </div>
 
-          <div class="card" style="width: 100%;">
-            <div v-if="err">
-              <h3>{{ err }}</h3>
-            </div>
-
-            <div v-else v-show="showData" v-for="network in networks" :key="network.id">
+          <div class="card" style="width: 100%;" v-if="!err">
+            <div v-show="showData" v-for="network in networks" :key="network.id">
               <div v-for="(peguei, index) in value" :key="index"> 
               <table class="table table-bordered table-dark" v-if="network.id == value[index].id">
                 <thead>
@@ -166,7 +198,10 @@
           <div class="card-body">
               <div class="col">
                 <label>Nome Da Rede</label>
-                <input type="text" class="form-control" placeholder="Digite o nome da rede" v-model="network" required>
+                <input type="text" id="inputNameNetwork" class="form-control" placeholder="Digite o nome da rede" v-model="network" @keydown="clear()" required>
+                <div class="invalid-feedback">
+                  Nome da rede não pode ser vazio
+                </div>
               </div>
 
               <div class="col text-center mt-2">
@@ -342,6 +377,7 @@ Vue.use(VModal, {
 
 export default {
   created(){
+    this.serverIP = scrypt.serverIP
     this.myFunction();
   },
   data() {
@@ -363,19 +399,20 @@ export default {
       editDoorIP: '',
       editLogin: '',
       selectNetwork: '',
-      err: undefined,
+      err: '',
+      success: '',
       data: [],
       networks: [],
       lojas: [],
       showData: false,
       redeIdUserLogged: '',
       roleUserLogged: '',
-      
+      serverIP: ''
     }
   },
   methods: {
     myFunction(){
-      axios.get("http://192.168.1.26:4000/replicacao", {
+      axios.get(`http://${this.serverIP}/replicacao`, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token")
         }
@@ -403,7 +440,7 @@ export default {
     }, 
     async initVerify(){
       if(this.value.length == 0){
-        alert("Informe uma rede para iniciar a verificação")
+        this.err = 'Informe uma rede para iniciar a verificação'
       } else{
         for(var e=0; e < this.data.length; e++) { // for para deixar array vazio antes de fazer novas consultas
           for(var i = 0; i< this.value.length; i++){
@@ -421,7 +458,7 @@ export default {
             if(this.data[y].REDEID == this.value[x].id){
               this.showData = true;
               try {
-                await axios.post("http://192.168.1.26:4000/replicacao", {array: this.data[y]})
+                await axios.post(`http://${this.serverIP}/replicacao`, {array: this.data[y]})
                 .then(res => {
                   Vue.set(this.data, y, res.data.newArray)
                 });
@@ -435,23 +472,25 @@ export default {
     }, 
     async registerNetwork(){
       if(this.network.trim() == ""){
-        alert("Nome da rede não pode ser vazio")
+        this.err = 'Nome da rede não pode ser vazio'
+        document.getElementById('inputNameNetwork').classList.add("is-invalid")
       } else{
         var confirmation = await confirm("Deseja cadastrar a rede com o nome " + this.network +' ?');
         if(confirmation) {
           try {
-            await axios.post("http://192.168.1.26:4000/rede", {
+            await axios.post(`http://${this.serverIP}/rede`, {
               network: this.network
             })
             .then(res => {
+              this.network = ''
               this.networks = [];
               this.lojas = [];
               this.data = [];
               this.myFunction();
-              alert(res.data.success)
+              this.success = res.data.success
             });
           } catch(err) {
-            alert(JSON.stringify(err.response.data.err))
+            this.err = err.response.data.err
           }
         }
       }
@@ -466,12 +505,12 @@ export default {
         || this.password.trim() == ""
       )
       {
-        alert("Todos os dados devem ser preenchidos")
+        this.err = "Todos os dados devem ser preenchidos" 
       } else {
         var confirmation = await confirm("Confirma a criação desta loja ?");
         if(confirmation){
           try {
-            await axios.post("http://192.168.1.26:4000/loja", {
+            await axios.post(`http://${this.serverIP}/loja`, {
               numberStoreNewStore: this.numberStoreNewStore,
               nameStore: this.nameStore,
               ipStore: this.ipStore,
@@ -492,11 +531,10 @@ export default {
               this.lojas = [];
               this.data = [];
               this.myFunction();
-              //this.initVerify();
-              alert(res.data.success)
+              this.success = res.data.success
             });
           } catch(err) {
-            alert(JSON.stringify(err.response.data.err))
+            this.err = err.response.data.err
           }
         }
       }
@@ -508,12 +546,14 @@ export default {
       window.location.reload(true);
     },
     showNewNetwork () {
+      this.err = ''
       this.$modal.show('modalNetwork');
     },
     hideNewNetwork () {
       this.$modal.hide('modalNetwork');
     },
     showNewStore(){
+      this.err = ''
       this.$modal.show('modalStore');
     },
     example(message){
@@ -559,14 +599,14 @@ export default {
         || this.editLogin.trim() == ""
       )
       {
-        alert("Todos os dados devem ser preenchidos")
+        this.err = 'Todos os dados devem ser preenchidos'
       } else if(this.editNumberStoreNewStore < 0||  this.editDoorIP.length < 4){
-        alert("Número da loja ou ip da loja estão incorretos")
+        this.err = 'Número ou ip da loja estão incorretos'
       }  else {
         var confirmation = await confirm("Confirma a alteração de dados ?");
         if(confirmation){
           try {
-            await axios.patch("http://192.168.1.26:4000/loja", {
+            await axios.patch(`http://${this.serverIP}/loja`, {
               editNumberStoreNewStore: this.editNumberStoreNewStore,
               editNameStore: this.editNameStore,
               editIpStore: this.editIpStore,
@@ -586,31 +626,40 @@ export default {
               this.lojas = [];
               this.data = [];
               this.myFunction();
-              alert(res.data.success)
+              this.$modal.hide('MyComponent');
+              this.success = res.data.success
             });
           } catch(err) {
-            alert(JSON.stringify(err.response.data.err))
+            this.err = err.response.data.err
           }
         }
       }
     },
     async deleteStore(id){
       var confirmation = await confirm("Deseja excluir " + this.data[id-1].NOME_LOJA +' da rede ' + this.data[id-1].NOME_REDE + ' ?');
-        console.log(JSON.stringify(this.data[id-1]))
+        console.log(JSON.stringify(this.data[id-1].ID_LOJA))
       if(confirmation) {
         try {
-          await axios.delete(`http://192.168.1.26:4000/loja/${id}`)
+          await axios.delete(`http://${this.serverIP}/loja/${id}`)
           .then(res => {
-            //this.clients = this.clients.filter(client => client.LOGIN_USUARIO != login)
-
+            console.log(JSON.stringify(this.data[id-1].ID_LOJA))
             this.data[id-1] = []
-            console.log(JSON.stringify(this.data[id-1]))
-            alert(res.data.success)
+            console.log(JSON.stringify(this.data[id-1].ID_LOJA))
+            this.success = res.data.success
           });
           } catch(err) {
-            alert(JSON.stringify(err.response.data.err))
+            this.err = err.response.data.err
           }
       }
+    }, 
+    clear(){
+      document.getElementById('inputNameNetwork').classList.remove("is-invalid");
+    },
+    closeToastErr(){
+      this.err = ''
+    },
+    closeToastSuccess(){
+      this.success = ''
     }
   }
 }
@@ -619,5 +668,11 @@ export default {
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 
 <style scoped>
+.toast{
+  border: none;
+}
 
+.toast-body{
+  font-size: 1.08rem;
+}
 </style>
