@@ -7,7 +7,8 @@ import Representative from '../views/Representative.vue'
 import AdminUsers from '../views/Admin/AdminUsers.vue'
 import Teste from '../views/Teste.vue'
 import axios from 'axios';
-
+import scrypt from "../assets/js/scrypt";
+var serverIP = scrypt.serverIP
 async function AdminAuth(to, from, next) {
   if(localStorage.getItem('token') != undefined) {
     var req = {
@@ -16,8 +17,8 @@ async function AdminAuth(to, from, next) {
       }
     }
    
-    await axios.post("http://localhost:4000/validate", {}, req).then(() => {
-      //console.log(res)
+    await axios.post(`http://${serverIP}/validate`, {}, req).then(() => {
+      console.log(scrypt)
       next();
     }).catch(err => {
       console.log(err.response)

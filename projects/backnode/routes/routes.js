@@ -11,6 +11,7 @@ router.post('/login', UserController.login);
 router.get('/user',AdminAuth, UserController.getUsers);
 router.post('/user', UserController.create);
 router.patch('/user', UserController.edit);
+router.post('/senha', UserController.recoveryPassword);
 router.delete('/user/:login', UserController.delete);
 router.get('/representante', RepresentativeController.searchRepresentative);
 router.get('/replicacao', AdminAuth, ReplicController.getData);

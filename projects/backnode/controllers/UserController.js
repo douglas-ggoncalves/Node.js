@@ -3,6 +3,7 @@ var User = require("../models/User");
 var jwt = require("jsonwebtoken");
 var secret = "as55a6a5as5d4a5qvjnkalçKASNFJLkakfnJKKjknldjsn";
 var bcrypt = require("bcrypt");
+const PasswordTokens = require("../models/PasswordTokens");
 
 class UserController{
     async login(req, res) {
@@ -28,6 +29,7 @@ class UserController{
 
     async create(req, res) {
         var login = await req.body.login;
+        var email = await req.body.email;
         var password = await req.body.password;
         var role = await req.body.role;
         var networkId = await req.body.networkId;
@@ -35,21 +37,27 @@ class UserController{
         try{
             if(login != undefined && password != undefined){
                 var loginExists = await User.findLogin(login);
-    
+                var loginEmail = await User.findEmail(email);
+                
                 if(loginExists != undefined){ // login existe
                     res.status(404)
                     res.send({err: "Já existe um usuário com este login"})
                     return
                 } else{
-                    var newUser = await User.newUser(login, password, role, networkId)
-                    console.log(JSON.stringify(newUser))
-                    if(newUser != undefined){
-                        res.send({success: "Usuário criado com sucesso"})
-                        return;
-                    } else {
-                        res.status(406);
-                        res.send({err: 'Ocorreu um erro ao tentar cadastrar o usuário '});
-                        return;
+                    if(loginEmail != undefined){
+                        res.status(404)
+                        res.send({err: "Já existe um usuário com este email"})
+                        return
+                    } else{
+                        var newUser = await User.newUser(login, email, password, role, networkId)
+                        if(newUser != undefined){
+                            res.send({success: "Usuário criado com sucesso"})
+                            return;
+                        } else {
+                            res.status(406);
+                            res.send({err: 'Ocorreu um erro ao tentar cadastrar o usuário '});
+                            return;
+                        }
                     }
                 }
             }
@@ -58,6 +66,17 @@ class UserController{
             res.status(406);
             return;
         }
+    }
+
+    async recoveryPassword(req, res) {
+        console.log("cjeg aa")
+        
+        var email = req.body.email;
+
+        var result = await PasswordTokens.create(email);
+
+       
+
     }
 
     async delete(req, res) {

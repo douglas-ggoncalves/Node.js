@@ -1,19 +1,22 @@
 <template>
   <div id="app">
     <div class="container">
-      <div class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 11" v-if="err != ''">
-        <div id="liveToast" class="toast show" role="alert" aria-live="assertive" aria-atomic="true" style="">
-          <div class="toast-header">
-            <img src="../assets/img/icone_maximus_gestao.png" style="height: 30px" class="rounded img-fluid me-2" alt="...">
-            
-            <strong class="me-auto">Maximus Gestão</strong>
-            <button type="button" class="btn-close" @click="closeToast()"></button>
-          </div>
-          <div class="toast-body text-white bg-primary">
-            {{ err }}
-          </div>
-        </div>
-      </div>
+
+      <div class="vm--overlay" style="z-index: 9999" @click="closeToastErr()" v-if="err != ''">
+              <div class="position-fixed top-0 start-50 translate-middle-x p-3">
+                <div id="liveToast" class="toast show" role="alert" aria-live="assertive" aria-atomic="true" style="">
+                  <div class="toast-header">
+                    <img src="../assets/img/icone_maximus_gestao.png" style="height: 30px" class="rounded img-fluid me-2" alt="...">
+                    
+                    <strong class="me-auto">Maximus Gestão</strong>
+                    <button type="button" class="btn-close" @click="closeToastErr()"></button>
+                  </div>
+                  <div class="toast-body text-white bg-primary">
+                    {{ err }}
+                  </div>
+                </div>
+              </div>
+            </div>
 
       <div class="row d-flex justify-content-center">
         <div class="bg-dark text-center col-8 col-md-6 col-lg-4 py-4">
@@ -36,13 +39,13 @@
               </div>
 
               <div class="row d-flex justify-content-center mt-3">
-                  <button type="button" class="btn btn-outline-light" @click="log()">
-                    Entrar
+                <button type="button" class="btn btn-outline-light" @click="log()">
+                  Entrar
                 </button>
               </div>
 
               <div class="row d-flex justify-content-center">
-                <button type="button" class="btn btn-link">
+                <button type="button" class="btn btn-link" @click="recoverPassword()">
                   Esqueci minha senha
                 </button>
               </div>
@@ -56,6 +59,32 @@
           </div>
         </div>
       </div>
+
+      <modal name="modalRecovery">
+      <div class="row">
+        <form action="">
+
+        <div class="card">
+          <h4 class="card-header">Recuperar Senha</h4>
+          <div class="card-body">
+            <div class="col">
+              <div class="form-group">
+                <Label for="loginUser">Informe o seu e-mail</Label>
+                <input type="email" class="form-control" v-model="emailForRecovery" required>
+              </div>
+            </div>
+
+            <div class="col text-center mt-2">
+              <button type="button" class="btn btn-success" @click="recoverPasswordUser()">
+                Recuperar Senha
+              </button>
+            </div>
+          </div>
+        </div>
+        </form>
+
+      </div>
+    </modal>
     </div>
   </div>
 </template>
@@ -63,6 +92,12 @@
 <script>
 import axios from 'axios';
 import scrypt from "../assets/js/scrypt";
+import Vue from 'vue'
+import VModal from 'vue-js-modal'
+
+Vue.use(VModal, {
+  dynamicDefaults: {height: 'auto'} 
+})
 
 export default {
    data(){
@@ -70,7 +105,8 @@ export default {
       login: '',
       password: '',
       err: '',
-      serverIP: ''
+      serverIP: '',
+      emailForRecovery: ''
     }
   }, methods: {
     async log(){
@@ -100,6 +136,23 @@ export default {
         })
       }
     }, 
+    async recoverPasswordUser(){
+      if(this.emailForRecovery.trim() == ''){
+        this.err = 'Email precisa ser preenchido'
+      } else if(!this.emailForRecovery.includes("@")){
+        this.err = 'Email inválido'
+      }else{
+        await axios.post(`http://${this.serverIP}/senha`, {
+          email: this.emailForRecovery
+        })
+        .then(res =>{
+          console.log(res)
+        }).catch(err => {
+          console.log(err)
+
+        })
+      }
+    },
     clear(){
       this.err = '';
       document.getElementById('inputLogin').classList.remove("is-invalid");
@@ -107,12 +160,17 @@ export default {
     },
     closeToast(){
       this.err = '';
+    },
+    recoverPassword(){
+      this.$modal.show('modalRecovery');
+    },
+    closeToastErr(){
+      this.err = ''
     }
   }, created(){
     this.serverIP = scrypt.serverIP
   }
 };
-
 </script>
 
 <style scoped>
@@ -138,5 +196,4 @@ button {
 .toast{
   border: none;
 }
-
 </style>

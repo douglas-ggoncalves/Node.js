@@ -1,5 +1,5 @@
 let exports = {};
-//var x= 'aaa';
+
 exports.clique = () => {
     var X = document.getElementById("sidebar").className;
     if (X == "") {

@@ -137,6 +137,11 @@
                             <label>Login</label>
                             <input type="text" class="form-control" placeholder="Informe o login" v-model="loginUser" required>
                         </div>
+                        
+                        <div class="col">
+                            <label>Email</label>
+                            <input type="text" class="form-control" placeholder="Informe a senha" v-model="emailUser" required>
+                        </div>
 
                         <div class="col">
                             <label>Senha</label>
@@ -225,7 +230,6 @@
                 Editar Usuário
               </button>
             </div>
-
           </div>
         </div>
       </div>
@@ -243,14 +247,11 @@ import scrypt from "../../assets/js/scrypt";
 import Vue from 'vue'
 import Multiselect from 'vue-multiselect'
 
-
 Vue.component('multiselect', Multiselect)
 
 Vue.use(VModal, {
   dynamicDefaults: {height: 'auto'} 
 })
-
-
 
 export default {
     data(){
@@ -259,6 +260,7 @@ export default {
             clients: [],
             busca: '',
             loginUser: '',
+            emailUser: '',
             passwordUser: '',
             abbreviatedRoleUser: '',
             selected: '',
@@ -327,6 +329,8 @@ export default {
         async registerUser(){
             if(this.loginUser.trim() == ''){
                 this.err = 'O campo login é obrigatório'
+            } else if(this.emailUser.trim() == ''){
+                this.err = 'O campo email é obrigatório'
             } else{
                 if(this.passwordUser.trim() == ''){
                     this.err = 'O campo senha é obrigatório'
@@ -338,12 +342,14 @@ export default {
                             await axios.post(`http://${this.serverIP}/user`, {
                                 login: this.loginUser,
                                 password: this.passwordUser,
+                                email: this.emailUser,
                                 role: this.abbreviatedRoleUser,
                                 networkId: this.selected
                             })
                             .then(res => {
                                 this.loginUser = '',
                                 this.passwordUser = '',
+                                this.email = '',
                                 this.abbreviatedRoleUser = ''
                                 this.clients = '';
                                 this.myFunction();
@@ -359,16 +365,14 @@ export default {
         async deleteUser(id, login){
             var confirmation = await confirm("Deseja excluir " + login + ' ?');
             if(confirmation) {
-                //alert("confirmou, bora deletar o usuário de id " + id)
                 try {
                     await axios.delete(`http://${this.serverIP}/user/${login}`)
                     .then(res => {
                         this.clients = this.clients.filter(client => client.LOGIN_USUARIO != login)
-                        alert(res.data.success)
-
+                        this.success = res.data.success
                     });
                     } catch(err) {
-                        alert(JSON.stringify(err.response.data.err))
+                        this.err = err.response.data.err
                     }
             }
         },
@@ -381,12 +385,12 @@ export default {
         },
         async editStore() {
             if(this.editLoginUser.trim() == "" || this.editRoleUser.trim() == "") {
-                alert("Todos os dados devem ser preenchidos")
+                this.err = 'Login ou cargo do usuário precisam ser preenchidos'
             } else {
                 var confirmation = await confirm("Confirma a alteração de dados ?");
                 if(confirmation){
                     try {
-                        await axios.patch(`http://${this.serverIP}:4000/user`, {
+                        await axios.patch(`http://${this.serverIP}/user`, {
                             editLoginUser: this.editLoginUser,
                             editRoleUser: this.editRoleUser,
                             editRoleNetwork: this.editRoleNetwork,
@@ -395,10 +399,11 @@ export default {
                         .then(res => {
                             this.clients = '';
                             this.myFunction();
-                            alert(res.data.success)
+                            this.$modal.hide('modalEditUser');
+                            this.success = res.data.success
                         });
                     } catch(err) {
-                        alert(JSON.stringify(err.response.data.err))
+                        this.err = err.response.data.err
                     }
                 }
             }
@@ -408,9 +413,6 @@ export default {
         },
         showModalNewUser () {
             this.$modal.show('modalNewUser');
-        },
-        hideModalEditUser () {
-            this.$modal.show('modalEditUser');
         },
         closeToastErr(){
             this.err = ''

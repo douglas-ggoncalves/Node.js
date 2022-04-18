@@ -1,8 +1,9 @@
 var knex = require("../database/database");
 var bcrypt = require("bcrypt");
-const PasswordTokens = require("./PasswordTokens");
-
+var PasswordTokens = require("./PasswordTokens");
 class User{
+
+
     async findLogin(login) {
         try {
             var result = await knex.select().where({LOGIN_USUARIO: login}).from("USUARIO").leftOuterJoin('rede', 'rede.id', 'USUARIO.REDEID_USUARIO');
@@ -15,6 +16,24 @@ class User{
             console.log(err);
             return undefined;
         }
+    }
+
+    async findddddddd(email) {
+        console.log("testeeeeeeeeeeeee " +email)
+        return
+        /*
+        try {
+            var result = await knex.select().where({EMAIL_USUARIO: email}).from("USUARIO").leftOuterJoin('rede', 'rede.id', 'USUARIO.REDEID_USUARIO');
+            if(result.length > 0) {
+                return result[0];
+            } else {
+                return undefined;
+            }
+        } catch(err) {
+            console.log(err);
+            return undefined;
+        }
+        */
     }
 
     async findUserById(id) {
@@ -31,15 +50,15 @@ class User{
         }
     }
 
-    async newUser(login, password, role, networkId){
+    async newUser(login, email, password, role, networkId){
         try {
             var hash = await bcrypt.hash(password, 10);
             var result;
             if(networkId == ''){
-                result = await knex.insert({LOGIN_USUARIO: login, CARGO_USUARIO: role, SENHA_USUARIO: hash}).table("USUARIO");
+                result = await knex.insert({LOGIN_USUARIO: login, EMAIL_USUARIO: email, CARGO_USUARIO: role, SENHA_USUARIO: hash}).table("USUARIO");
                 return result;
             } else{
-                result = await knex.insert({LOGIN_USUARIO: login, CARGO_USUARIO: role, SENHA_USUARIO: hash, REDEID_USUARIO: networkId}).table("USUARIO");
+                result = await knex.insert({LOGIN_USUARIO: login, EMAIL_USUARIO: email, CARGO_USUARIO: role, SENHA_USUARIO: hash, REDEID_USUARIO: networkId}).table("USUARIO");
                 return result;
             }
         } catch(err) {
