@@ -61,30 +61,52 @@
       </div>
 
       <modal name="modalRecovery">
-      <div class="row">
-        <form action="">
+        <div class="row">
+          <h4>Recuperar Senha</h4>
+          <hr>
+        </div>
 
-        <div class="card">
-          <h4 class="card-header">Recuperar Senha</h4>
-          <div class="card-body">
-            <div class="col">
-              <div class="form-group">
-                <Label for="loginUser">Informe o seu e-mail</Label>
-                <input type="email" class="form-control" v-model="emailForRecovery" required>
+        <div class="row d-flex justify-content-center align-items-center my-auto" style="border: 1px solid red">
+          <div class="col-10">
+            <Label for="loginUser">Informe o seu e-mail</Label>
+            <input type="email" id="inputRecover" class="form-control w-100" v-model="emailForRecovery" required @keydown="clear()">
+            <div class="invalid-feedback" v-if="err">
+              Email inválido
+            </div>
+          </div>
+
+          <div class="col-10 text-center">  
+            <button type="button" class="btn btn-success" @click="recoverPasswordUser()">
+              Recuperar Senha
+            </button>
+          </div>
+        </div>
+        
+      </modal>
+
+      <modal class="mx-5" name="modalRecovery2">
+        <div class="row d-flex align-items-center justify-content-center mx-auto my-auto h-100">
+          <div>
+            <div class="col-10 mx-auto">
+              <h5>Um e-mail com um código de verificação acaba de ser enviado para {{ emailForRecovery }}</h5>
+              <input id="inputRecoverCode" type="text" class="form-control" placeholder="Inserir Código" v-model="codeForRecovery"
+                @keydown="clear()">
+              <div class="invalid-feedback" v-if="err">
+                Código Inválido
               </div>
             </div>
 
-            <div class="col text-center mt-2">
-              <button type="button" class="btn btn-success" @click="recoverPasswordUser()">
-                Recuperar Senha
-              </button>
+            <div class="row d-flex justify-content-center mt-3">
+              <div class="col">
+                <button type="button" class="btn btn-primary" @click="criarEssaFuncao()">
+                  Próximo
+                </button>
+              </div>
+              
             </div>
           </div>
         </div>
-        </form>
-
-      </div>
-    </modal>
+      </modal>
     </div>
   </div>
 </template>
@@ -106,7 +128,8 @@ export default {
       password: '',
       err: '',
       serverIP: '',
-      emailForRecovery: ''
+      emailForRecovery: '',
+      codeForRecovery: '',
     }
   }, methods: {
     async log(){
@@ -146,16 +169,19 @@ export default {
           email: this.emailForRecovery
         })
         .then(res =>{
-          console.log(res)
+          console.log(res.data)
+          this.$modal.hide('modalRecovery');
+          this.$modal.show('modalRecovery2');
         }).catch(err => {
-          console.log(err)
-
+          this.err = err.response.data.err
+          document.getElementById('inputRecover').classList.add("is-invalid");
         })
       }
     },
     clear(){
       this.err = '';
       document.getElementById('inputLogin').classList.remove("is-invalid");
+      document.getElementById('inputRecover').classList.remove("is-invalid");
       document.getElementById('inputPassword').classList.remove("is-invalid");
     },
     closeToast(){
@@ -196,4 +222,5 @@ button {
 .toast{
   border: none;
 }
+
 </style>

@@ -18,10 +18,7 @@ class User{
         }
     }
 
-    async findddddddd(email) {
-        console.log("testeeeeeeeeeeeee " +email)
-        return
-        /*
+    async findEmail(email) {
         try {
             var result = await knex.select().where({EMAIL_USUARIO: email}).from("USUARIO").leftOuterJoin('rede', 'rede.id', 'USUARIO.REDEID_USUARIO');
             if(result.length > 0) {
@@ -33,7 +30,6 @@ class User{
             console.log(err);
             return undefined;
         }
-        */
     }
 
     async findUserById(id) {

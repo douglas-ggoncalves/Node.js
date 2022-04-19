@@ -2,32 +2,39 @@ var knex = require("../database/database");
 var User = require("./User")
 
 class PasswordTokens{
-    async create(email) {
-        try{
-            var usaudas = await User.findddddddd('douglas@gmail.com');
-        } catch(err){
-            console.log("Ocorreu esse erro " +err)
+    async findEmail(email) {
+        try {
+            var result = await knex.select().where({EMAIL_USUARIO: email}).from("USUARIO").leftOuterJoin('rede', 'rede.id', 'USUARIO.REDEID_USUARIO');
+            if(result.length > 0) {
+                return result[0];
+            } else {
+                return undefined;
+            }
+        } catch(err) {
+            console.log(err);
+            return undefined;
         }
-/*
+    }
+
+    async create(email) {
+        var user = await this.findEmail(email);
+       
         if(user != undefined) {
             try {
                 var token = Date.now();
-
                 await knex.insert({
-                    user_id: user.id,
+                    USERID_PASSWORDTOKENS: user.ID_USUARIO,
                     used: 0,
                     token: token
                 }).table("passwordTokens")
                 return {status: true, token: token}
 
             } catch(err) {
-                console.log(err);
                 return {status: false, err: err}
             }
         } else {
-            return {status: false, err: "O e-mail passado não existe no banco de dados"}
+            return {status: false, err: "O e-mail informado não existe"}
         }
-        */
     }
 
     async validate(token) {

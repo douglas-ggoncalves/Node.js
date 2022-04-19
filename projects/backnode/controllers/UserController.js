@@ -69,14 +69,17 @@ class UserController{
     }
 
     async recoveryPassword(req, res) {
-        console.log("cjeg aa")
-        
         var email = req.body.email;
 
         var result = await PasswordTokens.create(email);
-
-       
-
+        if(result.status){
+            res.status(200);
+            res.send("" + result.token);
+        } else{
+            res.status(406);
+            res.send({err: result.err});
+        }
+        
     }
 
     async delete(req, res) {
