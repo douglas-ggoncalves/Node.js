@@ -84,22 +84,17 @@
         
       </modal>
 
-      <modal class="mx-5" name="modalRecovery2">
+      <modal class="mx-5 mx-md-0" name="modalRecovery2">
         <div class="row d-flex align-items-center justify-content-center mx-auto my-auto h-100">
           <div>
             <div class="col-10 mx-auto">
-              <h5>Um e-mail com um código de verificação acaba de ser enviado para {{ emailForRecovery }}</h5>
-              <input id="inputRecoverCode" type="text" class="form-control" placeholder="Inserir Código" v-model="codeForRecovery"
-                @keydown="clear()">
-              <div class="invalid-feedback" v-if="err">
-                Código Inválido
-              </div>
+              <h5>Um e-mail foi enviado para {{ emailForRecovery }} com as instruções para a recuperação de senha</h5>
             </div>
 
             <div class="row d-flex justify-content-center mt-3">
               <div class="col">
-                <button type="button" class="btn btn-primary" @click="criarEssaFuncao()">
-                  Próximo
+                <button type="button" class="btn btn-success" @click="criarEssaFuncao()">
+                  Confirmar
                 </button>
               </div>
               

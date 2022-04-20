@@ -1,61 +1,25 @@
 <template>
-  <div>
-    <div class="container">
-      <div class="row">
-          <div class="card">
-            <h4 class="card-header">Cadastrar Usuário</h4>
-            <div class="card-body">
-                <div class="col">
-                  <label>Login</label>
-                  <input type="text" class="form-control" placeholder="Informe o seu login" v-model="loginUser" required>
-                </div>
-
-                <div class="col">
-                  <label>Senha</label>
-                  <input type="password" class="form-control" placeholder="Informe sua senha" v-model="passwordUser" required>
-                </div>
-
-                <div class="col">
-                  <div class="form-group">
-                    <Label for="selectedRole">Selecione um cargo</Label>
-                    <select id="selectedRole" class="form-control" v-model="abbreviatedRoleUser">
-                      <option disabled value="">Escolha um cargo</option>
-                      <option v-for="user in users" v-bind:value="user.abbreviatedRoleUser" :key="user.id">
-                        {{ user.role }}
-                      </option>
-                    </select>
-                  </div>
-                </div>
-                
-                <div class="col">
-
-                <div class="form-group">
-                  <Label for="selectedStore">Selecione uma rede</Label>
-                  <select id="selectedStore" class="form-control" v-model="selected">
-                    <option disabled value="">Escolha uma rede</option>
-                    <option v-for="option in networks" v-bind:value="option.id" :key="option.id">
-                      {{ option.NOME_REDE }}
-                    </option>
-                  </select>
-                  </div>
-                </div>
-
-                <div class="col text-center mt-2">
-                  <button type="button" class="btn btn-outline-dark" @click="hideNewNetwork()">
-                    Fechar
-                  </button>
-                </div>
-
-                <div class="col text-center mt-2">
-                  <button type="button" class="btn btn-success" @click="registerUser()">
-                    Cadastrar
-                  </button>
-                </div>
-            </div>
-          </div>
-        </div>
+    <div id="divMain">
+      <div id="divTitle">
+        <h4>Código de verificação da Maximus</h4>
       </div>
-  </div>
+      
+      <div id="divData">
+        <h6>Prezado nome do cliente aqui</h6>
+        <h5>
+          Este e-mail foi enviado para ajudar na recuperação de acesso à sua Conta da Maximus:
+        </h5>
+        <a href="#">Clique aqui para recuperar sua senha</a>
+
+        <h5>
+          Se você não solicitou esse código provavelmente outra pessoa esteja tentando acessar a sua <b>conta</b> <strong>douglasrnn63@gmail.com</strong> Não encaminhe ou mostre esse e-mail a ninguém.
+        </h5>
+      </div>
+
+      <footer>
+        <img src="../assets/img/logo_maximus_gestao.png" alt="">
+      </footer>
+    </div>
 </template>
 
 <script>
@@ -129,4 +93,63 @@ export default {
 }
 </script>
 
+<style scoped>
+#divMain{
+  position: relative;
+  width: 50%;
+  height: 90vh;
+  display: flex;
+  align-items: center;
+  background-color: rgb(250, 250, 250);
+  
+}
 
+#divTitle{
+  background-color: blue; 
+  width: 100%;
+  display: block; 
+  color: white; 
+  padding: 1rem;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+#divData{
+  padding: 0 1rem;
+}
+
+h4{
+  margin: auto;
+}
+
+h5{
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+}
+
+h6{
+  font-size: 1.15rem;
+}
+
+a{
+  font-size: 1.1rem;
+  margin-bottom: .5rem;
+  margin-top: .5rem;
+  color: blue !important; 
+  text-decoration: none;
+}
+
+footer{
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+img{
+  max-width: 100%;
+  height: 150px;
+}
+</style>
