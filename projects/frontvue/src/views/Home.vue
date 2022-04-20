@@ -66,7 +66,7 @@
           <hr>
         </div>
 
-        <div class="row d-flex justify-content-center align-items-center my-auto" style="border: 1px solid red">
+        <div class="row d-flex justify-content-center align-items-center my-auto">
           <div class="col-10">
             <Label for="loginUser">Informe o seu e-mail</Label>
             <input type="email" id="inputRecover" class="form-control w-100" v-model="emailForRecovery" required @keydown="clear()">
@@ -81,7 +81,6 @@
             </button>
           </div>
         </div>
-        
       </modal>
 
       <modal class="mx-5 mx-md-0" name="modalRecovery2">
@@ -93,15 +92,40 @@
 
             <div class="row d-flex justify-content-center mt-3">
               <div class="col">
-                <button type="button" class="btn btn-success" @click="criarEssaFuncao()">
+                <button type="button" class="btn btn-success" @click="closeRecovery2()">
                   Confirmar
                 </button>
               </div>
-              
             </div>
           </div>
         </div>
       </modal>
+      
+      <modal class="mx-5 mx-md-0" name="divForRecoveryPassword">
+        <div class="row d-flex align-items-center justify-content-center mx-auto my-auto h-100">
+          <div>
+            <div>
+              <input type="password" placeholder="Digite sua nova senha">
+            </div>
+            
+            <div>
+              <input type="password" placeholder="Repita sua nova senha">
+            </div>
+
+            <div class="row d-flex justify-content-center mt-3">
+              <div class="col">
+                <button type="button" class="btn btn-success" @click="criarEssaFuncao()">
+                  Confirmar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </modal>
+
+      <button id="activeModal" @click="activeModal()">
+        ativar
+      </button>
     </div>
   </div>
 </template>
@@ -125,6 +149,7 @@ export default {
       serverIP: '',
       emailForRecovery: '',
       codeForRecovery: '',
+      divForRecoveryPassword: ''
     }
   }, methods: {
     async log(){
@@ -185,10 +210,22 @@ export default {
     recoverPassword(){
       this.$modal.show('modalRecovery');
     },
+    closeRecovery2(){
+      this.$modal.hide('modalRecovery2');
+      this.emailForRecovery = ''
+    },
     closeToastErr(){
       this.err = ''
+    },
+    activeModal(){
+      this.$modal.show('divForRecoveryPassword');
     }
   }, created(){
+    if(this.$route.params.token != undefined){
+      this.activeModal();
+      document.getElementById("activeModal").click()
+      console.log("true")
+    }
     this.serverIP = scrypt.serverIP
   }
 };

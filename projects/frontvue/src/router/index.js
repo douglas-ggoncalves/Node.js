@@ -39,6 +39,11 @@ const routes = [
     component: Home
   },
   {
+    path: '/:token',
+    name: 'HomeRecover',
+    component: Home
+  },
+  {
     path: '/index',
     name: 'Index',
     component: Index
