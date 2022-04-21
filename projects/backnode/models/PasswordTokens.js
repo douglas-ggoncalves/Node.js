@@ -43,8 +43,8 @@ class PasswordTokens{
 
             if(result.length > 0) {
                 var tk = result[0];
-
-                if(tk.used) {
+                
+                if(tk.USED) {
                     return {status: false};
                 } else {
                     return {status: true, token: tk};

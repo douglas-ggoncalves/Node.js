@@ -171,7 +171,7 @@ class UserController{
                         <h5>
                         Este e-mail foi enviado para ajudar na recuperação de acesso à sua Conta da Maximus:
                         </h5>
-                        <a href="http://${serverIP}/senha/${token}">Clique aqui para recuperar sua senha</a>
+                        <a href="http://${serverIP}/${result.token}">Clique aqui para recuperar sua senha</a>
                 
                         <h5>
                         Se você não solicitou esse código provavelmente outra pessoa esteja tentando acessar a sua conta <b>${email}</b> Não encaminhe ou mostre esse e-mail a ninguém.
@@ -258,6 +258,22 @@ class UserController{
             return;
         }
     }
+
+    async validateToken(req, res) {
+        var token = req.body.token;
+
+        var tokenIsValid = await PasswordTokens.validate(token);
+
+        if(tokenIsValid.status) {
+            res.status(200);
+            res.send({success: 'Token válido'})
+        } else{
+            res.status(406);
+            res.send("Token inválido");
+        }
+    }
+
+    
 
     async getUsers(req, res) {
         var users = await User.findAllUser();

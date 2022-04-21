@@ -17,23 +17,45 @@
         </div>
       </div>
       
-      <div class="vm--overlay" style="z-index: 9999" @click="closeToastErr()" v-if="divForRecoveryPassword != ''">
-        <div class="position-fixed top-0 start-50 translate-middle-x p-3">
+      <div class="vm--overlay" style="z-index: 9999" v-if="divForRecoveryPassword != ''">
+        <div class="position-fixed top-50 start-50 translate-middle p-3">
           <div id="liveToast" class="toast show" role="alert" aria-live="assertive" aria-atomic="true" style="">
             <div class="toast-header">
               <img src="../assets/img/icone_maximus_gestao.png" style="height: 30px" class="rounded img-fluid me-2" alt="...">
               
               <strong class="me-auto">Maximus Gestão</strong>
-              <button type="button" class="btn-close" @click="closeToastErr()"></button>
+              <button type="button" class="btn-close" @click="closeToastForRecovery()"></button>
             </div>
-            <div class="toast-body text-white bg-primary">
-              {{ err }}
+            <div class="toast-body bg-white">
+              <div class="mt-3">
+                <input id="inputNewPassword" type="password" class="form-control" placeholder="Digite sua nova senha" autocomplete="on" v-model="newPassword" @keydown="clearInputsRecovery()">
+              </div>
+
+              <div class="mt-3">
+                <input id="inputNewPassword2" type="password" class="form-control" placeholder="Digite sua senha novamente" autocomplete="on" v-model="newPassword2"
+                @keydown="clearInputsRecovery()">
+                <div class="invalid-feedback" v-if="true">
+                  {{ errForRecover }}
+                </div>
+              </div>
+
+              <div class="mt-2">
+                <button class="btn btn-success mt-1" @click="checkAndRecoverPassword()">
+                  Alterar senha
+                </button>
+              </div>
+
+              <div>
+                <button class="btn btn-secondary mt-1" @click="closeToastForRecovery()">
+                  Cancelar
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="row d-flex justify-content-center">
+      <div class="row d-flex justify-content-center" id="divLogin" v-if="divForRecoveryPassword == ''">
         <div class="bg-dark text-center col-8 col-md-6 col-lg-4 py-4">
           <div class="m-auto pb-3">
             <img class="img-fluid" src="../assets/img/logo-white.png" />
@@ -62,12 +84,6 @@
               <div class="row d-flex justify-content-center">
                 <button type="button" class="btn btn-link" @click="recoverPassword()">
                   Esqueci minha senha
-                </button>
-              </div>
-
-              <div class="row d-flex justify-content-center">
-                <button type="button" class="btn btn-link text-white">
-                  Cadastrar-se
                 </button>
               </div>
             </form>
@@ -160,7 +176,10 @@ export default {
       serverIP: '',
       emailForRecovery: '',
       codeForRecovery: '',
-      divForRecoveryPassword: ''
+      divForRecoveryPassword: '',
+      newPassword: '',
+      newPassword2: '',
+      errForRecover: ''
     }
   }, methods: {
     async log(){
@@ -193,9 +212,7 @@ export default {
     async recoverPasswordUser(){
       if(this.emailForRecovery.trim() == ''){
         this.err = 'Email precisa ser preenchido'
-      } else if(!this.emailForRecovery.includes("@")){
-        this.err = 'Email inválido'
-      }else{
+      } else{
         await axios.post(`http://${this.serverIP}/senha`, {
           email: this.emailForRecovery
         })
@@ -218,6 +235,13 @@ export default {
     closeToast(){
       this.err = '';
     },
+    closeToastForRecovery(){
+      this.divForRecoveryPassword = ''
+    },
+    clearInputsRecovery(){
+      document.getElementById('inputNewPassword').classList.remove("is-invalid");
+      document.getElementById('inputNewPassword2').classList.remove("is-invalid");
+    },
     recoverPassword(){
       this.$modal.show('modalRecovery');
     },
@@ -227,11 +251,31 @@ export default {
     },
     closeToastErr(){
       this.err = ''
+    },
+    checkAndRecoverPassword(){
+      if(this.newPassword != this.newPassword2){
+        this.errForRecover = 'As senhas devem ser iguais'
+        document.getElementById('inputNewPassword').classList.add("is-invalid");
+        document.getElementById('inputNewPassword2').classList.add("is-invalid");
+      } else if(this.newPassword.length < 4 || this.newPassword2.length < 4){
+        this.errForRecover = 'A senha deve ter no mínimo 4 dígitos'
+        document.getElementById('inputNewPassword').classList.add("is-invalid");
+        document.getElementById('inputNewPassword2').classList.add("is-invalid");
+      } else{
+        
+        console.log(this.divForRecoveryPassword)
+      }
     }
-  }, created(){
+  }, async created(){
     if(this.$route.params.token != undefined){
-      this.divForRecoveryPassword = 'fa'
-      
+      await axios.post(`http://localhost:4000/token`, {
+        token: this.$route.params.token
+      }).then(res => {
+        console.log(res)
+        this.divForRecoveryPassword = this.$route.params.token
+      }).catch(err => {
+        console.log(err.response.data)
+      })
     }
     this.serverIP = scrypt.serverIP
   }
