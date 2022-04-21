@@ -100,89 +100,88 @@ class UserController{
                 <head>
                 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
                 <title>Pseudoclasse Hover</title>
-                <style type="text/css">
-            #divMain{
-              position: relative;
-              
-              align-items: center;
-              background-color: rgb(250, 250, 250);
-              color: black;
-              font-family: Avenir, Helvetica, Arial, sans-serif;
-            }
-            
-            #divTitle{
-              background-color: blue; 
-              width: 100%; 
-              color: white; 
-              display: block; 
-              padding: 1rem;
-              position: absolute;
-              top: 0;
-              left: 0;
-              right: 0;
-            }
-            
-            #divData{
-              padding: 0 1rem;
-            }
-            
-            h4{
-              margin: auto;
-            }
-            
-            h5{
-              margin-bottom: 1rem;
-              margin-top: 1rem;
-            }
-            
-            h6{
-              font-size: 1.15rem;
-            }
-            
-            a{
-              font-size: 1.1rem;
-              margin-bottom: .5rem;
-              margin-top: .5rem;
-              color: blue !important; 
-              text-decoration: none;
-            }
-            
-            footer{
-              position: absolute;
-              bottom: 0;
-              left: 0;
-              right: 0;
-            }
-            
-            img{
-              max-width: 100%;
-              height: 150px;
-            }
-            </style>
+                    <style type="text/css">
+                        #divMain{
+                            position: relative;
+                            align-items: center;
+                            background-color: rgb(250, 250, 250);
+                            color: black;
+                            font-family: Avenir, Helvetica, Arial, sans-serif;
+                        }
+                        
+                        #divTitle{
+                            background-color: blue; 
+                            width: 100%; 
+                            color: white; 
+                            display: block; 
+                            padding: 1rem;
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            right: 0;
+                        }
+                        
+                        #divData{
+                            padding: 0 1rem;
+                        }
+                        
+                        h4{
+                            margin: auto;
+                        }
+                        
+                        h5{
+                            margin-bottom: 1rem;
+                            margin-top: 1rem;
+                        }
+                        
+                        h6{
+                            font-size: 1.15rem;
+                        }
+                        
+                        a{
+                            font-size: 1.1rem;
+                            margin-bottom: .5rem;
+                            margin-top: .5rem;
+                            color: blue !important; 
+                            text-decoration: none;
+                        }
+                        
+                        footer{
+                            position: absolute;
+                            bottom: 0;
+                            left: 0;
+                            right: 0;
+                        }
+                        
+                        img{
+                            max-width: 100%;
+                            height: 150px;
+                        }
+                    </style>
                 </head>
                  
                 <body>
-                <div id="divMain">
-                  <div id="divTitle">
-                    <h4>Código de verificação da Maximus</h4>
-                  </div>
-                  
-                  <div id="divData">
-                    <h6>Prezado cliente</h6>
-                    <h5>
-                      Este e-mail foi enviado para ajudar na recuperação de acesso à sua Conta da Maximus:
-                    </h5>
-                    <a href="http://${serverIP}/senha/${token}">Clique aqui para recuperar sua senha</a>
-            
-                    <h5>
-                      Se você não solicitou esse código provavelmente outra pessoa esteja tentando acessar a sua conta <b>${email}</b> Não encaminhe ou mostre esse e-mail a ninguém.
-                    </h5>
-                  </div>
-            
-                  <footer>
-                    <img src="cid:logo" alt="">
-                  </footer>
-                </div>`,
+                    <div id="divMain">
+                    <div id="divTitle">
+                        <h4>Código de verificação da Maximus</h4>
+                    </div>
+                    
+                    <div id="divData">
+                        <h6>Prezado cliente</h6>
+                        <h5>
+                        Este e-mail foi enviado para ajudar na recuperação de acesso à sua Conta da Maximus:
+                        </h5>
+                        <a href="http://${serverIP}/senha/${token}">Clique aqui para recuperar sua senha</a>
+                
+                        <h5>
+                        Se você não solicitou esse código provavelmente outra pessoa esteja tentando acessar a sua conta <b>${email}</b> Não encaminhe ou mostre esse e-mail a ninguém.
+                        </h5>
+                    </div>
+                
+                    <footer>
+                        <img src="cid:logo" alt="">
+                    </footer>
+                    </div>`,
             }).then(message => {
                 console.log(message)
             }).catch(err => {

@@ -1,22 +1,37 @@
 <template>
   <div id="app">
     <div class="container">
-
       <div class="vm--overlay" style="z-index: 9999" @click="closeToastErr()" v-if="err != ''">
-              <div class="position-fixed top-0 start-50 translate-middle-x p-3">
-                <div id="liveToast" class="toast show" role="alert" aria-live="assertive" aria-atomic="true" style="">
-                  <div class="toast-header">
-                    <img src="../assets/img/icone_maximus_gestao.png" style="height: 30px" class="rounded img-fluid me-2" alt="...">
-                    
-                    <strong class="me-auto">Maximus Gestão</strong>
-                    <button type="button" class="btn-close" @click="closeToastErr()"></button>
-                  </div>
-                  <div class="toast-body text-white bg-primary">
-                    {{ err }}
-                  </div>
-                </div>
-              </div>
+        <div class="position-fixed top-0 start-50 translate-middle-x p-3">
+          <div id="liveToast" class="toast show" role="alert" aria-live="assertive" aria-atomic="true" style="">
+            <div class="toast-header">
+              <img src="../assets/img/icone_maximus_gestao.png" style="height: 30px" class="rounded img-fluid me-2" alt="...">
+              
+              <strong class="me-auto">Maximus Gestão</strong>
+              <button type="button" class="btn-close" @click="closeToastErr()"></button>
             </div>
+            <div class="toast-body text-white bg-primary">
+              {{ err }}
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="vm--overlay" style="z-index: 9999" @click="closeToastErr()" v-if="divForRecoveryPassword != ''">
+        <div class="position-fixed top-0 start-50 translate-middle-x p-3">
+          <div id="liveToast" class="toast show" role="alert" aria-live="assertive" aria-atomic="true" style="">
+            <div class="toast-header">
+              <img src="../assets/img/icone_maximus_gestao.png" style="height: 30px" class="rounded img-fluid me-2" alt="...">
+              
+              <strong class="me-auto">Maximus Gestão</strong>
+              <button type="button" class="btn-close" @click="closeToastErr()"></button>
+            </div>
+            <div class="toast-body text-white bg-primary">
+              {{ err }}
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div class="row d-flex justify-content-center">
         <div class="bg-dark text-center col-8 col-md-6 col-lg-4 py-4">
@@ -122,10 +137,6 @@
           </div>
         </div>
       </modal>
-
-      <button id="activeModal" @click="activeModal()">
-        ativar
-      </button>
     </div>
   </div>
 </template>
@@ -216,15 +227,11 @@ export default {
     },
     closeToastErr(){
       this.err = ''
-    },
-    activeModal(){
-      this.$modal.show('divForRecoveryPassword');
     }
   }, created(){
     if(this.$route.params.token != undefined){
-      this.activeModal();
-      document.getElementById("activeModal").click()
-      console.log("true")
+      this.divForRecoveryPassword = 'fa'
+      
     }
     this.serverIP = scrypt.serverIP
   }
