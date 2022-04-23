@@ -39,7 +39,12 @@ const routes = [
     component: Home
   },
   {
-    path: '/:token',
+    path: '/*',
+    name: 'DefaultRouter',
+    component: Home
+  },
+  {
+    path: '/conta/:token',
     name: 'HomeRecover',
     component: Home
   },

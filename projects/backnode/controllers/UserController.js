@@ -171,7 +171,7 @@ class UserController{
                         <h5>
                         Este e-mail foi enviado para ajudar na recuperação de acesso à sua Conta da Maximus:
                         </h5>
-                        <a href="http://${serverIP}/${result.token}">Clique aqui para recuperar sua senha</a>
+                        <a href="http://${serverIP}/conta/${result.token}">Clique aqui para recuperar sua senha</a>
                 
                         <h5>
                         Se você não solicitou esse código provavelmente outra pessoa esteja tentando acessar a sua conta <b>${email}</b> Não encaminhe ou mostre esse e-mail a ninguém.
