@@ -51,8 +51,8 @@ const routes = [
   {
     path: '/replicacoes',
     name: 'Replic',
-    component: Replic,
-    beforeEnter: AdminAuth
+    component: Replic/*,
+    beforeEnter: AdminAuth*/
   },
   {
     path: '/representantes',
@@ -62,13 +62,14 @@ const routes = [
   {
     path: '/adminUsers',
     name: 'AdminUsers',
-    component: AdminUsers,
-    beforeEnter: AdminAuth
+    component: AdminUsers/*,
+    beforeEnter: AdminAuth*/
   },
   {
     path: '/teste',
     name: 'Teste',
-    component: Teste
+    component: Teste,
+    beforeEnter: AdminAuth
   }
 ]
 

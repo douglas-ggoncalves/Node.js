@@ -309,6 +309,8 @@ export default {
       }).then(() => {
         this.divForRecoveryPassword = this.$route.params.token
       }).catch(err => {
+        console.log("deu erro aqui")
+        console.log(err)
         console.log(err.response.data.err)
       })
     }

@@ -1,6 +1,6 @@
 var knex = require("../database/database");
 var User = require("./User")
-
+const { v4: uuidv4 } = require('uuid');
 class PasswordTokens{
     async findEmail(email) {
         try {
@@ -21,7 +21,7 @@ class PasswordTokens{
        
         if(user != undefined) {
             try {
-                var token = Date.now();
+                var token = uuidv4();
                 await knex.insert({
                     USERID_PASSWORDTOKENS: user.ID_USUARIO,
                     used: 0,
