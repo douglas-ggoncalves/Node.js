@@ -3,7 +3,6 @@ var bcrypt = require("bcrypt");
 var PasswordTokens = require("./PasswordTokens");
 class User{
 
-
     async findLogin(login) {
         try {
             var result = await knex.select().where({LOGIN_USUARIO: login}).from("USUARIO").leftOuterJoin('rede', 'rede.id', 'USUARIO.REDEID_USUARIO');
@@ -89,6 +88,16 @@ class User{
             return result;
         } catch(err) {
             console.log(err)
+            return undefined;
+        }
+    }
+
+    async editPasswordUser(password, idUser){
+        try {
+            var hash = await bcrypt.hash(password, 10);
+            var result = await knex.where('ID_USUARIO', '=', idUser).update({ SENHA_USUARIO: hash }).table("USUARIO")
+            return result;
+        } catch(err) {
             return undefined;
         }
     }

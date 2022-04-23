@@ -272,8 +272,30 @@ class UserController{
             res.send("Token inválido");
         }
     }
-
     
+    async editPassword(req, res) {
+        var token = await req.body.token;
+        var password = await req.body.password;
+        var tokenIsValid = await PasswordTokens.validate(token);
+        if(tokenIsValid.status) {
+            var editUser = await User.editPasswordUser(password, tokenIsValid.token.USERID_PASSWORDTOKENS)
+
+            if(editUser != undefined) {
+                await PasswordTokens.updateToken(token);
+                res.status(200);
+                res.send({success: "Usuário editado com sucesso"})
+                return;
+            } else{
+                res.status(404)
+                res.send({success: "Não foi possível editar o usuário"})
+            }
+            res.status(200);
+            res.send({success: 'Token válido'})
+        } else{
+            res.status(406);
+            res.send("Token inválido");
+        }
+    }
 
     async getUsers(req, res) {
         var users = await User.findAllUser();

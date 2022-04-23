@@ -12,6 +12,12 @@ router.get('/user',AdminAuth, UserController.getUsers);
 router.post('/user', UserController.create);
 router.patch('/user', UserController.edit);
 router.post('/token', UserController.validateToken);
+
+/**/
+router.patch('/token', UserController.editPassword);
+
+
+
 router.post('/senha', UserController.recoveryPassword);
 router.delete('/user/:login', UserController.delete);
 router.get('/representante', RepresentativeController.searchRepresentative);

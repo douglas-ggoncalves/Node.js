@@ -43,7 +43,6 @@ class PasswordTokens{
 
             if(result.length > 0) {
                 var tk = result[0];
-                
                 if(tk.USED) {
                     return {status: false};
                 } else {
@@ -60,7 +59,7 @@ class PasswordTokens{
     }
 
     async updateToken(token) {
-        await knex.update({used: 1}).where({token: token}).table("passwordTokens");
+        await knex.update({USED: 1}).where({TOKEN: token}).table("passwordTokens");
     }
 }
 

@@ -1,6 +1,26 @@
 <template>
   <div id="app">
     <div class="container">
+      <div class="vm--overlay" style="z-index: 9999" @click="closeToastSuccess()" v-if="success != ''">
+        <div class="position-fixed top-50 start-50 translate-middle p-3">
+          <div id="liveToast" class="toast show" role="alert" aria-live="assertive" aria-atomic="true" style="">
+            <div class="toast-header">
+              <img src="../assets/img/icone_maximus_gestao.png" style="height: 30px" class="rounded img-fluid me-2" alt="...">
+              
+              <strong class="me-auto">Maximus Gestão</strong>
+              <button type="button" class="btn-close" @click="closeToastSuccess()"></button>
+            </div>
+            <div class="toast-body bg-light">
+              {{ success }}
+
+              <button class="btn btn-success mt-3 d-block mx-auto">
+                CONFIRMAR
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="vm--overlay" style="z-index: 9999" @click="closeToastErr()" v-if="err != ''">
         <div class="position-fixed top-0 start-50 translate-middle-x p-3">
           <div id="liveToast" class="toast show" role="alert" aria-live="assertive" aria-atomic="true" style="">
@@ -100,7 +120,7 @@
         <div class="row d-flex justify-content-center align-items-center my-auto">
           <div class="col-10">
             <Label for="loginUser">Informe o seu e-mail</Label>
-            <input type="email" id="inputRecover" class="form-control w-100" v-model="emailForRecovery" required @keydown="clear()">
+            <input type="email" id="inputRecover" class="form-control w-100" v-model="emailForRecovery" required @keydown="clearInputsRecover()">
             <div class="invalid-feedback" v-if="err">
               Email inválido
             </div>
@@ -173,6 +193,7 @@ export default {
       login: '',
       password: '',
       err: '',
+      success:'',
       serverIP: '',
       emailForRecovery: '',
       codeForRecovery: '',
@@ -216,8 +237,7 @@ export default {
         await axios.post(`http://${this.serverIP}/senha`, {
           email: this.emailForRecovery
         })
-        .then(res =>{
-          console.log(res.data)
+        .then(() =>{
           this.$modal.hide('modalRecovery');
           this.$modal.show('modalRecovery2');
         }).catch(err => {
@@ -229,9 +249,12 @@ export default {
     clear(){
       this.err = '';
       document.getElementById('inputLogin').classList.remove("is-invalid");
-      document.getElementById('inputRecover').classList.remove("is-invalid");
       document.getElementById('inputPassword').classList.remove("is-invalid");
     },
+    clearInputsRecover(){
+      document.getElementById('inputRecover').classList.remove("is-invalid");
+    }
+    ,
     closeToast(){
       this.err = '';
     },
@@ -252,7 +275,10 @@ export default {
     closeToastErr(){
       this.err = ''
     },
-    checkAndRecoverPassword(){
+    closeToastSuccess(){
+      this.success = ''
+    },
+    async checkAndRecoverPassword(){
       if(this.newPassword != this.newPassword2){
         this.errForRecover = 'As senhas devem ser iguais'
         document.getElementById('inputNewPassword').classList.add("is-invalid");
@@ -262,22 +288,30 @@ export default {
         document.getElementById('inputNewPassword').classList.add("is-invalid");
         document.getElementById('inputNewPassword2').classList.add("is-invalid");
       } else{
-        
-        console.log(this.divForRecoveryPassword)
+        await axios.patch(`http://${this.serverIP}/token`, {
+          token: this.divForRecoveryPassword,
+          password: this.newPassword
+        }).then(res => {
+          this.divForRecoveryPassword = ''
+          this.success = res.data.success
+        }).catch(err => {
+          this.err = err.response.data
+        })
       }
     }
-  }, async created(){
+  }, 
+  async created(){
+    this.serverIP = scrypt.serverIP
+
     if(this.$route.params.token != undefined){
-      await axios.post(`http://localhost:4000/token`, {
+      await axios.post(`http://${this.serverIP}/token`, {
         token: this.$route.params.token
-      }).then(res => {
-        console.log(res)
+      }).then(() => {
         this.divForRecoveryPassword = this.$route.params.token
       }).catch(err => {
-        console.log(err.response.data)
+        console.log(err.response.data.err)
       })
     }
-    this.serverIP = scrypt.serverIP
   }
 };
 </script>
