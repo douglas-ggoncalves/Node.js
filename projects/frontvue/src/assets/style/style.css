@@ -212,4 +212,24 @@ button {
 .toast-body {
   font-size: 1.08rem;
 }
+
+.vm--modal {
+  background: none !important;
+  left: 0 !important;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100% !important;
+}
+
+.home .vm--modal {
+  background: white !important;
+  width: 80% !important;
+}
+
+@media (min-width: 992px) {
+  .home .vm--modal {
+    background: white !important;
+    width: 50% !important;
+  }
+}
 /*# sourceMappingURL=style.css.map */

@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="home">
     <div class="container">
       <div class="vm--overlay" style="z-index: 9999" @click="closeToastSuccess()" v-if="success != ''">
         <div class="position-fixed top-50 start-50 translate-middle p-3">
@@ -82,7 +82,6 @@
           </div>
 
           <div class="col-12 col-lg-9 mx-auto">
-            <form>
               <div class="mt-4">
                 <input id="inputLogin" type="text" class="form-control" placeholder="Digite seu usuário" v-model="login" @keydown="clear()">
               </div>
@@ -90,8 +89,8 @@
               <div class="mt-4">
                 <input id="inputPassword" type="password" class="form-control" placeholder="Digite sua senha" autocomplete="on" v-model="password"
                 @keydown="clear()">
-                <div class="invalid-feedback" v-if="err">
-                  Usuário e/ou senha incorretos
+                <div class="invalid-feedback" v-if="errLogin">
+                  {{ errLogin }}
                 </div>
               </div>
 
@@ -106,47 +105,41 @@
                   Esqueci minha senha
                 </button>
               </div>
-            </form>
           </div>
         </div>
       </div>
 
       <modal name="modalRecovery">
-        <div class="row">
-          <h4>Recuperar Senha</h4>
-          <hr>
-        </div>
+        <div class="container">
+          <div class="row d-flex justify-content-center">
+            <div class="col-12 col-lg-10 col-xl-8">
+              <h4 class="mt-2">Recuperar Senha</h4>
+              <hr>
+              <Label for="inputRecover">Informe o seu e-mail</Label>
+              <input type="email" id="inputRecover" class="form-control w-100" v-model="emailForRecovery" required @keydown="clearInputsRecover()">
+              <div class="invalid-feedback" v-if="errEmail">
+                {{ errEmail }}
+              </div>
 
-        <div class="row d-flex justify-content-center align-items-center my-auto">
-          <div class="col-10">
-            <Label for="loginUser">Informe o seu e-mail</Label>
-            <input type="email" id="inputRecover" class="form-control w-100" v-model="emailForRecovery" required @keydown="clearInputsRecover()">
-            <div class="invalid-feedback" v-if="err">
-              Email inválido
+              <button type="button" class="btn btn-success mt-2" @click="recoverPasswordUser()">
+                Recuperar Senha
+              </button>
             </div>
-          </div>
-
-          <div class="col-10 text-center">  
-            <button type="button" class="btn btn-success" @click="recoverPasswordUser()">
-              Recuperar Senha
-            </button>
           </div>
         </div>
       </modal>
 
-      <modal class="mx-5 mx-md-0" name="modalRecovery2">
-        <div class="row d-flex align-items-center justify-content-center mx-auto my-auto h-100">
-          <div>
-            <div class="col-10 mx-auto">
-              <h5>Um e-mail foi enviado para {{ emailForRecovery }} com as instruções para a recuperação de senha</h5>
-            </div>
+      <modal name="modalRecovery2">
+        <div class="container d-flex align-items-center h-100">
+          <div class="row d-flex justify-content-center">
+              <div class="col-12 col-lg-10 col-xl-8">
+                <h5>Um e-mail foi enviado para {{ emailForRecovery }} com as instruções para a recuperação de senha</h5>
 
-            <div class="row d-flex justify-content-center mt-3">
-              <div class="col">
-                <button type="button" class="btn btn-success" @click="closeRecovery2()">
-                  Confirmar
-                </button>
-              </div>
+                <div>
+                  <button type="button" class="btn btn-success" @click="closeRecovery2()">
+                    Confirmar
+                  </button>
+                </div>
             </div>
           </div>
         </div>
@@ -200,7 +193,9 @@ export default {
       divForRecoveryPassword: '',
       newPassword: '',
       newPassword2: '',
-      errForRecover: ''
+      errForRecover: '',
+      errEmail: '',
+      errLogin: ''
     }
   }, methods: {
     async log(){
@@ -219,6 +214,7 @@ export default {
           localStorage.setItem("redeIdUser", res.data.user.REDEID_USUARIO);
           this.$router.push({name: "Index"})
         }).catch(err => {
+          this.errLogin = err.response.data.err
           this.err = `${err.response.data.err}`
           document.getElementById('inputLogin').classList.add("is-invalid")
           document.getElementById('inputPassword').classList.add("is-invalid")
@@ -241,17 +237,20 @@ export default {
           this.$modal.hide('modalRecovery');
           this.$modal.show('modalRecovery2');
         }).catch(err => {
+          this.errEmail = err.response.data.err
           this.err = err.response.data.err
           document.getElementById('inputRecover').classList.add("is-invalid");
         })
       }
     },
     clear(){
+      this.errLogin = '';
       this.err = '';
       document.getElementById('inputLogin').classList.remove("is-invalid");
       document.getElementById('inputPassword').classList.remove("is-invalid");
     },
     clearInputsRecover(){
+      this.errEmail = ''
       document.getElementById('inputRecover').classList.remove("is-invalid");
     }
     ,
@@ -341,5 +340,4 @@ button {
 .toast{
   border: none;
 }
-
 </style>

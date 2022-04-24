@@ -193,9 +193,9 @@
 
     <modal name="modalNetwork">
       <div class="row">
-        <div class="card">
-          <h4 class="card-header">Cadastrar Rede</h4>
-          <div class="card-body">
+          <div class="card">
+            <h4 class="card-header">Cadastrar Rede</h4>
+            <div class="card-body">
               <div class="col">
                 <label>Nome Da Rede</label>
                 <input type="text" id="inputNameNetwork" class="form-control" placeholder="Digite o nome da rede" v-model="network" @keydown="clear()" required>
@@ -210,22 +210,22 @@
                 </button>
               </div>
 
-              <div class="col text-center mt-2">
+              <div class="col text-center mt-1">
                 <button type="button" class="btn btn-success" @click="registerNetwork()">
                   Cadastrar
                 </button>
               </div>
-          </div>
+            </div>
         </div>
       </div>
     </modal>
 
     <modal name="modalStore" id="modalStore">
-      <div class="row">
+      <div class="row d-flex justify-content-center">
         <div class="card">
           <h4 class="card-header">Cadastrar Loja</h4>
           <div class="card-body">
-              <div class="col">
+            <div class="col">
               <div class="form-group">
                 <Label for="storeNumber">Número da loja</Label>
                 <input type="number" class="form-control" placeholder="Informe o número da loja" v-model="numberStoreNewStore" @change="updateStoreName()" required>
@@ -279,18 +279,24 @@
               </div>
             </div>
 
-            <div class="col mt-2">
+            <div class="col text-center mt-2">
+              <button type="button" class="btn btn-outline-dark" @click="hideNewStore()">
+                Fechar
+              </button>
+            </div>
+
+            <div class="col text-center mt-1">
+              <button type="button" class="btn btn-success" @click="registerStore()">
+                Cadastrar Loja
+              </button>
+            </div>
+            
+            <div class="col mt-1">
               <div class="text-center">
                 <button type="button" class="btn btn-outline-danger" @click="defaults()">
                   Alterar valores padrões
                 </button>
               </div>
-            </div>
-
-            <div class="col text-center mt-1">
-                <button type="button" class="btn btn-success" @click="registerStore()">
-                  Cadastrar Loja
-                </button>
             </div>
           </div>
         </div>
@@ -302,7 +308,7 @@
         <div class="card">
           <h4 class="card-header">Editar Loja</h4>
           <div class="card-body">
-              <div class="col">
+            <div class="col">
               <div class="form-group">
                 <Label for="storeNumber">Número da loja</Label>
                 <input type="number" class="form-control" placeholder="Informe o número da loja" v-model="editNumberStoreNewStore" @change="editUpdateStoreName()" required>
@@ -551,6 +557,9 @@ export default {
     },
     hideNewNetwork () {
       this.$modal.hide('modalNetwork');
+    },
+    hideNewStore () {
+      this.$modal.hide('modalStore');
     },
     showNewStore(){
       this.err = ''

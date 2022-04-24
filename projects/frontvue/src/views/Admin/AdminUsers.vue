@@ -127,62 +127,60 @@
         </div>
     </div>
 
-    <modal name="modalNewUser" id="modalStore">
-        <div class="container">
-            <div class="row">
-                <div class="card">
-                    <h4 class="card-header">Cadastrar Usuário</h4>
-                    <div class="card-body">
-                        <div class="col">
-                            <label>Login</label>
-                            <input type="text" class="form-control" placeholder="Informe o login" v-model="loginUser" required>
-                        </div>
-                        
-                        <div class="col">
-                            <label>Email</label>
-                            <input type="text" class="form-control" placeholder="Informe a senha" v-model="emailUser" required>
-                        </div>
+    <modal name="modalNewUser" class="" id="modalStore">
+        <div class="row">
+            <div class="card">
+                <h4 class="card-header">Cadastrar Usuário</h4>
+                <div class="card-body">
+                    <div class="col">
+                        <label>Login</label>
+                        <input type="text" class="form-control" placeholder="Informe o login" v-model="loginUser" required>
+                    </div>
+                    
+                    <div class="col">
+                        <label>E-mail</label>
+                        <input type="text" class="form-control" placeholder="Informe seu e-mail" v-model="emailUser" required>
+                    </div>
 
-                        <div class="col">
-                            <label>Senha</label>
-                            <input type="password" class="form-control" placeholder="Informe a senha" v-model="passwordUser" required>
-                        </div>
+                    <div class="col">
+                        <label>Senha</label>
+                        <input type="password" class="form-control" placeholder="Informe a senha" v-model="passwordUser" required>
+                    </div>
 
-                        <div class="col">
-                            <div class="form-group">
-                                <Label for="selectedRole">Selecione um cargo</Label>
-                                <select id="selectedRole" class="form-control" v-model="abbreviatedRoleUser">
-                                    <option disabled value="">Escolha um cargo</option>
-                                    <option v-for="user in users" v-bind:value="user.abbreviatedRoleUser" :key="user.id">
-                                        {{ user.role }}
-                                    </option>
-                                </select>
-                            </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <Label for="selectedRole">Selecione um cargo</Label>
+                            <select id="selectedRole" class="form-control" v-model="abbreviatedRoleUser">
+                                <option disabled value="">Escolha um cargo</option>
+                                <option v-for="user in users" v-bind:value="user.abbreviatedRoleUser" :key="user.id">
+                                    {{ user.role }}
+                                </option>
+                            </select>
                         </div>
-                        
-                        <div class="col">
-                            <div class="form-group">
-                                <Label for="selectedStore">Selecione uma rede</Label>
-                                <select id="selectedStore" class="form-control" v-model="selected">
-                                    <option disabled value="">Escolha uma rede</option>
-                                    <option v-for="option in networks" v-bind:value="option.id" :key="option.id">
-                                    {{ option.NOME_REDE }}
-                                    </option>
-                                </select>
-                            </div>
+                    </div>
+                    
+                    <div class="col">
+                        <div class="form-group">
+                            <Label for="selectedStore">Selecione uma rede</Label>
+                            <select id="selectedStore" class="form-control" v-model="selected">
+                                <option disabled value="">Escolha uma rede</option>
+                                <option v-for="option in networks" v-bind:value="option.id" :key="option.id">
+                                {{ option.NOME_REDE }}
+                                </option>
+                            </select>
                         </div>
+                    </div>
 
-                        <div class="col text-center mt-2">
-                            <button type="button" class="btn btn-outline-dark" @click="hideNewNetwork()">
-                                Fechar
-                            </button>
-                        </div>
+                    <div class="col text-center mt-2">
+                        <button type="button" class="btn btn-outline-dark" @click="hideNewNetwork()">
+                            Fechar
+                        </button>
+                    </div>
 
-                        <div class="col text-center mt-2">
-                            <button type="button" class="btn btn-success" @click="registerUser()">
-                                Cadastrar
-                            </button>
-                        </div>
+                    <div class="col text-center mt-2">
+                        <button type="button" class="btn btn-success" @click="registerUser()">
+                            Cadastrar
+                        </button>
                     </div>
                 </div>
             </div>
