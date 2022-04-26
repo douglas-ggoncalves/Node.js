@@ -136,7 +136,6 @@ class ReplicController{
 
     async delete(req, res) {
         var id = req.params.id;
-        console.log(id)
         
         try {
             await database.select().where({ID_LOJA: id}).from("LOJA").del();

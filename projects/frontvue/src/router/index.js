@@ -28,8 +28,9 @@ async function AdminAuth(to, from, next) {
       //console.log(redeUser + ' ' + roleUser)
       next();
     }).catch(err => {
+
       console.log(err.response)
-      alert(err)
+      alert(err.response.data.err)
       next("/");
     })
   } else{

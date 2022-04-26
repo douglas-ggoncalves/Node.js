@@ -308,12 +308,16 @@ class UserController{
 
         var redeUser = req.body.redeUser
         var roleUser = req.body.roleUser
-        //this.clients = res.data.filter(r => r.REDEID_USUARIO == this.redeIdUserLogged)
+        var loginUser = req.body.loginUser
+        if(redeUser == 'null'){
+            redeUser = null;
+        }
+     
         var users = await User.findAllUser();
-        var oneUser = users.filter(user => user.CARGO_USUARIO == 'M' && user.LOGIN_USUARIO == 'MAXIMUS' && user.REDEID_USUARIO == null)
-
+        var oneUser = users.filter(user => user.LOGIN_USUARIO == loginUser && user.CARGO_USUARIO == roleUser && user.REDEID_USUARIO == redeUser)
+        console.log(oneUser)
         if(oneUser != ''){
-            console.log(oneUser) 
+            //console.log(oneUser) 
             res.status(200);
             res.send("Ok");
         } else{
