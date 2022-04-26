@@ -8,21 +8,28 @@ import AdminUsers from '../views/Admin/AdminUsers.vue'
 import Teste from '../views/Teste.vue'
 import axios from 'axios';
 import scrypt from "../assets/js/scrypt";
+
 var serverIP = scrypt.serverIP
+
 async function AdminAuth(to, from, next) {
+  console.log("console aqui ")
   if(localStorage.getItem('token') != undefined) {
     var req = {
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token")
       }
     }
+    
+    var redeUser = localStorage.getItem("redeIdUser")
+    var roleUser = localStorage.getItem("roleUser")
+    var loginUser = localStorage.getItem("loginUser")
    
-    await axios.post(`http://${serverIP}/validate`, {}, req).then(() => {
-      console.log(scrypt)
+    await axios.post(`http://${serverIP}/validate`, {redeUser, roleUser, loginUser}, req).then(() => {
+      //console.log(redeUser + ' ' + roleUser)
       next();
     }).catch(err => {
       console.log(err.response)
-      alert(err.response)
+      alert(err)
       next("/");
     })
   } else{
@@ -56,8 +63,8 @@ const routes = [
   {
     path: '/replicacoes',
     name: 'Replic',
-    component: Replic/*,
-    beforeEnter: AdminAuth*/
+    component: Replic,
+    beforeEnter: AdminAuth
   },
   {
     path: '/representantes',

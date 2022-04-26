@@ -101,7 +101,7 @@
                         <th scope="col">Login</th>
                         <th scope="col">Cargo</th>
                         <th scope="col">Rede Usuário</th>
-                        <th scope="col">Handle</th>
+                        <th scope="col">Ações</th>
                         </tr>
                     </thead>
 
@@ -139,7 +139,7 @@
                     
                     <div class="col">
                         <label>E-mail</label>
-                        <input type="text" class="form-control" placeholder="Informe seu e-mail" v-model="emailUser" required>
+                        <input type="email" class="form-control" placeholder="Informe seu e-mail" v-model="emailUser" required>
                     </div>
 
                     <div class="col">
@@ -347,11 +347,12 @@ export default {
                             .then(res => {
                                 this.loginUser = '',
                                 this.passwordUser = '',
-                                this.email = '',
+                                this.emailUser = '',
                                 this.abbreviatedRoleUser = ''
                                 this.clients = '';
+                                this.hideNewNetwork();
                                 this.myFunction();
-                                this.success = res.data.success
+                                this.success = res.data.success;
                             });
                             } catch(err) {
                                 this.err = err.response.data.err

@@ -33,11 +33,11 @@
 
         <div class="container-fluid" id="content">
           <nav class="navbar navbar-expand-lg navbar-light">
-              <div class="container-fluid">
-                  <button type="button" id="sidebarCollapse" class="btn btn-outline-dark" @click="clique()">
-                      <span class="navbar-toggler-icon"></span>
-                  </button>
-              </div>
+            <div class="container-fluid">
+              <button type="button" id="sidebarCollapse" class="btn btn-outline-dark" @click="clique()">
+                  <span class="navbar-toggler-icon"></span>
+              </button>
+            </div>
           </nav>
 
           <div class="container">
@@ -106,8 +106,8 @@
                     
                   </template>
                   <span slot="noResult">
-                      Sua pesquisa não retornou nenhum resultado
-                    </span>
+                    Sua pesquisa não retornou nenhum resultado
+                  </span>
                 </multiselect>
               </div>
 
@@ -148,7 +148,7 @@
                         <i class="fa-solid fa-screwdriver-wrench"></i>
                       </button>
 
-                      <button class="btn btn-outline-danger" @click="deleteStore(data[index].ID_LOJA)">
+                      <button class="btn btn-outline-danger" @click="deleteStore(data[index].ID_LOJA)" v-if="roleUserLogged == 'M'">
                         <i class="fa-solid fa-trash-can"></i>
                       </button>
                     </td>
@@ -176,16 +176,14 @@
                         <i class="fa-solid fa-screwdriver-wrench"></i>
                       </button>
 
-                      <button class="btn btn-outline-danger" @click="deleteStore(data[index].ID_LOJA)">
+                      <button class="btn btn-outline-danger" @click="deleteStore(data[index].ID_LOJA)" v-if="roleUserLogged == 'M'">
                         <i class="fa-solid fa-trash-can"></i>
                       </button>
                     </td>
                   </tr>
                 </tbody>
               </table>
-
               </div>
-
             </div>
           </div>
         </div>
@@ -384,6 +382,7 @@ Vue.use(VModal, {
 export default {
   created(){
     this.serverIP = scrypt.serverIP
+    //this.verifyAuth();
     this.myFunction();
   },
   data() {
@@ -417,6 +416,7 @@ export default {
     }
   },
   methods: {
+    
     myFunction(){
       axios.get(`http://${this.serverIP}/replicacao`, {
         headers: {

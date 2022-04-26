@@ -6,6 +6,8 @@ var bcrypt = require("bcrypt");
 const PasswordTokens = require("../models/PasswordTokens");
 const nodemailer = require("nodemailer");
 const serverIP = 'localhost:8080'
+var jwt = require("jsonwebtoken");
+var secret = "as55a6a5as5d4a5qvjnkalçKASNFJLkakfnJKKjknldjsn";
 
 let transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
@@ -303,8 +305,22 @@ class UserController{
     }
 
     async validate(req, res) {
-        res.status(200)
-        res.send("Ok");
+
+        var redeUser = req.body.redeUser
+        var roleUser = req.body.roleUser
+        //this.clients = res.data.filter(r => r.REDEID_USUARIO == this.redeIdUserLogged)
+        var users = await User.findAllUser();
+        var oneUser = users.filter(user => user.CARGO_USUARIO == 'M' && user.LOGIN_USUARIO == 'MAXIMUS' && user.REDEID_USUARIO == null)
+
+        if(oneUser != ''){
+            console.log(oneUser) 
+            res.status(200);
+            res.send("Ok");
+        } else{
+            res.status(406);
+            res.send({err:"Usuário inválido"});
+        }
+        
     }
 }
 
