@@ -315,9 +315,7 @@ class UserController{
      
         var users = await User.findAllUser();
         var oneUser = users.filter(user => user.LOGIN_USUARIO == loginUser && user.CARGO_USUARIO == roleUser && user.REDEID_USUARIO == redeUser)
-        console.log(oneUser)
         if(oneUser != ''){
-            //console.log(oneUser) 
             res.status(200);
             res.send("Ok");
         } else{

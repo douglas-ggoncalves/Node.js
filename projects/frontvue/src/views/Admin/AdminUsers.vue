@@ -94,7 +94,22 @@
                 <div class="form-group">
                     <input type="text" class="form-control" v-model="busca" placeholder="Busca por login do usuário">
                 </div>
-                
+
+                <div>
+                    <div class="form-check form-check-inline" >
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" @click="checkFunction('1')" checked>
+                        <label class="form-check-label" for="inlineCheckbox1">Mostrar Cargo</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox2"  @click="checkFunction('2')" checked>
+                        <label class="form-check-label" for="inlineCheckbox2">Mostrar Rede</label>
+                    </div>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox3"  @click="checkFunction('3')">
+                        <label class="form-check-label" for="inlineCheckbox3">Mostrar Ações</label>
+                    </div>
+                </div>
                 <table class="table table-hover">
                     <thead>
                         <tr>
@@ -107,7 +122,7 @@
 
                     <tbody v-for="(client, index) in searchClient" :key="client.ID_USUARIO">
                         <tr>
-                            <th scope="row">{{ client.LOGIN_USUARIO }}</th>
+                            <td style="font-weight: bold">{{ client.LOGIN_USUARIO }}</td>
                             <td>{{ client.CARGO_USUARIO }}</td>
                             <td>{{ client.NOME_REDE }}</td>
                             <td>
@@ -332,6 +347,8 @@ export default {
             } else{
                 if(this.passwordUser.trim() == ''){
                     this.err = 'O campo senha é obrigatório'
+                } else if(this.passwordUser.length < 4){
+                    this.err = 'A senha deve ter no mínimo 4 dígitos'
                 } else {
                     if(this.abbreviatedRoleUser == ""){
                         this.err = 'O campo cargo é obrigatório'
@@ -345,11 +362,12 @@ export default {
                                 networkId: this.selected
                             })
                             .then(res => {
-                                this.loginUser = '',
-                                this.passwordUser = '',
-                                this.emailUser = '',
+                                this.loginUser = ''
+                                this.passwordUser = ''
+                                this.emailUser = ''
                                 this.abbreviatedRoleUser = ''
-                                this.clients = '';
+                                this.networkId = ''
+                                this.clients = ''
                                 this.hideNewNetwork();
                                 this.myFunction();
                                 this.success = res.data.success;
@@ -421,6 +439,9 @@ export default {
         },
         hideNewNetwork(){
             this.$modal.hide('modalNewUser');
+        },
+        checkFunction(value){
+            alert(value)
         }
     },
     created(){

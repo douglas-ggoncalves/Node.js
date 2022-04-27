@@ -12,7 +12,6 @@ import scrypt from "../assets/js/scrypt";
 var serverIP = scrypt.serverIP
 
 async function AdminAuth(to, from, next) {
-  console.log("console aqui ")
   if(localStorage.getItem('token') != undefined) {
     var req = {
       headers: {
@@ -25,11 +24,8 @@ async function AdminAuth(to, from, next) {
     var loginUser = localStorage.getItem("loginUser")
    
     await axios.post(`http://${serverIP}/validate`, {redeUser, roleUser, loginUser}, req).then(() => {
-      //console.log(redeUser + ' ' + roleUser)
       next();
     }).catch(err => {
-
-      console.log(err.response)
       alert(err.response.data.err)
       next("/");
     })
@@ -75,8 +71,8 @@ const routes = [
   {
     path: '/adminUsers',
     name: 'AdminUsers',
-    component: AdminUsers/*,
-    beforeEnter: AdminAuth*/
+    component: AdminUsers,
+    beforeEnter: AdminAuth
   },
   {
     path: '/teste',
