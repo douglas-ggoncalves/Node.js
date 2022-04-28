@@ -1,0 +1,5 @@
+configurações ip:
+
+js/scrypt.js variável serverIP
+UserController.js: variável serverIP
+database.js

@@ -5,7 +5,7 @@ var secret = "as55a6a5as5d4a5qvjnkalçKASNFJLkakfnJKKjknldjsn";
 var bcrypt = require("bcrypt");
 const PasswordTokens = require("../models/PasswordTokens");
 const nodemailer = require("nodemailer");
-const serverIP = 'localhost:8080'
+const serverIP = '192.168.1.12:8080'
 var jwt = require("jsonwebtoken");
 var secret = "as55a6a5as5d4a5qvjnkalçKASNFJLkakfnJKKjknldjsn";
 
