@@ -81,7 +81,7 @@
                 <h3>Gestão de Usuários</h3>
               </div>
 
-              <div class="col-12" >
+              <div class="col-12">
                 <button type="button" class="btn btn-outline-dark" @click="showModalNewUser()">
                   Novo usuário
                 </button>
@@ -95,37 +95,37 @@
                     <input type="text" class="form-control" v-model="busca" placeholder="Busca por login do usuário">
                 </div>
 
-                <div>
+                <div class="my-3">
                     <div class="form-check form-check-inline" >
-                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" @click="checkFunction('1')" checked>
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" @click="checkFunction('updateRole')">
                         <label class="form-check-label" for="inlineCheckbox1">Mostrar Cargo</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" id="inlineCheckbox2"  @click="checkFunction('2')" checked>
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox2"  @click="checkFunction('updateNetwork')" checked>
                         <label class="form-check-label" for="inlineCheckbox2">Mostrar Rede</label>
                     </div>
 
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" id="inlineCheckbox3"  @click="checkFunction('3')">
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox3"  @click="checkFunction('updateAction')" checked>
                         <label class="form-check-label" for="inlineCheckbox3">Mostrar Ações</label>
                     </div>
                 </div>
                 <table class="table table-hover">
                     <thead>
                         <tr>
-                        <th scope="col">Login</th>
-                        <th scope="col">Cargo</th>
-                        <th scope="col">Rede Usuário</th>
-                        <th scope="col">Ações</th>
+                            <th scope="col">Login</th>
+                            <th scope="col" v-if="roleUsers">Cargo</th>
+                            <th scope="col" v-if="networkUsers">Rede Usuário</th>
+                            <th scope="col" v-if="actionUsers">Ações</th>
                         </tr>
                     </thead>
 
                     <tbody v-for="(client, index) in searchClient" :key="client.ID_USUARIO">
                         <tr>
                             <td style="font-weight: bold">{{ client.LOGIN_USUARIO }}</td>
-                            <td>{{ client.CARGO_USUARIO }}</td>
-                            <td>{{ client.NOME_REDE }}</td>
-                            <td>
+                            <td v-if="roleUsers">{{ client.CARGO_USUARIO }}</td>
+                            <td v-if="networkUsers">{{ client.NOME_REDE }}</td>
+                            <td v-if="actionUsers">
                                 <button type="button" class="btn btn-outline-dark" @click="editClient(index)" v-if="roleUserLogged == 'M' || roleUserLogged == 'A'">
                                     <i class="fa-solid fa-pencil"></i>
                                 </button>
@@ -286,6 +286,9 @@ export default {
             idUser: '',
             err: '',
             success: '',
+            roleUsers: false,
+            networkUsers: true,
+            actionUsers: true,
             users: [
                 {
                     id: 1,
@@ -322,7 +325,7 @@ export default {
             })
         },
         myFunction2(){
-            axios.get(`http://${this.serverIP}/replicacao`, {
+            axios.get(`http://${this.serverIP}/replic`, {
                 headers: {
                     Authorization: "Bearer " + localStorage.getItem("token")
                 }
@@ -441,8 +444,30 @@ export default {
             this.$modal.hide('modalNewUser');
         },
         checkFunction(value){
-            alert(value)
-        }
+            if(value == 'updateRole'){
+                if(this.roleUsers){
+                    this.roleUsers = undefined;
+                } else{
+                    this.roleUsers = true;
+                }
+            }
+            
+            if(value == 'updateNetwork'){
+                if(this.networkUsers){
+                    this.networkUsers = undefined;
+                } else{
+                    this.networkUsers = true;
+                }
+            }
+
+            if(value == 'updateAction'){
+                if(this.actionUsers){
+                    this.actionUsers = undefined;
+                } else{
+                    this.actionUsers = true;
+                }
+            }
+        },
     },
     created(){
         this.serverIP = scrypt.serverIP
@@ -454,7 +479,11 @@ export default {
             if(this.busca.trim() == ''){
                 return this.clients;
             } else{
-                return this.clients.filter(client => client.LOGIN_USUARIO.toLowerCase().match(this.busca.toLowerCase()));
+                return this.clients.filter(client => 
+                client.LOGIN_USUARIO.toLowerCase().match(this.busca.toLowerCase())
+                );
+
+                
             }
         }
     }

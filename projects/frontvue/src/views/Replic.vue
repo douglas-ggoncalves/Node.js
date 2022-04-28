@@ -418,7 +418,7 @@ export default {
   methods: {
     
     myFunction(){
-      axios.get(`http://${this.serverIP}/replicacao`, {
+      axios.get(`http://${this.serverIP}/replic`, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token")
         }
@@ -464,7 +464,7 @@ export default {
             if(this.data[y].REDEID == this.value[x].id){
               this.showData = true;
               try {
-                await axios.post(`http://${this.serverIP}/replicacao`, {array: this.data[y]})
+                await axios.post(`http://${this.serverIP}/replic`, {array: this.data[y]})
                 .then(res => {
                   Vue.set(this.data, y, res.data.newArray)
                 });
@@ -484,7 +484,7 @@ export default {
         var confirmation = await confirm("Deseja cadastrar a rede com o nome " + this.network +' ?');
         if(confirmation) {
           try {
-            await axios.post(`http://${this.serverIP}/rede`, {
+            await axios.post(`http://${this.serverIP}/network`, {
               network: this.network
             })
             .then(res => {
@@ -516,7 +516,7 @@ export default {
         var confirmation = await confirm("Confirma a criação desta loja ?");
         if(confirmation){
           try {
-            await axios.post(`http://${this.serverIP}/loja`, {
+            await axios.post(`http://${this.serverIP}/store`, {
               numberStoreNewStore: this.numberStoreNewStore,
               nameStore: this.nameStore,
               ipStore: this.ipStore,
@@ -615,7 +615,7 @@ export default {
         var confirmation = await confirm("Confirma a alteração de dados ?");
         if(confirmation){
           try {
-            await axios.patch(`http://${this.serverIP}/loja`, {
+            await axios.patch(`http://${this.serverIP}/store`, {
               editNumberStoreNewStore: this.editNumberStoreNewStore,
               editNameStore: this.editNameStore,
               editIpStore: this.editIpStore,
@@ -649,7 +649,7 @@ export default {
         console.log(JSON.stringify(this.data[id-1].ID_LOJA))
       if(confirmation) {
         try {
-          await axios.delete(`http://${this.serverIP}/loja/${id}`)
+          await axios.delete(`http://${this.serverIP}/store/${id}`)
           .then(res => {
             console.log(JSON.stringify(this.data[id-1].ID_LOJA))
             this.data[id-1] = []

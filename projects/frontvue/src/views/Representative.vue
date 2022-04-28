@@ -99,7 +99,7 @@ export default {
       this.serverIP = scrypt.serverIP
       this.redeIdUserLogged = localStorage.getItem("redeIdUser")
       this.roleUserLogged = localStorage.getItem("roleUser")
-      axios.get(`http://${this.serverIP}/representante`).then(res => {
+      axios.get(`http://${this.serverIP}/representative`).then(res => {
       
       console.log(res.data.select)
       }).catch(err => {

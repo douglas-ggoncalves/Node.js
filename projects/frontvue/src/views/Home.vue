@@ -232,7 +232,7 @@ export default {
       if(this.emailForRecovery.trim() == ''){
         this.err = 'Email precisa ser preenchido'
       } else{
-        await axios.post(`http://${this.serverIP}/senha`, {
+        await axios.post(`http://${this.serverIP}/password`, {
           email: this.emailForRecovery
         })
         .then(() =>{
