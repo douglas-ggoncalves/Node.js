@@ -3,7 +3,6 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Replic from '../views/Replic.vue'
 import Index from '../views/Index.vue'
-import Representative from '../views/Representative.vue'
 import AdminUsers from '../views/Admin/AdminUsers.vue'
 import Teste from '../views/Teste.vue'
 import axios from 'axios';
@@ -55,7 +54,8 @@ const routes = [
   {
     path: '/index',
     name: 'Index',
-    component: Index
+    component: Index,
+    beforeEnter: AdminAuth
   },
   {
     path: '/replicacoes',
@@ -64,12 +64,7 @@ const routes = [
     beforeEnter: AdminAuth
   },
   {
-    path: '/representantes',
-    name: 'Representative',
-    component: Representative
-  },
-  {
-    path: '/adminUsers',
+    path: '/usuarios',
     name: 'AdminUsers',
     component: AdminUsers,
     beforeEnter: AdminAuth

@@ -18,15 +18,7 @@
                 </li>
 
                 <li>
-                    <a href="representantes">Representante</a>
-                </li>
-
-                <li>
-                    <a href="#">Sobre</a>
-                </li>
-
-                <li>
-                    <a href="logout">Sair</a>
+                    <a href="javascript:;" @click="logout()">Sair</a>
                 </li>
             </ul>
         </nav>
@@ -468,6 +460,15 @@ export default {
                 }
             }
         },
+        logout(){
+           if(confirm("Deseja sair?")){
+                localStorage.removeItem("token")
+                localStorage.removeItem("roleUser")
+                localStorage.removeItem("redeIdUser")
+                localStorage.removeItem("loginUser")
+                this.$router.push({name: "Home"})
+           }
+        }
     },
     created(){
         this.serverIP = scrypt.serverIP

@@ -10,7 +10,7 @@
               </div>
 
               <li v-if="roleUserLogged == 'M' || roleUserLogged == 'A'">
-                <a href="adminUsers">Gestão de Usuários</a>
+                <a href="usuarios">Gestão de Usuários</a>
               </li>
 
               <li>
@@ -18,15 +18,7 @@
               </li>
 
               <li>
-                  <a href="representantes">Representante</a>
-              </li>
-
-              <li>
-                  <a href="#">Sobre</a>
-              </li>
-
-              <li>
-                  <a href="logout">Sair</a>
+                  <a href="javascript:;" @click="logout()">Sair</a>
               </li>
             </ul>
         </nav>
@@ -120,69 +112,70 @@
           <div class="card" style="width: 100%;" v-if="!err">
             <div v-show="showData" v-for="network in networks" :key="network.id">
               <div v-for="(peguei, index) in value" :key="index"> 
-              <table class="table table-bordered table-dark" v-if="network.id == value[index].id">
-                <thead>
-                  <tr>
-                    <th scope="col"></th>
-                    <th scope="col" style="width: 60%">{{ network.NOME_REDE }}</th>
-                    <th scope="col"></th>
-                  </tr>
+                <table class="table table-bordered table-dark" v-if="network.id == value[index].id">
+                  <thead>
+                    <tr>
+                      <th scope="col"></th>
+                      <th scope="col" style="width: 60%">{{ network.NOME_REDE }}</th>
+                      <th scope="col"></th>
+                    </tr>
 
-                  <tr>
-                    <th scope="col">Loja Origem</th>
-                    <th scope="col" style="width: 60%">Comandos Pendentes</th>
-                    <th scope="col">Ações</th>
-                  </tr>
-                </thead>
-                
-                <tbody v-for="(poke, index) in data" :key="index">
-                  <tr v-if="poke.err" v-show="network.id == poke.REDEID">
-                    <td>{{ poke.NOME_LOJA }}</td>
-                    <td>{{ poke.err }} com a loja {{ poke.NUMERO_LOJA }}</td>
-                    <td>
-                      <a v-bind:href="`https://api.whatsapp.com/send?phone=5562999770941&text=Olá! gostaria que alguém verificasse a replicação da ${network.NOME_REDE} ${poke.NOME_LOJA}`" class="btn btn-outline-light" v-if="roleUserLogged == 'A'" target="_blank">
-                        <i class="fa-solid fa-headset"></i>
-                      </a>
+                    <tr>
+                      <th scope="col">Loja Origem</th>
+                      <th scope="col" style="width: 60%">Comandos Pendentes</th>
+                      <th scope="col">Ações</th>
+                    </tr>
+                  </thead>
+                  
+                  <tbody v-for="(poke, index) in data" :key="index">
+                    <tr v-if="poke.err" v-show="network.id == poke.REDEID">
+                      <td>{{ poke.NOME_LOJA }}</td>
+                      <td>{{ poke.err }} com a loja {{ poke.NUMERO_LOJA }}</td>
+                      <td>
+                        <a v-bind:href="`https://api.whatsapp.com/send?phone=5562999770941&text=Olá! gostaria que alguém verificasse a replicação da ${network.NOME_REDE} ${poke.NOME_LOJA}`" class="btn btn-outline-light" v-if="roleUserLogged == 'A'" target="_blank">
+                          <i class="fa-solid fa-headset"></i>
+                        </a>
 
-                      <button type="button" class="btn btn-outline-light" @click="example(poke.ID_LOJA)" v-if="roleUserLogged == 'M'">
-                        <i class="fa-solid fa-screwdriver-wrench"></i>
-                      </button>
+                        <button type="button" class="btn btn-outline-light" @click="example(poke.ID_LOJA)" v-if="roleUserLogged == 'M'">
+                          <i class="fa-solid fa-screwdriver-wrench"></i>
+                        </button>
 
-                      <button class="btn btn-outline-danger" @click="deleteStore(data[index].ID_LOJA)" v-if="roleUserLogged == 'M'">
-                        <i class="fa-solid fa-trash-can"></i>
-                      </button>
-                    </td>
-                  </tr>
+                        <button class="btn btn-outline-danger" @click="deleteStore(data[index].ID_LOJA)" v-if="roleUserLogged == 'M'">
+                          <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                      </td>
+                    </tr>
 
-                 <tr v-if="!poke.err" v-show="network.id == poke.REDEID">
-                    <td>{{ poke.NOME_LOJA }}</td>
-                    <td>
-                      <div v-for="(arr, id) in data[index].result" :key="id">
-                        <span v-if="!data[index].result[id].semComandos">
-                          Loja Destino: {{ data[index].result[id].IDLojaDestino }} - Quantidade de Comandos: {{ data[index].result[id].QuantidadesDeComandos }}
-                        </span>
+                    <tr v-if="!poke.err" v-show="network.id == poke.REDEID">
+                      <td>{{ poke.NOME_LOJA }}</td>
+                      <td>
+                        <div v-for="(arr, id) in data[index].result" :key="id">
+                          <span v-if="!data[index].result[id].semComandos">
+                            Loja Destino: {{ data[index].result[id].IDLojaDestino }} - Quantidade de Comandos: {{ data[index].result[id].QuantidadesDeComandos }}
+                          </span>
 
-                        <span v-else>
-                          Não existem comandos pendentes
-                        </span>
-                      </div>
-                    </td>
-                    <td>
-                      <a v-bind:href="`https://api.whatsapp.com/send?phone=5562999770941&text=Olá! gostaria que alguém verificasse a replicação da ${network.NOME_REDE} ${poke.NOME_LOJA}`" class="btn btn-outline-light" v-if="roleUserLogged == 'A'" target="_blank">
-                        <i class="fa-solid fa-headset"></i>
-                      </a>
+                          <span v-else>
+                            Não existem comandos pendentes
+                          </span>
+                        </div>
+                      </td>
 
-                      <button type="button" class="btn btn-outline-light" @click="example(data[index].ID_LOJA)" v-if="roleUserLogged == 'M'">
-                        <i class="fa-solid fa-screwdriver-wrench"></i>
-                      </button>
+                      <td>
+                        <a v-bind:href="`https://api.whatsapp.com/send?phone=5562999770941&text=Olá! gostaria que alguém verificasse a replicação da ${network.NOME_REDE} ${poke.NOME_LOJA}`" class="btn btn-outline-light" v-if="roleUserLogged == 'A'" target="_blank">
+                          <i class="fa-solid fa-headset"></i>
+                        </a>
 
-                      <button class="btn btn-outline-danger" @click="deleteStore(data[index].ID_LOJA)" v-if="roleUserLogged == 'M'">
-                        <i class="fa-solid fa-trash-can"></i>
-                      </button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+                        <button type="button" class="btn btn-outline-light" @click="example(data[index].ID_LOJA)" v-if="roleUserLogged == 'M'">
+                          <i class="fa-solid fa-screwdriver-wrench"></i>
+                        </button>
+
+                        <button class="btn btn-outline-danger" @click="deleteStore(data[index].ID_LOJA)" v-if="roleUserLogged == 'M'">
+                          <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
@@ -416,7 +409,6 @@ export default {
     }
   },
   methods: {
-    
     myFunction(){
       axios.get(`http://${this.serverIP}/replic`, {
         headers: {
@@ -646,14 +638,11 @@ export default {
     },
     async deleteStore(id){
       var confirmation = await confirm("Deseja excluir " + this.data[id-1].NOME_LOJA +' da rede ' + this.data[id-1].NOME_REDE + ' ?');
-        console.log(JSON.stringify(this.data[id-1].ID_LOJA))
       if(confirmation) {
         try {
           await axios.delete(`http://${this.serverIP}/store/${id}`)
           .then(res => {
-            console.log(JSON.stringify(this.data[id-1].ID_LOJA))
             this.data[id-1] = []
-            console.log(JSON.stringify(this.data[id-1].ID_LOJA))
             this.success = res.data.success
           });
           } catch(err) {
@@ -669,7 +658,16 @@ export default {
     },
     closeToastSuccess(){
       this.success = ''
-    }
+    },
+    logout(){
+      if(confirm("Deseja sair?")){
+        localStorage.removeItem("token")
+        localStorage.removeItem("roleUser")
+        localStorage.removeItem("redeIdUser")
+        localStorage.removeItem("loginUser")
+        this.$router.push({name: "Home"})
+      }
+    } 
   }
 }
 </script> 

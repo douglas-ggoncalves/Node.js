@@ -14,7 +14,6 @@ router.post('/token', UserController.validateToken);
 router.patch('/token', UserController.editPassword);
 router.post('/password', UserController.recoveryPassword);
 router.delete('/user/:login', UserController.delete);
-router.get('/representative', RepresentativeController.searchRepresentative);
 router.get('/replic', AdminAuth, ReplicController.getData);
 router.post('/replic', ReplicController.searchComands);
 router.post('/network', ReplicController.postNetworks);
