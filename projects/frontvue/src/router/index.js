@@ -4,7 +4,8 @@ import Home from '../views/Home.vue'
 import Replic from '../views/Replic.vue'
 import Index from '../views/Index.vue'
 import AdminUsers from '../views/Admin/AdminUsers.vue'
-import Teste from '../views/Teste.vue'
+import Wiki from '../views/Wiki/Wiki.vue'
+import RegisterPost from '../views/Wiki/RegisterPost.vue'
 import axios from 'axios';
 import scrypt from "../assets/js/scrypt";
 
@@ -70,10 +71,14 @@ const routes = [
     beforeEnter: AdminAuth
   },
   {
-    path: '/teste',
-    name: 'Teste',
-    component: Teste,
-    beforeEnter: AdminAuth
+    path: '/Wiki',
+    name: 'Wiki',
+    component: Wiki
+  },
+  {
+    path: '/cadastrar-post',
+    name: 'RegisterPost',
+    component: RegisterPost
   }
 ]
 

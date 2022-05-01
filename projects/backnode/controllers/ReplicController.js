@@ -27,8 +27,7 @@ class ReplicController{
 
         try{
             array = await req.body.array
-            console.log(array)
-                var result = await database.raw(`
+            var result = await database.raw(`
                 select * FROM OPENROWSET('SQLNCLI','${array.IP_LOJA},${array.PORTA_LOJA}';'${array.LOGIN_LOJA}';'${array.SENHA_LOJA}',
                     'select idloja as ''IDLojaDestino'', count(*) as ''QuantidadesDeComandos'' from historico..comandoreplicacao group by idloja order by idloja'
                 );

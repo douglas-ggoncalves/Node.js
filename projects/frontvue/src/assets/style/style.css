@@ -123,18 +123,6 @@ button {
   margin: 0  .15rem !important;
 }
 
-#divMainReplic {
-  /*      .dropbtn {
-        background-color: #4CAF50;
-        color: white;
-        padding: 16px;
-        font-size: 16px;
-        border: none;
-        cursor: pointer;
-      }
-      */
-}
-
 #divMainReplic #modalStore .vm--modal, #divMainReplic #modalStoreEdit .vm--modal {
   height: auto !important;
   bottom: 2rem !important;
@@ -224,6 +212,13 @@ button {
 .home .vm--modal {
   background: white !important;
   width: 80% !important;
+}
+
+button.close {
+  background: none;
+  border: none !important;
+  font-size: 1.5rem;
+  border-radius: 50% !important;
 }
 
 @media (min-width: 992px) {

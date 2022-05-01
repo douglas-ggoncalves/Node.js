@@ -211,6 +211,12 @@ button {
     }
 }
 
+button.close{
+    background: none;
+    border: none !important;
+    font-size: 1.5rem;
+    border-radius: 50% !important;
+}
 @media (min-width: 576px) { 
     
 }
