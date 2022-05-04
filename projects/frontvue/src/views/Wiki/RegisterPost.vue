@@ -80,17 +80,13 @@
 
           <div class="row d-flex justify-content-center mt-3">
             <div class="col-6">
-            <multiselect v-model="value" deselect-label="Remover Status" selectLabel="Selecionar essa opção" selectedLabel="Opção selecionada" placeholder="Selecionar um status" :options="options" :searchable="false" :allow-empty="true">
-              {{ options }}
-            </multiselect>
-
-            </div>
-          </div>
-          
-          <div class="row d-flex justify-content-center mt-2">
-            <div class="col-6">
               <b-button-group>
-                <b-button variant="success" @click="registerPost()">Salvar</b-button>
+                <b-button v-b-tooltip.hover.v-secondary.top="'Selecione essa opção para gravar as alterações'" variant="outline-secondary" @click="registerPost('Inativo')">
+                  <i class="fa-solid fa-floppy-disk"></i>
+                  Salvar
+                </b-button>
+
+                <b-button v-b-tooltip.hover.v-success.top="'Selecione essa opção para publicar a postagem'" variant="outline-success" @click="registerPost('Ativo')">Publicar</b-button>
               </b-button-group>
             </div>
           </div>
@@ -131,8 +127,6 @@ export default {
   
   data() {
     return {
-      value: '',
-      options: ['Ativo', 'Inativo'],
       title: '',
       errTitle: '',
       errDesc: '',
@@ -166,8 +160,8 @@ export default {
     closeToastErr(){
       this.err = ''
     },
-    registerPost(){
-      console.log("value " +this.value)
+    registerPost(status){
+      console.log("asd")
       if(this.title.trim() == ''){
         this.err = 'Título não pode ser vazio'
         document.getElementById("inputTitle").classList.add("is-invalid")
@@ -175,12 +169,11 @@ export default {
       } else if(this.desc.trim() == ''){
         this.err = 'Descrição não pode ser vazia'
         this.errDesc = 'Informe uma descrição no campo logo a cima'
-      } else if(this.value == ''){
-        this.err = 'Status não pode estar vazio'
       } else{
-        axios.post(`http://${serverIP}/post`,{
+        axios.post(`http://${this.serverIP}/post`,{
           title: title,
-          desc: desc
+          desc: desc, 
+          status: status
         }).then(res => {
           console.log(res)
         }).catch(err => {

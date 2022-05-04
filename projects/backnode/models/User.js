@@ -1,8 +1,8 @@
 var knex = require("../database/database");
 var bcrypt = require("bcrypt");
 var PasswordTokens = require("./PasswordTokens");
-class User{
 
+class User{
     async findLogin(login) {
         try {
             var result = await knex.select().where({LOGIN_USUARIO: login}).from("USUARIO").leftOuterJoin('rede', 'rede.id', 'USUARIO.REDEID_USUARIO');
@@ -101,7 +101,6 @@ class User{
             return undefined;
         }
     }
-    
 }
 
 module.exports = new User();
