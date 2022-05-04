@@ -1,36 +1,40 @@
 <template>
   <div class="home" id="divMainReplic">
     <div class="wrapper">
-        <!-- Sidebar -->
-        <nav id="sidebar">
-            <ul class="list-unstyled components">
-              <div class="sidebar-header">
-                <img class="img-fluid" src="../assets/img/logo-white.png">
-                <hr>
-              </div>
+      <!-- Sidebar -->
+      <nav id="sidebar">
+        <ul class="list-unstyled components">
+          <div class="sidebar-header">
+            <img class="img-fluid" src="../assets/img/logo-white.png">
+            <hr>
+          </div>
 
-              <li v-if="roleUserLogged == 'M' || roleUserLogged == 'A'">
-                <a href="usuarios">Gestão de Usuários</a>
-              </li>
+          <li v-if="roleUserLogged == 'M' || roleUserLogged == 'A'">
+            <a href="usuarios">Gestão de Usuários</a>
+          </li>
 
-              <li>
-                <a href="replicacoes">Replicação</a>
-              </li>
+          <li>
+            <a href="replicacoes">Replicação</a>
+          </li>
 
-              <li>
-                  <a href="javascript:;" @click="logout()">Sair</a>
-              </li>
-            </ul>
+          <li>
+            <a href="wiki">Wiki</a>
+          </li>
+
+          <li>
+            <a href="javascript:;" @click="logout()">Sair</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="container-fluid" id="content">
+        <nav class="navbar navbar-expand-lg navbar-light">
+          <div class="container-fluid">
+            <button type="button" id="sidebarCollapse" class="btn btn-outline-dark" @click="clique()">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+          </div>
         </nav>
-
-        <div class="container-fluid" id="content">
-          <nav class="navbar navbar-expand-lg navbar-light">
-            <div class="container-fluid">
-              <button type="button" id="sidebarCollapse" class="btn btn-outline-dark" @click="clique()">
-                  <span class="navbar-toggler-icon"></span>
-              </button>
-            </div>
-          </nav>
 
           <div class="container">
             <div class="vm--overlay" style="z-index: 9999" @click="closeToastErr()" v-if="err != ''">

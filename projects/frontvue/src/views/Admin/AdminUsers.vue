@@ -18,6 +18,10 @@
                 </li>
 
                 <li>
+                    <a href="wiki">Wiki</a>
+                </li>
+
+                <li>
                     <a href="javascript:;" @click="logout()">Sair</a>
                 </li>
             </ul>
