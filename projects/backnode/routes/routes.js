@@ -18,6 +18,7 @@ router.get('/replic', AdminAuth, ReplicController.getData);
 router.post('/replic', ReplicController.searchComands);
 router.post('/network', ReplicController.postNetworks);
 router.post('/store', ReplicController.postStores);
+router.get('/post', WikiController.getPosts);
 router.post('/post', WikiController.create);
 router.delete('/store/:id', ReplicController.delete);
 router.patch('/store', ReplicController.patchStores);

@@ -79,15 +79,45 @@
           </div>
 
           <div class="row d-flex justify-content-center mt-3">
+            <div class="col-12 col-md-10 col-lg-6">
+              <multiselect v-model="moduleSelect" deselect-label="Remover opção" selectLabel="Selecionar essa opção" selectedLabel="Opção selecionada" 
+              placeholder="Selecionar módulo" :options="modules" :searchable="false" :allow-empty="true"
+              label="DESC_MODULE" track-by="DESC_MODULE">
+                {{ modules }}
+              </multiselect>
+            </div>
+          </div>
+
+          <div class="row d-flex justify-content-center mt-3">
             <div class="col-6">
               <b-button-group>
-                <b-button v-b-tooltip.hover.v-secondary.top="'Selecione essa opção para gravar as alterações'" variant="outline-secondary" @click="registerPost('Inativo')">
+                <b-button v-b-tooltip.hover.v-secondary.top="'Selecione essa opção para gravar as alterações'" variant="outline-secondary" @click="registerPost(0)">
                   <i class="fa-solid fa-floppy-disk"></i>
                   Salvar
                 </b-button>
 
-                <b-button v-b-tooltip.hover.v-success.top="'Selecione essa opção para publicar a postagem'" variant="outline-success" @click="registerPost('Ativo')">Publicar</b-button>
+                <b-button v-b-tooltip.hover.v-success.top="'Selecione essa opção para publicar a postagem'" variant="outline-success" @click="registerPost(1)">Publicar</b-button>
               </b-button-group>
+            </div>
+          </div>
+
+          <div class="vm--overlay" style="z-index: 9999" @click="closeToastSuccess()" v-if="success != ''">
+            <div class="position-fixed top-50 start-50 translate-middle p-3">
+              <div id="liveToast" class="toast show" role="alert" aria-live="assertive" aria-atomic="true" style="">
+                <div class="toast-header">
+                  <img src="../../assets/img/icone_maximus_gestao.png" style="height: 30px" class="rounded img-fluid me-2" alt="...">
+                  
+                  <strong class="me-auto">Maximus Gestão</strong>
+                  <button type="button" class="btn-close" @click="closeToastSuccess()"></button>
+                </div>
+                <div class="toast-body bg-light">
+                  {{ success }}
+
+                  <button class="btn btn-success mt-3 d-block mx-auto" @click="closeToastSuccess()">
+                    CONFIRMAR
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -130,15 +160,36 @@ export default {
       title: '',
       errTitle: '',
       errDesc: '',
+      modules: [
+        {
+          ID_MODULE: 1,
+          DESC_MODULE: 'Maximus Lite'
+        },
+        {
+          ID_MODULE: 2,
+          DESC_MODULE: 'Maximus Administrativo'
+        },
+        {
+          ID_MODULE: 3,
+          DESC_MODULE: 'Maximus Balcão'
+        },
+        {
+          ID_MODULE: 4,
+          DESC_MODULE: 'Maximus Caixa'
+        }
+      ],
+      moduleSelect: '',
       desc: '',
       roleUserLogged: '',
       err: '',
+      success: '',
       serverIP: '',
       myTokenTiny: 'uh8htti14est749fpsiu62185d85fz8ev62uj4p8jxyrifa4'
     }
   },
   created(){
     this.serverIP = scrypt.serverIP
+    console.log(this.serverIP)
     this.myFunction();
   },
   methods: {
@@ -160,8 +211,10 @@ export default {
     closeToastErr(){
       this.err = ''
     },
+    closeToastSuccess(){
+      this.success = ''
+    },
     registerPost(status){
-      console.log("asd")
       if(this.title.trim() == ''){
         this.err = 'Título não pode ser vazio'
         document.getElementById("inputTitle").classList.add("is-invalid")
@@ -169,15 +222,21 @@ export default {
       } else if(this.desc.trim() == ''){
         this.err = 'Descrição não pode ser vazia'
         this.errDesc = 'Informe uma descrição no campo logo a cima'
-      } else{
+      } else if(this.moduleSelect.ID_MODULE == undefined){
+        this.err = 'Selecione um módulo'
+      } else {
         axios.post(`http://${this.serverIP}/post`,{
-          title: title,
-          desc: desc, 
-          status: status
+          title: this.title,
+          desc: this.desc, 
+          status: status,
+          moduleId: this.moduleSelect.ID_MODULE
         }).then(res => {
-          console.log(res)
+          this.title = '';
+          this.desc = '';
+          this.moduleSelect = '';
+          this.success = res.data.success;
         }).catch(err => {
-          console.log(err)
+          this.err = err.response.data.err
         })
       }
     },

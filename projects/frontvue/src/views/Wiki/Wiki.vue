@@ -43,7 +43,6 @@
               <div>
                 <h3 class="mt-3">
                   Seja bem Vindo
-                  <font-awesome-icon icon="fa-solid fa-bars" />
                 </h3>
                 <h6 class="m-3">
                   Esse Wiki é uma coleção de páginas interligadas e cada uma delas pode ser visitada por qualquer pessoa porém editada pelos
@@ -62,15 +61,29 @@
         <b-container fluid>
           <b-row class="d-flex justify-content-center mt-3">
             <h3>O que você procura?</h3>
+            <b-col sm="6">
+              <b-form-input type="search" placeholder="Digite o que você está procurando" ></b-form-input>
 
+              <div style="margin-top: 0.25rem">
+                <div class="form-control" style="border: 1px solid black">
+                  <a style="height: 100%; width: 100%; color: black !important" href="teste">teste</a>
+                </div>
+              </div>
+              
+            </b-col>
+            <!--
             <b-col sm="6">
               <b-form-input  placeholder="Digite o que você está procurando" list="my-list-id"></b-form-input>
 
               <datalist id="my-list-id">
-                <option>Manual Option</option>
-                <option v-for="(size, index) in sizes" :key="index">{{ size }}</option>
+                <option v-for="(element, index) in allPosts" :key="index">
+                  <a href="asdasd">
+                  {{ element.TITULO }}
+                  </a>
+                </option>
               </datalist>
             </b-col>
+            -->
           </b-row>
 
           <b-row class="d-flex justify-content-center mt-5">
@@ -92,22 +105,35 @@
 import '../../assets/style/style.css'
 import scrypt from "../../assets/js/scrypt";
 
+import axios from "axios";
+
 export default {
   data() {
     return {
       sizes: ['Small', 'Medium', 'Large', 'Extra Large'],
-      roleUserLogged: ''
+      roleUserLogged: '',
+      serverIP: '',
+      allPosts: []
     }
   },
   created(){
+    this.serverIP = scrypt.serverIP
+    this.roleUserLogged = localStorage.getItem("roleUser")
     this.myFunction();
   },
   methods: {
     clique() {
       scrypt.clique(this);
     }, 
-    myFunction(){
-      this.roleUserLogged = localStorage.getItem("roleUser")
+    async myFunction(){
+      await axios.get(`http://${this.serverIP}/post`,)
+      .then(res => {
+        this.allPosts = res.data.arrayPosts
+        console.log(this.allPosts)
+      })
+      .catch(err => {
+        this.err = err.response.data.err
+      })
     },
     logout(){
       if(confirm("Deseja sair?")){
