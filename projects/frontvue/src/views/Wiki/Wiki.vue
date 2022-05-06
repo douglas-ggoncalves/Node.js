@@ -64,9 +64,26 @@
             <b-col sm="6">
               <b-form-input type="search" placeholder="Digite o que você está procurando" ></b-form-input>
 
-              <div style="margin-top: 0.25rem">
-                <div class="form-control" style="border: 1px solid black">
-                  <a style="height: 100%; width: 100%; color: black !important" href="teste">teste</a>
+              <div id="elements">
+                <div>
+                  <div class="blue">
+                    <a href="teste">teste</a>
+                  </div>
+
+                  <div class="green">
+                    <a href="teste">teste</a>
+                  </div>
+                  
+                  <div class="red">
+                    <a href="teste">teste</a>
+                  </div>
+                  <div class="red">
+                    <a href="teste">teste</a>
+                  </div>
+                  <div class="red">
+                    <a href="teste">teste</a>
+                  </div>
+                  
                 </div>
               </div>
               
