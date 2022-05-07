@@ -48,7 +48,7 @@
                   Esse Wiki é uma coleção de páginas interligadas e cada uma delas pode ser visitada por qualquer pessoa porém editada pelos
                   funcionários do sistema Maximus, aqui você irá encontrar tutoriais das funções do sistema
                 </h6>
-                <a href="cadastrar-post"  v-if="roleUserLogged == 'M'">
+                <a href="wiki/cadastrar"  v-if="roleUserLogged == 'M'">
                   <b-button>
                     Cadastrar Post
                   </b-button>
@@ -141,7 +141,7 @@ export default {
         return this.allPosts;
       } else{
         return this.allPosts.filter(post => 
-          post.TITULO.toLowerCase().match(this.value.toLowerCase())
+          post.TITULO.toLowerCase().match(/w+/g,this.value.toLowerCase())
         );
       }
     }

@@ -71,12 +71,12 @@ const routes = [
     beforeEnter: AdminAuth
   },
   {
-    path: '/Wiki',
+    path: '/wiki',
     name: 'Wiki',
     component: Wiki
   },
   {
-    path: '/cadastrar-post',
+    path: '/wiki/cadastrar',
     name: 'RegisterPost',
     component: RegisterPost
   }
