@@ -485,10 +485,8 @@ export default {
                 return this.clients;
             } else{
                 return this.clients.filter(client => 
-                client.LOGIN_USUARIO.toLowerCase().match(this.busca.toLowerCase())
+                    client.LOGIN_USUARIO.toLowerCase().match(this.busca.toLowerCase())
                 );
-
-                
             }
         }
     }

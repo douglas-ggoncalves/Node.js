@@ -1,3 +1,10 @@
+$blueLight: rgb(25, 136, 255);
+$blueDark: #0c63e4;
+$greenLight: rgb(61, 176, 87);
+$greenDark: rgb(25, 135, 84);
+$redLight: rgb(223, 73, 87);
+$redDark: rgb(220, 53, 69);
+
 a{
     color: white !important;
     text-decoration: none !important;
@@ -218,54 +225,69 @@ button.close{
     border-radius: 50% !important;
 }
 
+/* width */
+   ::-webkit-scrollbar {
+    width: 9px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: black;
+    border-radius: 20px;
+}
+
 #elements{
-    position: absolute;
     text-align: left;
-    background-color: rgb(52, 52, 61); 
     box-shadow: 0px 1px 5px 3px rgba(0,0,0,0.12); 
     border-radius: 0 0 5px 5px;
-    border: 1px solid red;
-    width: 100vh;
+    overflow-y: scroll;
+    //height: 100px;
+
     >div{
-        position: absolute;
-       left: 0;
-       right: 0;
+        background-color: rgb(52, 52, 61); 
     }
+
     a{
         padding: 0.375rem 0.75rem;
         display: block;
     }
 
     div.blue{
-        background-color: rgb(25, 136, 255);
+        background-color: $blueLight;
+        border-bottom: 1px solid $blueDark;
+        
         a{
             color: white;
         }
 
         &:hover{
-            background-color: #0c63e4;
+            background-color: $blueDark;
         }
     }
 
     div.green{
-        background-color: rgb(61, 176, 87);
+        background-color: $greenLight;
+        border-bottom: 1px solid $greenDark;
+
         a{
             color: white;
         }
 
         &:hover{
-            background-color: rgb(25, 135, 84);
+            background-color: $greenDark;
         }
     }
 
     div.red{
-        background-color: rgb(223, 73, 87);
+        background-color: $redLight;
+        border-bottom: 1px solid $redDark;
+
         a{
             color: white;
         }
 
         &:hover{
-            background-color: rgb(220, 53, 69);
+            background-color: $redLight;
         }
     }
 }

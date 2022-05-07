@@ -46,7 +46,7 @@
                 </h3>
                 <h6 class="m-3">
                   Esse Wiki é uma coleção de páginas interligadas e cada uma delas pode ser visitada por qualquer pessoa porém editada pelos
-                  funcionários do sistema Maximus, aqui você irá encontrar tutorias das funções do sistema
+                  funcionários do sistema Maximus, aqui você irá encontrar tutoriais das funções do sistema
                 </h6>
                 <a href="cadastrar-post"  v-if="roleUserLogged == 'M'">
                   <b-button>
@@ -59,48 +59,20 @@
         </b-container>
 
         <b-container fluid>
-          <b-row class="d-flex justify-content-center mt-3">
+          <b-row class="d-flex justify-content-center mt-3" style="">
             <h3>O que você procura?</h3>
-            <b-col sm="6">
-              <b-form-input type="search" placeholder="Digite o que você está procurando" ></b-form-input>
+            <b-col sm="6" style="">
+              <b-form-input type="search" v-model="value" placeholder="Digite o que você está procurando" ></b-form-input>
 
               <div id="elements">
-                <div>
-                  <div class="blue">
-                    <a href="teste">teste</a>
+                <div v-for="post in searchPost" :key="post.ID_POST">
+                  <div :class="{'green': post.CODMODULO == 2, 'blue': post.CODMODULO == 3, 'red': post.CODMODULO == 4} ">
+                    <a :href="post.SLUG">{{ post.TITULO }}</a>
                   </div>
-
-                  <div class="green">
-                    <a href="teste">teste</a>
-                  </div>
-                  
-                  <div class="red">
-                    <a href="teste">teste</a>
-                  </div>
-                  <div class="red">
-                    <a href="teste">teste</a>
-                  </div>
-                  <div class="red">
-                    <a href="teste">teste</a>
-                  </div>
-                  
                 </div>
               </div>
               
             </b-col>
-            <!--
-            <b-col sm="6">
-              <b-form-input  placeholder="Digite o que você está procurando" list="my-list-id"></b-form-input>
-
-              <datalist id="my-list-id">
-                <option v-for="(element, index) in allPosts" :key="index">
-                  <a href="asdasd">
-                  {{ element.TITULO }}
-                  </a>
-                </option>
-              </datalist>
-            </b-col>
-            -->
           </b-row>
 
           <b-row class="d-flex justify-content-center mt-5">
@@ -130,7 +102,8 @@ export default {
       sizes: ['Small', 'Medium', 'Large', 'Extra Large'],
       roleUserLogged: '',
       serverIP: '',
-      allPosts: []
+      allPosts: [],
+      value: ''
     }
   },
   created(){
@@ -159,6 +132,17 @@ export default {
         localStorage.removeItem("redeIdUser")
         localStorage.removeItem("loginUser")
         this.$router.push({name: "Home"})
+      }
+    }
+  },
+  computed: {
+    searchPost: function(){
+      if(this.value.trim() == ''){
+        return this.allPosts;
+      } else{
+        return this.allPosts.filter(post => 
+          post.TITULO.toLowerCase().match(this.value.toLowerCase())
+        );
       }
     }
   }
