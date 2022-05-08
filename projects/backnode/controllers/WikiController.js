@@ -8,14 +8,22 @@ class WikiController{
         var desc = req.body.desc
         var status = req.body.status
         var moduleId = req.body.moduleId
-        var result = await Wiki.new(title, slug, desc, status, moduleId)  
 
-        if(result != undefined){
-            res.status(200);
-            res.send({success: 'Postagem salva com sucesso'})
-        } else{
+        var existPost = await Wiki.findByTitle(title);
+        if(existPost != undefined){
             res.status(406);
-            res.send({err: "Não foi possível cadastrar a postagem"})
+            res.send({err: "Já existe uma postagem com este título"})
+            return;
+        } else{
+            var result = await Wiki.new(title, slug, desc, status, moduleId)  
+
+            if(result != undefined){
+                res.status(200);
+                res.send({success: 'Postagem salva com sucesso'})
+            } else{
+                res.status(406);
+                res.send({err: "Não foi possível cadastrar a postagem"})
+            }
         }
     }
 

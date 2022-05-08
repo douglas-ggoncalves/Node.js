@@ -290,6 +290,19 @@ button.close{
             background-color: $redLight;
         }
     }
+
+    div.black{
+        background-color: black !important;
+        border-bottom: 1px solid black !important;
+
+        a{
+            color: white;
+        }
+
+        &:hover{
+            background-color: black !important;
+        }
+    }
 }
 
 

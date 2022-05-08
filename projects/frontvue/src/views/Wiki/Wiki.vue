@@ -48,7 +48,7 @@
                   Esse Wiki é uma coleção de páginas interligadas e cada uma delas pode ser visitada por qualquer pessoa porém editada pelos
                   funcionários do sistema Maximus, aqui você irá encontrar tutoriais das funções do sistema
                 </h6>
-                <a href="wiki/cadastrar"  v-if="roleUserLogged == 'M'">
+                <a href="cadastrar-postagem"  v-if="roleUserLogged == 'M'">
                   <b-button>
                     Cadastrar Post
                   </b-button>
@@ -66,8 +66,16 @@
 
               <div id="elements">
                 <div v-for="post in searchPost" :key="post.ID_POST">
-                  <div :class="{'green': post.CODMODULO == 2, 'blue': post.CODMODULO == 3, 'red': post.CODMODULO == 4} ">
-                    <a :href="post.SLUG">{{ post.TITULO }}</a>
+                  <div v-if="post.ATIVO == 1 && roleUserLogged != 'M'">
+                    <div :class="{'green': post.CODMODULO == 2, 'blue': post.CODMODULO == 3, 'red': post.CODMODULO == 4}">
+                      <a :href="post.SLUG">{{ post.TITULO }}</a>
+                    </div>
+                  </div>
+                  
+                  <div v-else-if="roleUserLogged == 'M'">
+                    <div :class="{'green': post.CODMODULO == 2, 'blue': post.CODMODULO == 3, 'red': post.CODMODULO == 4}">
+                      <a :href="post.SLUG">{{ post.TITULO }} <span v-if="post.ATIVO == 0">( Esse post está inativo / Não aparece para usuário comum )</span></a>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -119,7 +127,6 @@ export default {
       await axios.get(`http://${this.serverIP}/post`,)
       .then(res => {
         this.allPosts = res.data.arrayPosts
-        console.log(this.allPosts)
       })
       .catch(err => {
         this.err = err.response.data.err
@@ -141,7 +148,7 @@ export default {
         return this.allPosts;
       } else{
         return this.allPosts.filter(post => 
-          post.TITULO.toLowerCase().match(/w+/g,this.value.toLowerCase())
+          post.TITULO.toLowerCase().match(this.value.toLowerCase())
         );
       }
     }

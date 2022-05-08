@@ -189,7 +189,6 @@ export default {
   },
   created(){
     this.serverIP = scrypt.serverIP
-    console.log(this.serverIP)
     this.myFunction();
   },
   methods: {
@@ -236,6 +235,7 @@ export default {
           this.moduleSelect = '';
           this.success = res.data.success;
         }).catch(err => {
+          console.log(err.response)
           this.err = err.response.data.err
         })
       }

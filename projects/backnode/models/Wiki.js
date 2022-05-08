@@ -11,6 +11,16 @@ class Wiki{
         }
     }
 
+    async findByTitle(title){
+        var result = await knex.select().where({TITULO: title}).table("POSTAGEM")
+
+        if(result.length > 0) {
+            return result[0];
+        } else {
+            return undefined;
+        }
+    }
+
     async findPosts(){
         var result = knex.select().table("POSTAGEM")
         return result;

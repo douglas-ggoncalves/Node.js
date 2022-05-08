@@ -6,6 +6,8 @@ import Index from '../views/Index.vue'
 import AdminUsers from '../views/Admin/AdminUsers.vue'
 import Wiki from '../views/Wiki/Wiki.vue'
 import RegisterPost from '../views/Wiki/RegisterPost.vue'
+import Post from '../views/Wiki/Post.vue'
+
 import axios from 'axios';
 import scrypt from "../assets/js/scrypt";
 
@@ -73,12 +75,17 @@ const routes = [
   {
     path: '/wiki',
     name: 'Wiki',
-    component: Wiki
+    component: Wiki    
   },
   {
-    path: '/wiki/cadastrar',
+    path: '/cadastrar-postagem',
     name: 'RegisterPost',
     component: RegisterPost
+  },
+  {
+    path: '/:slug',
+    name: 'Post',
+    component: Post
   }
 ]
 
