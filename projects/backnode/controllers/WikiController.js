@@ -38,6 +38,57 @@ class WikiController{
             res.send({err: "Não foi possível carregar as postagens"})
         }
     }
+    
+    async getPost(req, res){
+        var slug = req.query.slug
+        var post = await Wiki.findBySlug(slug);
+
+        if(post != undefined){
+            res.status(200);
+            res.send({post: post})
+        } else{
+            res.status(406);
+            res.send({err: "Não foi possível carregar a postagem"})
+        }
+    }
+    
+    async editPost(req, res){
+        var idPost = req.body.idPost
+        var title = req.body.title
+        var slug = slugify(title.toLowerCase())
+        var desc = req.body.desc
+        var status = req.body.status
+        var moduleId = req.body.moduleId
+
+        var existPost = await Wiki.findByTitle(title);
+        if(existPost != undefined){
+            if(existPost.ID_POST != idPost){
+                res.status(406);
+                res.send({err: "Já existe uma postagem com este título"})
+                return;
+            } else{
+                var update = await Wiki.editPost(idPost, title, slug, desc, status, moduleId)
+    
+                if(update != undefined){
+                    res.status(200);
+                    res.send({success: "Postagem alterada com sucesso", slug: slug})
+                } else{
+                    res.status(406);
+                    res.send({success: "Não foi possível fazer a alteração da postagem"})
+                }
+            }
+        } else{
+            var update = await Wiki.editPost(idPost, title, slug, desc, status, moduleId)
+    
+            if(update != undefined){
+                res.status(200);
+                res.send({success: "Postagem alterada com sucesso", slug: slug})
+            } else{
+                res.status(406);
+                res.send({success: "Não foi possível fazer a alteração da postagem"})
+            }
+        }
+    }
 }
 
 module.exports = new WikiController();

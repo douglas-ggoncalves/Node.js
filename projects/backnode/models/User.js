@@ -1,6 +1,5 @@
 var knex = require("../database/database");
 var bcrypt = require("bcrypt");
-var PasswordTokens = require("./PasswordTokens");
 
 class User{
     async findLogin(login) {

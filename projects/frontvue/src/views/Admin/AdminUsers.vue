@@ -343,6 +343,8 @@ export default {
                 this.err = 'O campo login é obrigatório'
             } else if(this.emailUser.trim() == ''){
                 this.err = 'O campo email é obrigatório'
+            } else if(this.roleUserLogged != 'M' && this.abbreviatedRoleUser == 'M'){
+                this.err = 'Você não tem permissão para criar usuários com este cargo'
             } else{
                 if(this.passwordUser.trim() == ''){
                     this.err = 'O campo senha é obrigatório'
@@ -402,6 +404,8 @@ export default {
         async editStore() {
             if(this.editLoginUser.trim() == "" || this.editRoleUser.trim() == "") {
                 this.err = 'Login ou cargo do usuário precisam ser preenchidos'
+            } else if(this.roleUserLogged != 'M' && this.editRoleUser == 'M'){
+                this.err = 'Você não tem permissão para adicionar usuários com este cargo'
             } else {
                 var confirmation = await confirm("Confirma a alteração de dados ?");
                 if(confirmation){
