@@ -48,30 +48,7 @@
 
           <div class="row d-flex justify-content-center mt-3">
             <div class="col-12">
-              <editor
-              :api-key="myTokenTiny"
-              placeholder= "Forneça o passo a passo do tutorial com palavras/fotos e/ou vídeos..."
-              v-model="desc"
-              @keydown="clearErrDesc()"
-
-              :init="{
-                height: 500,
-                menubar: false,
-                language: 'pt_BR',
-                tinydrive_token_provider: '/jwt',
-                tinydrive_upload_path: '/some/other/path',
-                tinydrive_google_drive_key: '<AIzaSyABQJpA4BAzrRL20s0RVP22QmcoHOZGDuk>',
-                tinydrive_google_drive_client_id: '<145500733260-4jjevvn5qti1fj1ljopsbqdu7eqbh6dc.apps.googleusercontent.com>',
-                plugins: [
-                  'advlist autolink lists link image charmap print preview anchor',
-                  'searchreplace visualblocks code fullscreen',
-                  'insertdatetime media table paste code help wordcount tinydrive'
-                ],
-                toolbar:
-                  'undo redo | formatselect | bold italic backcolor | \
-                  alignleft aligncenter alignright alignjustify | \
-                  bullist numlist outdent indent | removeformat | help | image | media | preview | tinydrive'
-              }"/>
+              <vue-editor v-model="desc" />
               <div id="divErrDesc" style="margin-top: 0.25rem; font-size: 0.875em; color: #dc3545;" v-if="errDesc">
                 {{ errDesc }}
               </div>
@@ -141,17 +118,21 @@
     </div>
   </div>
 </template>
-<script src="/path/to/tinymce.min.js"></script>
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/vue2-editor/dist/vue2-editor.umd.min.js"></script>
+
 <script>
 
 import '../../assets/style/style.css'
 import Multiselect from 'vue-multiselect'
 import Vue from 'vue'
 import axios from 'axios'
-import Editor from '@tinymce/tinymce-vue'
 import scrypt from "../../assets/js/scrypt";
+import Vue2Editor from "vue2-editor";
 
+Vue.use(Vue2Editor);
 Vue.component('multiselect', Multiselect)
+
 
 export default {
   
@@ -183,8 +164,7 @@ export default {
       roleUserLogged: '',
       err: '',
       success: '',
-      serverIP: '',
-      myTokenTiny: 'uh8htti14est749fpsiu62185d85fz8ev62uj4p8jxyrifa4'
+      serverIP: ''
     }
   },
   created(){
@@ -248,9 +228,6 @@ export default {
       console.log("teste")
       this.errDesc = '';
     }
-  },
-  components: {
-    'editor': Editor
   }
 }
 

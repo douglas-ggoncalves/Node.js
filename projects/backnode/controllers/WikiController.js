@@ -8,7 +8,6 @@ class WikiController{
         var desc = req.body.desc
         var status = req.body.status
         var moduleId = req.body.moduleId
-
         var existPost = await Wiki.findByTitle(title);
         if(existPost != undefined){
             res.status(406);
