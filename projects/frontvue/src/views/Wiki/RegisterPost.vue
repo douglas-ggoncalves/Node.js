@@ -48,14 +48,21 @@
 
           <div class="row d-flex justify-content-center mt-3">
             <div class="col-12">
-              <vue-editor v-model="desc" />
+              <div style="text-align: left !important">
+                <b-button-group>
+                  <b-button class="m-0" @click="previewMode=false">Live</b-button>
+                  <b-button @click="previewMode=true">Preview</b-button>
+                </b-button-group>
+              </div>
+
+              <vue-editor v-if="!previewMode" v-model="desc" />
               <div id="divErrDesc" style="margin-top: 0.25rem; font-size: 0.875em; color: #dc3545;" v-if="errDesc">
                 {{ errDesc }}
               </div>
             </div>
           </div>
 
-          <div class="row d-flex justify-content-center mt-3">
+          <div class="row d-flex justify-content-center mt-3" v-if="!previewMode">
             <div class="col-12 col-md-10 col-lg-6">
               <multiselect v-model="moduleSelect" deselect-label="Remover opção" selectLabel="Selecionar essa opção" selectedLabel="Opção selecionada" 
               placeholder="Selecionar módulo" :options="modules" :searchable="false" :allow-empty="true"
@@ -76,7 +83,7 @@
 
           </div>
 
-          <div class="row d-flex justify-content-center mt-3">
+          <div class="row d-flex justify-content-center mt-3" v-if="!previewMode">
             <div class="col-6">
               <b-button-group>
                 <b-button v-b-tooltip.hover.v-secondary.bottom="'Gravar as alterações'" variant="outline-secondary" @click="registerPost()">
@@ -85,6 +92,11 @@
                 </b-button>
               </b-button-group>
             </div>
+          </div>
+
+          <div class="row text-left mt-3" v-if="previewMode">
+            <div class="col-12 text-left" v-html="title"/>
+            <div class="col-12 text-left" v-html="desc" />
           </div>
 
           <div class="vm--overlay" style="z-index: 9999" @click="closeToastSuccess()" v-if="success != ''">
@@ -144,7 +156,6 @@ Vue.component('multiselect', Multiselect)
 
 
 export default {
-  
   data() {
     return {
       title: '',
@@ -184,7 +195,8 @@ export default {
       roleUserLogged: '',
       err: '',
       success: '',
-      serverIP: ''
+      serverIP: '',
+      previewMode: false
     }
   },
   created(){
@@ -236,7 +248,6 @@ export default {
           this.optionSelect = '';
           this.success = res.data.success;
         }).catch(err => {
-          console.log(err.response)
           this.err = err.response.data.err
         })
       }
