@@ -43,6 +43,16 @@ class Wiki{
             return undefined;
         }
     }
+
+    async deletePost(slug){
+        try {
+            var result = await knex.select().where({SLUG: slug}).from("POSTAGEM").del();
+            return result;
+        } catch(err) {
+            console.log(err);
+            return undefined;
+        }
+    }
 }
 
 module.exports = new Wiki();

@@ -62,18 +62,27 @@
               label="DESC_MODULE" track-by="DESC_MODULE">
                 {{ modules }}
               </multiselect>
+
+              <div style="height: 1rem">
+
+              </div>
+
+              <multiselect v-model="optionSelect" deselect-label="Remover opção" selectLabel="Selecionar essa opção" selectedLabel="Opção selecionada" 
+              placeholder="Selecionar opção" :options="array" :searchable="false" :allow-empty="true"
+              label="DESC" track-by="ID">
+                {{ array }}
+              </multiselect>
             </div>
+
           </div>
 
           <div class="row d-flex justify-content-center mt-3">
             <div class="col-6">
               <b-button-group>
-                <b-button v-b-tooltip.hover.v-secondary.top="'Selecione essa opção para gravar as alterações'" variant="outline-secondary" @click="registerPost(0)">
+                <b-button v-b-tooltip.hover.v-secondary.bottom="'Gravar as alterações'" variant="outline-secondary" @click="registerPost()">
                   <i class="fa-solid fa-floppy-disk"></i>
-                  Salvar
+                  Gravar
                 </b-button>
-
-                <b-button v-b-tooltip.hover.v-success.top="'Selecione essa opção para publicar a postagem'" variant="outline-success" @click="registerPost(1)">Publicar</b-button>
               </b-button-group>
             </div>
           </div>
@@ -159,7 +168,18 @@ export default {
           DESC_MODULE: 'Maximus Caixa'
         }
       ],
+      array: [
+        {
+          ID: 0,
+          DESC: 'Inativo'
+        },
+        {
+          ID: 1,
+          DESC: 'Ativo'
+        }
+      ],
       moduleSelect: '',
+      optionSelect: '',
       desc: '',
       roleUserLogged: '',
       err: '',
@@ -193,7 +213,7 @@ export default {
     closeToastSuccess(){
       this.success = ''
     },
-    registerPost(status){
+    registerPost(){
       if(this.title.trim() == ''){
         this.err = 'Título não pode ser vazio'
         document.getElementById("inputTitle").classList.add("is-invalid")
@@ -207,12 +227,13 @@ export default {
         axios.post(`http://${this.serverIP}/post`,{
           title: this.title,
           desc: this.desc, 
-          status: status,
+          status: this.optionSelect.ID,
           moduleId: this.moduleSelect.ID_MODULE
         }).then(res => {
           this.title = '';
           this.desc = '';
           this.moduleSelect = '';
+          this.optionSelect = '';
           this.success = res.data.success;
         }).catch(err => {
           console.log(err.response)

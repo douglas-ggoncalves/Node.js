@@ -36,7 +36,22 @@
           </div>
         </nav>
 
-        <div class="container">
+        <div class="container" v-if="!editMode">
+          <div class="row d-flex justify-content-center mt-3">
+            <div class="col-12">
+              <h3>{{ title }}</h3>
+
+              <div v-html="desc"/>
+
+              <div>
+                <b-button variant="outline-secondary" @click="editMode=true">Editar</b-button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="container" v-if="editMode">
           <div class="row d-flex justify-content-center mt-3">
             <div class="col-12">
               <input id="inputTitle" type="text" class="form-control" v-model="title" placeholder="Informe o título do post" @keydown="clearErrTitle()">
@@ -75,6 +90,10 @@
                 </b-button>
 
                 <b-button v-b-tooltip.hover.v-success.top="'Selecione essa opção para publicar a postagem'" variant="outline-success" @click="updatePost(1)">Publicar</b-button>
+
+                <b-button v-b-tooltip.hover.v-danger.top="'Apagar postagem'" variant="outline-danger" @click="deletePost()">Apagar</b-button>
+
+                <b-button v-b-tooltip.hover.v-secondary.top="'Editar postagem'" variant="outline-secondary" @click="editMode=false">Editar</b-button>
               </b-button-group>
             </div>
           </div>
@@ -162,15 +181,16 @@ export default {
       ],
       moduleSelect: [
         {
-            ID_MODULE: 0,
-            DESC_MODULE: ''
+          ID_MODULE: 0,
+          DESC_MODULE: ''
         }
-    ],
+      ],
       desc: '',
       roleUserLogged: '',
       err: '',
       success: '',
-      serverIP: ''
+      serverIP: '',
+      editMode: false
     }
   },
   created(){
@@ -221,42 +241,54 @@ export default {
       } else if(this.moduleSelect.ID_MODULE == undefined){
         this.err = 'Selecione um módulo'
       } else {
-            axios.patch(`http://${this.serverIP}/post`,{
-                idPost: this.idPost,
-                title: this.title,
-                desc: this.desc, 
-                status: status,
-                moduleId: this.moduleSelect.ID_MODULE
-            }).then(res => {
-                this.slug = res.data.slug;
-                this.success = res.data.success;
-                //this.$router.push({name: "Wiki"})
-            }).catch(err => {
-                this.err = err.response.data.err
-            })
+        axios.patch(`http://${this.serverIP}/post`,{
+          idPost: this.idPost,
+          title: this.title,
+          desc: this.desc, 
+          status: status,
+          moduleId: this.moduleSelect.ID_MODULE
+        }).then(res => {
+          this.slug = res.data.slug;
+          this.success = res.data.success;
+        }).catch(err => {
+          this.err = err.response.data.err
+        })
       }
     },
     async verifySlug(slug){
-        await axios.get(`http://${this.serverIP}/post`,{
-          params:{
-            slug: slug
+      await axios.get(`http://${this.serverIP}/post`,{
+        params:{
+          slug: slug
+        }
+      }).then(res => {
+        this.idPost = res.data.post.ID_POST
+        this.title = res.data.post.TITULO;
+        this.desc = res.data.post.DESCRICAO;
+        if(res.data.post.CODMODULO == 1){
+          this.moduleSelect = ({ID_MODULE: 1, DESC_MODULE: 'Maximus Lite'})
+        } else if(res.data.post.CODMODULO == 2){
+          this.moduleSelect = ({ID_MODULE: 2, DESC_MODULE: 'Maximus Administrativo'})
+        } else if(res.data.post.CODMODULO == 3){
+          this.moduleSelect = ({ID_MODULE: 3, DESC_MODULE: 'Maximus Balcão'})
+        } else if(res.data.post.CODMODULO == 4){
+          this.moduleSelect = ({ID_MODULE: 4, DESC_MODULE: 'Maximus Caixa'})
+        }
+      }).catch(err => {
+          this.$router.push({name: "Wiki"})
+      })
+    },
+    async deletePost(){
+      var confirmation = await confirm("Deseja excluir este post?");
+        if(confirmation) {
+          try {
+            await axios.delete(`http://${this.serverIP}/post/${this.$route.params.slug}`)
+            .then(res => {
+              this.success = res.data.success;
+            });
+          } catch(err) {
+            this.err = err.response.data.err
           }
-        }).then(res => {
-            this.idPost = res.data.post.ID_POST
-            this.title = res.data.post.TITULO;
-            this.desc = res.data.post.DESCRICAO;
-            if(res.data.post.CODMODULO == 1){
-                this.moduleSelect = ({ID_MODULE: 1, DESC_MODULE: 'Maximus Lite'})
-            } else if(res.data.post.CODMODULO == 2){
-                this.moduleSelect = ({ID_MODULE: 2, DESC_MODULE: 'Maximus Administrativo'})
-            } else if(res.data.post.CODMODULO == 3){
-                this.moduleSelect = ({ID_MODULE: 3, DESC_MODULE: 'Maximus Balcão'})
-            } else if(res.data.post.CODMODULO == 4){
-                this.moduleSelect = ({ID_MODULE: 4, DESC_MODULE: 'Maximus Caixa'})
-            }
-        }).catch(err => {
-            this.$router.push({name: "Wiki"})
-        })
+        }
     },
     clearErrTitle(){
       this.errTitle = '';

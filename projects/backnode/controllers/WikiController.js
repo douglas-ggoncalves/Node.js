@@ -88,6 +88,26 @@ class WikiController{
             }
         }
     }
+
+    async deletePost(req, res){
+        var slug = req.params.slug
+        var post = await Wiki.findBySlug(slug);
+
+        if(post != undefined){
+            var deletePost = await Wiki.deletePost(slug);
+
+            if(deletePost != undefined){
+                res.status(200);
+                res.send({success: "Postagem excluida com sucesso"})
+            } else{
+                res.status(406);
+                res.send({err: "Não foi possível carregar a postagem"}) 
+            }
+        } else{
+            res.status(406);
+            res.send({err: "Não foi possível carregar a postagem"})
+        }
+    }
 }
 
 module.exports = new WikiController();

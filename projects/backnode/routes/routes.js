@@ -19,6 +19,7 @@ router.post('/replic', ReplicController.searchComands);
 router.post('/network', ReplicController.postNetworks);
 router.post('/store', ReplicController.postStores);
 router.get('/post', WikiController.getPost);
+router.delete('/post/:slug', WikiController.deletePost);
 router.patch('/post', WikiController.editPost);
 router.post('/post', WikiController.create);
 router.get('/posts', WikiController.getPosts);
