@@ -3,6 +3,10 @@ a {
   text-decoration: none !important;
 }
 
+div.ql-editor ol, div.ql-editor ul {
+  text-align: left !important;
+}
+
 .wrapper {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -286,6 +290,19 @@ button.close {
 
 #elements div.red:hover {
   background-color: #df4957;
+}
+
+#elements div.black {
+  background-color: black !important;
+  border-bottom: 1px solid black !important;
+}
+
+#elements div.black a {
+  color: white;
+}
+
+#elements div.black:hover {
+  background-color: black !important;
 }
 
 @media (min-width: 992px) {

@@ -37,21 +37,34 @@
         </nav>
 
         <div class="container" v-if="!editMode">
-          <div class="row d-flex justify-content-center mt-3">
-            <div class="col-12">
-              <h3>{{ title }}</h3>
+          <div class="row d-flex justify-content-center mt-3 mb-5">
+            <h2>Edição de postagem</h2>
+            <hr style="width: 50%">
+          </div>
+          
+          <div class="row mt-3">
+              <div class="ql-editor">
+                <div class="text-center">
+                  <h3 v-html="title"></h3>
+                </div>
 
-              <div v-html="desc"/>
+                <span v-html="desc">
 
-              <div>
-                <b-button variant="outline-secondary" @click="editMode=true">Editar</b-button>
+                </span>
               </div>
 
-            </div>
+              <div>
+                <b-button variant="outline-secondary" @click="editMode=true" v-if="roleUserLogged == 'M'">Editar</b-button>
+              </div>
           </div>
         </div>
 
         <div class="container" v-if="editMode">
+          <div class="row d-flex justify-content-center mt-3 mb-5">
+            <h2>Edição de postagem</h2>
+            <hr style="width: 50%">
+          </div>
+
           <div class="row d-flex justify-content-center mt-3">
             <div class="col-12">
               <input id="inputTitle" type="text" class="form-control" v-model="title" placeholder="Informe o título do post" @keydown="clearErrTitle()">
@@ -78,22 +91,30 @@
               label="DESC_MODULE" track-by="DESC_MODULE" :taggable="true" @tag="addTag">
                 {{ modules }}
               </multiselect>
+
+              <div style="height: 1rem">
+
+              </div>
+
+              <multiselect v-model="arrayOptionSelect" deselect-label="Remover opção" selectLabel="Selecionar essa opção" selectedLabel="Opção selecionada" 
+              placeholder="Selecionar opção" :options="array" :searchable="false" :allow-empty="true"
+              label="DESC" track-by="ID">
+                {{ array }}
+              </multiselect>
             </div>
           </div>
 
           <div class="row d-flex justify-content-center mt-3">
             <div class="col-6">
               <b-button-group>
-                <b-button v-b-tooltip.hover.v-secondary.top="'Selecione essa opção para gravar as alterações'" variant="outline-secondary" @click="updatePost(0)">
+                <b-button v-b-tooltip.hover.v-secondary.top="'Selecione essa opção para gravar as alterações'" variant="outline-secondary" @click="updatePost()">
                   <i class="fa-solid fa-floppy-disk"></i>
                   Salvar
                 </b-button>
 
-                <b-button v-b-tooltip.hover.v-success.top="'Selecione essa opção para publicar a postagem'" variant="outline-success" @click="updatePost(1)">Publicar</b-button>
-
                 <b-button v-b-tooltip.hover.v-danger.top="'Apagar postagem'" variant="outline-danger" @click="deletePost()">Apagar</b-button>
 
-                <b-button v-b-tooltip.hover.v-secondary.top="'Editar postagem'" variant="outline-secondary" @click="editMode=false">Editar</b-button>
+                <b-button v-b-tooltip.hover.v-secondary.top="'Voltar para a postagem'" variant="outline-secondary" @click="editMode=false">Voltar</b-button>
               </b-button-group>
             </div>
           </div>
@@ -185,6 +206,22 @@ export default {
           DESC_MODULE: ''
         }
       ],
+      array: [
+        {
+          ID: 0,
+          DESC: 'Inativo'
+        },
+        {
+          ID: 1,
+          DESC: 'Ativo'
+        }
+      ],
+      arrayOptionSelect: [
+        {
+          ID: 0,
+          DESC: ''
+        }
+      ],
       desc: '',
       roleUserLogged: '',
       err: '',
@@ -230,7 +267,7 @@ export default {
         this.$router.push({path: `${this.slug}`})
         window.location.reload()
     },
-    updatePost(status){
+    updatePost(){
       if(this.title.trim() == ''){
         this.err = 'Título não pode ser vazio'
         document.getElementById("inputTitle").classList.add("is-invalid")
@@ -245,7 +282,7 @@ export default {
           idPost: this.idPost,
           title: this.title,
           desc: this.desc, 
-          status: status,
+          status: this.arrayOptionSelect.ID,
           moduleId: this.moduleSelect.ID_MODULE
         }).then(res => {
           this.slug = res.data.slug;
@@ -273,8 +310,14 @@ export default {
         } else if(res.data.post.CODMODULO == 4){
           this.moduleSelect = ({ID_MODULE: 4, DESC_MODULE: 'Maximus Caixa'})
         }
+
+        if(res.data.post.ATIVO == 0){
+          this.arrayOptionSelect = ({ID: 0, DESC: 'Inativo'})
+        } else if(res.data.post.ATIVO == 1){
+          this.arrayOptionSelect = ({ID: 1, DESC: 'Ativo'})
+        }
       }).catch(err => {
-          this.$router.push({name: "Wiki"})
+        this.$router.push({name: "Wiki"})
       })
     },
     async deletePost(){

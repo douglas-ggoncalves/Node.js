@@ -10,6 +10,12 @@ a{
     text-decoration: none !important;
 }
 
+div.ql-editor{
+    ol, ul{
+        text-align: left !important;
+    }
+}
+
 .wrapper {
     display: flex;
     width: 100%;

@@ -4,6 +4,14 @@
   </div>
 </template>
 
+<script>
+
+export default {
+
+}
+</script>
+
+
 <style scoped>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;

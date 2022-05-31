@@ -37,7 +37,12 @@
         </nav>
 
         <div class="container">
-          <div class="row d-flex justify-content-center mt-3">
+          <div class="row d-flex justify-content-center mt-3 mb-5">
+            <h2>Cadastro de postagem</h2>
+            <hr style="width: 50%">
+          </div>
+
+          <div class="row d-flex justify-content-center mt-3" v-if="!previewMode">
             <div class="col-12">
               <input id="inputTitle" type="text" class="form-control" v-model="title" placeholder="Informe o título do post" @keydown="clearErrTitle()">
               <div class="invalid-feedback" v-if="errTitle">
@@ -45,13 +50,14 @@
               </div>
             </div>
           </div>
+          
 
           <div class="row d-flex justify-content-center mt-3">
             <div class="col-12">
               <div style="text-align: left !important">
                 <b-button-group>
-                  <b-button class="m-0" @click="previewMode=false">Live</b-button>
-                  <b-button @click="previewMode=true">Preview</b-button>
+                  <b-button class="m-0" v-if="previewMode==true" @click="previewMode=false">Editar Arquivo</b-button>
+                  <b-button @click="previewMode=true"><i class="fa-solid fa-eye"></i> Preview</b-button>
                 </b-button-group>
               </div>
 
@@ -95,8 +101,22 @@
           </div>
 
           <div class="row text-left mt-3" v-if="previewMode">
-            <div class="col-12 text-left" v-html="title"/>
-            <div class="col-12 text-left" v-html="desc" />
+            <div class="col-12 text-center" v-if="title == '' && desc == ''">
+              <h4>Não foi informado nenhum dado nos campos título e descrição</h4>
+                <b-button-group>
+                  <b-button @click="previewMode=false">Editar Arquivo</b-button>
+                </b-button-group>
+            </div>
+
+            <div class="ql-editor">
+              <div class="text-center">
+                <h3 v-html="title"></h3>
+              </div>
+
+              <span v-html="desc">
+
+              </span>
+            </div>
           </div>
 
           <div class="vm--overlay" style="z-index: 9999" @click="closeToastSuccess()" v-if="success != ''">
@@ -149,11 +169,9 @@ import Multiselect from 'vue-multiselect'
 import Vue from 'vue'
 import axios from 'axios'
 import scrypt from "../../assets/js/scrypt";
-import Vue2Editor from "vue2-editor";
+import { Vue2Editor, Quill } from "vue2-editor";
 
-Vue.use(Vue2Editor);
 Vue.component('multiselect', Multiselect)
-
 
 export default {
   data() {
