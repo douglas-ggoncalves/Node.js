@@ -37,17 +37,13 @@
         </nav>
 
         <div class="container" v-if="!editMode">
-          <div class="row d-flex justify-content-center mt-3 mb-5">
-            <h2>Edição de postagem</h2>
+          <div class="row d-flex justify-content-center my-3">
+            <h2>{{ title }}</h2>
             <hr style="width: 50%">
           </div>
           
-          <div class="row mt-3">
+          <div class="row">
               <div class="ql-editor">
-                <div class="text-center">
-                  <h3 v-html="title"></h3>
-                </div>
-
                 <span v-html="desc">
 
                 </span>

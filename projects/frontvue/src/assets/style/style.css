@@ -242,10 +242,17 @@ button.close {
           box-shadow: 0px 1px 5px 3px rgba(0, 0, 0, 0.12);
   border-radius: 0 0 5px 5px;
   overflow-y: scroll;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 #elements > div {
+  display: block;
   background-color: #34343d;
+  min-width: 100%;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 #elements a {

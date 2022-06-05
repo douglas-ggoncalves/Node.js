@@ -55,10 +55,8 @@
           <div class="row d-flex justify-content-center mt-3">
             <div class="col-12">
               <div style="text-align: left !important">
-                <b-button-group>
                   <b-button class="m-0" v-if="previewMode==true" @click="previewMode=false">Editar Arquivo</b-button>
-                  <b-button @click="previewMode=true"><i class="fa-solid fa-eye"></i> Preview</b-button>
-                </b-button-group>
+                  <b-button v-if="!previewMode==true" @click="previewMode=true"><i class="fa-solid fa-eye"></i> Preview</b-button>
               </div>
 
               <vue-editor v-if="!previewMode" v-model="desc" />

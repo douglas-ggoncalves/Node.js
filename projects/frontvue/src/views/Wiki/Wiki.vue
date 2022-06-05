@@ -66,7 +66,7 @@
 
               <div id="elements">
                 <div v-for="post in searchPost" :key="post.ID_POST">
-                  <div v-if="post.ATIVO == 1 && roleUserLogged != 'M'">
+                  <div  v-if="post.ATIVO == 1 && roleUserLogged != 'M'">
                     <div :class="{'green': post.CODMODULO == 2, 'blue': post.CODMODULO == 3, 'red': post.CODMODULO == 4}">
                       <a :href="post.SLUG">{{ post.TITULO }}</a>
                     </div>
@@ -83,6 +83,7 @@
             </b-col>
           </b-row>
 
+          <!--
           <b-row class="d-flex justify-content-center mt-5">
             <b-col cols="12">
               <b-button-group>
@@ -92,6 +93,7 @@
               </b-button-group>
             </b-col>
           </b-row>
+           -->
         </b-container>
       </div>
     </div>
