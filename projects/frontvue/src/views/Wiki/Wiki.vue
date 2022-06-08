@@ -126,7 +126,7 @@ export default {
       scrypt.clique(this);
     }, 
     async myFunction(){
-      await axios.get(`http://67.207.84.123/posts`,)
+      await axios.get(`http://${this.serverIP}/posts`,)
       .then(res => {
         console.log('teste')
         console.log(res.data)
