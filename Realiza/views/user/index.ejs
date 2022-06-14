@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="pt-br">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+  <!-- Normalize -->
+  <link rel="stylesheet" href="/css/normalize.css">
+
+  <link rel="stylesheet" href="/css/style.css">
+
+  <!-- Ícones -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css">
+
+  <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <![endif]-->
+
+  <title>Realiza Assessoria</title>
+</head>
+
+<body>
+
+  <div class="container-fluid">
+    <div class="row barraMenu bg-dark">
+      <div class="col-6 col-md-4 offset-lg-1 col-lg-4 pl-5 pl-md-5">
+        <a href="#" class="btn btn-link text-info"
+          style="font-size: 27px; text-decoration: none; padding-top: 11px;">Realiza Assessoria</a>
+      </div>
+
+      <div class="col-6 col-md-8 col-lg-5">
+        <nav class="navbar navbar-dark navbar-expand-lg" style="padding: 14px;">
+          <!-- Logo -->
+          <a href="" class="navbar-brand"></a>
+
+          <!-- Menu Hamburguer -->
+          <button class="navbar-toggler" data-toggle="collapse" data-target="#navegacao">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <!-- navegacao -->
+          <div class="col collapse navbar-collapse" id="navegacao">
+            <ul class="navbar-nav col-6 pl-2 offset-4 offset-md-1 offset-lg-3 ml-auto ml-md-4 col-12 p-0"
+              style="font-size: 1.04em;">
+
+              <form action="/" id="formulario" method="POST" onsubmit="submitLinks(event, this)">
+              </form>
+
+              <li class="nav-item ml-auto ml-lg-auto">
+                <a href="home" class="btn btn-link">Home</a>
+              </li>
+              <li class="nav-item  ml-auto ml-xl-1">
+                <a href="minhas-ordens" class="btn btn-link">Pedidos</a>
+              </li>
+              <% if(user.nivelDeAcesso=="Administrador" ) { %>
+              <li class="nav-item  ml-auto ml-xl-1">
+                <a href="cadastro" class="btn btn-link">Cadastro</a>
+              </li>
+              <% } %>
+              <li class="nav-item  ml-auto ml-xl-1">
+                <a href="sobre" class="btn btn-link">Sobre</a>
+              </li>
+              <li class="nav-item  ml-auto ml-xl-1">
+                <a href="logout" class="btn btn-link" onclick="logout()">Sair</a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </div>
+  
+  <div class="container mt-5">
+    <div class="row d-flex justify-content-center">
+      <div class="col">
+        <h2 class="text-center display-3" style="font-weight: bold; text-transform: uppercase; font-family: Roboto, sans-serif;">Seja Bem-Vindo
+        </h2>
+      </div>
+    </div>
+
+    <div class="row d-flex justify-content-center mb-5 mt-5 mt-lg-2">
+      <div>
+        <img src="img/tigre.png">
+      </div>
+    </div>
+  </div>
+</body>
+
+<script>
+  function logout() {
+    return function (req, res) {
+      req.logout()
+      res.redirect('/login')
+    }
+  }
+</script>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+  integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+  integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="/js/bootstrap.min.js"></script>
+
+</html>

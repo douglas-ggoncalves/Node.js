@@ -1,27 +1,27 @@
 <%- include('./partials/navbar') %>
-<div class="container">
-    <div class="row">
-        <div class="col-12">
-            <form method="POST" action="/perguntar" onsubmit="checkForm(event, this)">
-                <div class="card mt-3">
-                    <div class="card-header">
-                        <h2>Criar Pergunta</h2>
-                    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <form method="POST" action="/perguntar" onsubmit="checkForm(event, this)">
+                    <div class="card mt-3">
+                        <div class="card-header">
+                            <h2>Criar Pergunta</h2>
+                        </div>
 
-                    <div class="card-body">
-                        <span>Título</span> <input type="text" class="form-control mb-2" name="title" id="title" placeholder="Título">
-                        <span>Descrição</span> <textarea class="form-control mb-2" cols="30" rows="2" name="desc" id="desc" placeholder="Digite sua pergunta aqui"></textarea>
-                        
-                        <button type="submit" class="btn btn-primary">
-                            Criar Pergunta
-                        </button>
-                        <hr>
+                        <div class="card-body">
+                            <span>Título</span> <input type="text" class="form-control mb-2" name="title" id="title" placeholder="Título">
+                            <span>Descrição</span> <textarea class="form-control mb-2" cols="30" rows="2" name="desc" id="desc" placeholder="Digite sua pergunta aqui"></textarea>
+                            
+                            <button type="submit" class="btn btn-primary">
+                                Criar Pergunta
+                            </button>
+                            <hr>
+                        </div>
                     </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
-</div>
 </body>
 
 <script>
@@ -30,9 +30,9 @@
         var title = document.getElementById('title').value
         var desc = document.getElementById('desc').value
 
-        if(title.trim() == '' || desc.trim() == ''){
+        if(title.trim() == '' || desc.trim() == '') {
             alert("Preencha todos os campos obrigatórios")
-        } else{
+        } else {
             form.submit();
         }
     }

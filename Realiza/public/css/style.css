@@ -1,0 +1,13 @@
+a.btn.btn-link {
+   color: rgba(255, 255, 255, .5);
+   text-decoration: none;
+   font-size: 1.1em;
+}
+
+a.btn.btn-link:hover {
+   color: #CCCECF;
+}
+
+a.btn.btn-success.finish{
+   color: white;
+}
