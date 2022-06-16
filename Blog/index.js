@@ -4,7 +4,6 @@ const bodyParser = require("body-parser");
 const Admin = require("./admin/Admin");
 const Article = require("./article/Article");
 
-
 app.use(bodyParser.urlencoded({extended: false}));
 app.set('view engine', 'ejs');
 app.use(express.static('public'))
